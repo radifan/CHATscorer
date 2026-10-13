@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Penilaian Prototipe WebApp UMKM - Single Audit & Top 5 Tier Leaderboard</title>
+  <title>Penilaian Prototipe WebApp UMKM</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -114,18 +114,18 @@
         <div>
           <h1 class="font-extrabold text-base sm:text-xl text-slate-900 tracking-tight flex items-center gap-2">
             Penilaian Prototipe WebApp UMKM
-            <span class="text-xs bg-sky-100 text-sky-800 border border-sky-300 font-mono px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1">
+            <!--<span class="text-xs bg-sky-100 text-sky-800 border border-sky-300 font-mono px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1">
               <i class="fa-solid fa-gem text-sky-600"></i> Skala Grade A - E
-            </span>
+            </span>-->
           </h1>
-          <p class="text-xs sm:text-sm text-slate-500 font-medium hidden sm:block">Audit Konsisten & Deterministik 10 Kriteria Terbobot dengan Klasifikasi Tier</p>
+          <!--<p class="text-xs sm:text-sm text-slate-500 font-medium hidden sm:block">Audit Konsisten & Deterministik 10 Kriteria Terbobot dengan Klasifikasi Tier</p>-->
         </div>
       </div>
 
       <div class="flex items-center gap-2 sm:gap-3">
         <button id="btn-open-api-modal" class="px-3.5 py-2 rounded-xl border border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold transition flex items-center gap-2 shadow-sm">
           <i class="fa-solid fa-key text-amber-500"></i>
-          <span id="api-status-label" class="hidden sm:inline">Kunci Gemini API</span>
+          <span id="api-status-label" class="hidden sm:inline">Gemini API</span>
         </button>
       </div>
     </div>
@@ -153,17 +153,17 @@
               <i class="fa-solid fa-globe text-sky-600 text-xl"></i> Masukkan URL Prototipe Website UMKM
             </h2>
             <p class="text-xs sm:text-sm text-slate-600 mt-1">
-              Masukkan 1 atau beberapa URL (pisahkan dengan baris baru). Penilaian bersifat deterministik: URL yang sama akan selalu memberikan skor yang konsisten.
+              Masukkan 1 atau beberapa URL
             </p>
           </div>
-          <button id="btn-insert-sample" class="self-start sm:self-center px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-sky-700 text-xs font-extrabold rounded-xl border border-slate-300 transition flex items-center gap-1.5 shadow-sm">
+          <!--<button id="btn-insert-sample" class="self-start sm:self-center px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-sky-700 text-xs font-extrabold rounded-xl border border-slate-300 transition flex items-center gap-1.5 shadow-sm">
             <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Contoh Beberapa URL
-          </button>
+          </button>-->
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
           <div class="lg:col-span-9 relative">
-            <label for="input-url" class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-1.5">URL Target Prototipe WebApp (Dapat Memasukkan Banyak URL):</label>
+            <!--<label for="input-url" class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-1.5">URL Target Prototipe WebApp (Dapat Memasukkan Banyak URL):</label>-->
             <div class="relative">
               <textarea id="input-url" rows="3" placeholder="https://kopi-lokal-nusantara.vercel.app&#10;https://batik-tradisional-solo.vercel.app&#10;https://kerajinan-bambu-bali.vercel.app" class="w-full pl-4 pr-16 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-mono font-bold transition shadow-inner custom-scrollbar resize-none"></textarea>
               
@@ -185,7 +185,7 @@
               <span>Preview Website</span>
               <span class="font-normal text-[10px] text-slate-500">(URL Aktif Terpilih)</span>
             </button>
-          </div>
+          </div>-->
         </div>
       </div>
     </section>
@@ -236,7 +236,7 @@
         <div id="iframe-wrapper" class="device-desktop transition-all duration-300 bg-white rounded-2xl overflow-hidden shadow-2xl relative border-2 border-slate-300">
           <div id="iframe-loading" class="hidden absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-10 text-white">
             <i class="fa-solid fa-circle-notch fa-spin text-4xl text-sky-400"></i>
-            <p class="text-xs sm:text-sm font-bold">Memuat Preview Website...</p>
+            <p class="text-xs sm:text-sm font-bold">Memuat Preview...</p>
           </div>
           <iframe id="preview-iframe" src="about:blank" class="w-full h-full border-0"></iframe>
         </div>
@@ -254,19 +254,19 @@
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-5 relative z-10">
           <div>
             <span class="text-xs font-bold text-amber-400 bg-amber-950/80 border border-amber-500/30 px-3 py-1 rounded-full font-mono uppercase tracking-wider flex items-center gap-1.5 w-fit mb-2">
-              <i class="fa-solid fa-trophy text-amber-400"></i> Top 5 Leaderboard Tier Rating
+              <i class="fa-solid fa-trophy text-amber-400"></i> Top 5 Rank
             </span>
             <h2 class="text-xl sm:text-3xl font-black text-white flex items-center gap-3 tracking-tight">
-              Klasifikasi Peringkat Tier WebApp UMKM
+              5 WebApp UMKM Teratas
             </h2>
             <p class="text-xs sm:text-sm text-slate-400 mt-1">
-              Top 5 Tier disesuaikan persis dengan urutan peringkat: Platinum 💎 (#1), Gold 👑 (#2), Silver 🥈 (#3), Bronze 🥉 (#4), dan Copper 🟤 (#5).
+              Hasil Penilaian oleh Gemini AI
             </p>
           </div>
 
           <button id="btn-trigger-celebration" class="px-6 py-3.5 bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm rounded-2xl shadow-xl shadow-amber-500/30 transition transform hover:scale-105 flex items-center gap-2.5 animate-glow-pulse">
-            <i class="fa-solid fa-wand-magic-sparkles text-base"></i>
-            <span>Selebrasi Tier 🎉</span>
+            <!--<i class="fa-solid fa-wand-magic-sparkles text-base"></i>-->
+            <span>Selebrasi 🎉</span>
           </button>
         </div>
 
@@ -282,14 +282,14 @@
           <div>
             <h2 class="text-lg sm:text-2xl font-black text-slate-900 flex items-center gap-3">
               <i class="fa-solid fa-chart-line text-sky-600 text-2xl"></i>
-              Hasil Laporan AI Gemini
+              Laporan AI Gemini
             </h2>
-            <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Rincian skor terbobot akhir, grade (A-E), dan pemetaan kriteria untuk URL terpilih.</p>
+            <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Rincian penilaian untuk URL terpilih.</p>
           </div>
 
           <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
             <div class="flex items-center gap-2">
-              <label for="select-active-url" class="text-xs font-extrabold text-slate-600 whitespace-nowrap">Tampilkan Laporan URL:</label>
+              <label for="select-active-url" class="text-xs font-extrabold text-slate-600 whitespace-nowrap">Tampilkan Laporan:</label>
               <select id="select-active-url" class="bg-slate-100 border-2 border-sky-300 text-sky-900 font-mono font-bold text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-sky-600 shadow-sm max-w-xs">
                 <!-- Dynamically populated options -->
               </select>
@@ -310,7 +310,7 @@
             
             <div class="my-4">
               <span id="overall-score-display" class="text-6xl sm:text-7xl font-extrabold text-sky-600 font-mono tracking-tight drop-shadow-sm">
-                0.0%
+                0.0
               </span>
             </div>
 
@@ -328,19 +328,19 @@
 
             <div class="w-full mt-6 pt-5 border-t border-sky-200/80 text-left text-xs sm:text-sm font-medium space-y-2.5">
               <div class="flex justify-between items-center text-slate-700">
-                <span>Kel. 1-4 (45% UI/UX & Katalog):</span>
+                <span>Kriteria 1-4 (45% UI/UX & Katalog):</span>
                 <span id="cat-score-a" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 45</span>
               </div>
               <div class="flex justify-between items-center text-slate-700">
-                <span>Kel. 5-6 (20% Keamanan & Admin):</span>
+                <span>Kriteria 5-6 (20% Keamanan & Admin):</span>
                 <span id="cat-score-b" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 20</span>
               </div>
               <div class="flex justify-between items-center text-slate-700">
-                <span>Kel. 7-9 (25% Resp & Info):</span>
+                <span>Kriteria 7-9 (25% Resp & Info):</span>
                 <span id="cat-score-c" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 25</span>
               </div>
               <div class="flex justify-between items-center text-slate-700">
-                <span>Kel. 10 (10% Direct Checkout):</span>
+                <span>Kriteria 10 (10% Direct Checkout):</span>
                 <span id="cat-score-d" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 10</span>
               </div>
             </div>
@@ -350,7 +350,7 @@
           <div class="md:col-span-7 bg-slate-50 border border-slate-200 rounded-3xl p-6 flex flex-col justify-between space-y-4">
             <div class="flex items-center justify-between">
               <h3 class="text-xs sm:text-sm font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                <i class="fa-solid fa-chart-pie text-sky-600"></i> Radar Performa 10 Kriteria
+                <i class="fa-solid fa-chart-pie text-sky-600"></i> Grafik Penilaian
               </h3>
               <span class="text-xs font-mono text-slate-500 font-bold">Skala 0 - 100</span>
             </div>
@@ -365,7 +365,7 @@
 
             <button id="btn-view-report-modal" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-extrabold rounded-2xl transition shadow-md shadow-sky-600/20 flex items-center justify-center gap-2">
               <i class="fa-solid fa-file-pdf text-base"></i>
-              <span>Cetak / Simpan Laporan PDF Resmi</span>
+              <span>Cetak / Simpan sebagai PDF</span>
             </button>
           </div>
 
@@ -378,9 +378,9 @@
           <div>
             <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2.5">
               <i class="fa-solid fa-list-check text-sky-600"></i>
-              Matriks Audit Terperinci 10 Kriteria
+              Matriks Penilaian
             </h2>
-            <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Evaluasi mendalam per kriteria: checklist sub-fitur, temuan bukti, keunggulan, kekurangan, alasan, dan rekomendasi.</p>
+            <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Hasil Penilaian per kriteria: checklist sub-fitur, temuan bukti, keunggulan, kekurangan, alasan, dan rekomendasi.</p>
           </div>
         </div>
 
@@ -400,7 +400,7 @@
         <i class="fa-solid fa-brain animate-pulse"></i>
       </div>
       <div>
-        <h3 class="font-black text-slate-900 text-base sm:text-lg">AI Sedang Menilai Mendalam</h3>
+        <h3 class="font-black text-slate-900 text-base sm:text-lg">AI Sedang Menilai</h3>
         <p id="ai-progress-status" class="text-xs sm:text-sm text-slate-500 mt-1.5 font-medium">Mengevaluasi struktur URL, tautan admin, dan kelengkapan katalog...</p>
       </div>
       <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden border border-slate-200">
@@ -422,11 +422,11 @@
       </div>
 
       <p class="text-xs text-slate-600 leading-relaxed font-medium">
-        Model default yang digunakan adalah <code class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded text-sky-700 font-mono font-bold">gemini-3-flash-preview</code>. Kunci API bawaan terpasang secara otomatis.
+        Model default yang digunakan adalah <code class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded text-sky-700 font-mono font-bold">gemini-3-flash-preview</code> dengan Kunci API bawaan otomatis.
       </p>
 
       <div class="space-y-2">
-        <label for="custom-api-key" class="text-xs font-bold text-slate-700">Gemini API Key (Opsional / Custom):</label>
+        <label for="custom-api-key" class="text-xs font-bold text-slate-700">Gemini API Key Custom:</label>
         <input type="password" id="custom-api-key" placeholder="Masukkan Custom Gemini API Key..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-sky-600 font-mono">
       </div>
 
@@ -450,7 +450,7 @@
             </div>
             <h2 class="text-xl sm:text-2xl font-black text-slate-900">LAPORAN PENILAIAN PROTOTIPE WEBSITE UMKM</h2>
           </div>
-          <p class="text-xs text-slate-500 mt-1 font-medium">Laporan Audit AI Terbobot 10 Kriteria & Klasifikasi Tier</p>
+          <p class="text-xs text-slate-500 mt-1 font-medium">Laporan Penilaian</p>
         </div>
 
         <div class="text-right text-xs text-slate-500 no-print">
@@ -465,25 +465,25 @@
 
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-200 text-xs">
         <div>
-          <span class="text-slate-500 block font-medium">URL Target Prototipe:</span>
+          <span class="text-slate-500 block font-medium">URL yang Dinilai:</span>
           <span id="rpt-url" class="font-bold text-slate-900 break-all font-mono">-</span>
         </div>
         <div>
-          <span class="text-slate-500 block font-medium">Tanggal Audit AI:</span>
+          <span class="text-slate-500 block font-medium">Tanggal Penilaian AI:</span>
           <span id="rpt-date" class="font-bold text-slate-900">-</span>
         </div>
         <div>
-          <span class="text-slate-500 block font-medium">Skor Terbobot Akhir:</span>
+          <span class="text-slate-500 block font-medium">Skor Akhir:</span>
           <span id="rpt-score" class="font-extrabold text-sky-700 text-base font-mono">-</span>
         </div>
         <div>
-          <span class="text-slate-500 block font-medium">Predikat & Tier:</span>
+          <span class="text-slate-500 block font-medium">Predikat:</span>
           <span id="rpt-grade" class="font-bold text-emerald-700 text-sm">-</span>
         </div>
       </div>
 
       <div class="space-y-3">
-        <h3 class="font-extrabold text-sm text-slate-900 border-b pb-2">Hasil Rincian Audit 10 Kriteria</h3>
+        <h3 class="font-extrabold text-sm text-slate-900 border-b pb-2">Hasil Rincian Penilaian</h3>
         <table class="w-full text-left text-xs border-collapse">
           <thead>
             <tr class="bg-slate-100 border-b border-slate-300 text-slate-800">
@@ -512,11 +512,11 @@
 
       <div class="pt-8 flex justify-between items-end text-xs text-slate-500 border-t border-slate-200">
         <div>
-          <p>Auditor AI Engine: <span class="font-mono font-bold text-slate-700">Gemini 3 Flash (Temp 0.2 - Deterministic Hash-Seeded)</span></p>
+          <p>AI Engine: <span class="font-mono font-bold text-slate-700">Gemini 3 Flash (Temp 0.2 - Deterministic Hash-Seeded)</span></p>
         </div>
         <div class="text-center">
           <p class="mb-12 font-medium">Penilai oleh Gemini AI</p>
-          <p class="font-extrabold text-slate-900">( AI UMKM AUDITOR ENGINE )</p>
+          <!--<p class="font-extrabold text-slate-900">( AI UMKM AUDITOR ENGINE )</p>-->
         </div>
       </div>
 
@@ -727,18 +727,18 @@
         const deterministicScores = getDeterministicScoresForUrl(url);
 
         try {
-          const systemPrompt = `Anda adalah Auditor AI Resmi untuk Prototipe WebApp UMKM.
+          const systemPrompt = `Anda adalah Penilai, Penguji, sebagai Auditor untuk menilai Prototipe WebApp UMKM yang berisi Katalog Produk.
 Tugas Anda adalah menilai URL website katalog produk UMKM secara obyektif & SANGAT DETAIL berdasarkan 10 kriteria:
 1. c1: Fungsionalitas Elemen (tombol, filter, navigasi)
 2. c2: Tata Letak Elemen (grid produk, spacing, hierarki visual)
 3. c3: UI/UX User Friendly (kontras, kenyamanan, keterbacaan)
 4. c4: Gambar Katalog & Keterangan (kualitas foto, rincian produk)
-5. c5: Pemisahan Akses Admin & Pengunjung (WAJIB PERIKSA apakah ada tautan 'Portal Admin', 'Login Pengelola', '/admin', atau tombol kelola pada navbar/footer/menu website. Jika ada, berikan skor tinggi 85-100 dan sebutkan lokasinya)
-6. c6: Ketahanan Anti SQL Injection (sanitasi input, validasi form)
-7. c7: Tampilan Dynamic / Responsive (adaptabilitas desktop, tablet, mobile)
-8. c8: Informasi Kontak Perusahaan Lengkap (alamat, WhatsApp, email)
-9. c9: Mekanisme Belanja / Checkout Dijelaskan (alur pemesanan transparan)
-10. c10: Direct Checkout & Metode Pembayaran (WA, QRIS, Transfer)
+5. c5: Pemisahan Akses Admin & Pengunjung (WAJIB PERIKSA apakah ada tautan 'Portal Admin', 'Login Pengelola', '/admin', atau tombol kelola pada navbar/footer/menu website. Jika ada periksa apakah tahan terhadap SQL Injection, lalu periksa penempatannya, apakah disebutkan secara gambar seperti "masuk sebagai Admin" atau sejenisnya, atau hanya menyebutkan "Masuk". Jika tidak secara gamblang menyebutkan "Admin" maka beri skor tinggi, jika secara gamblang maka beri skor rendah kemudian sebutkan lokasinya peletakannya dimana)
+6. c6: Ketahanan Anti SQL Injection (lakukan percobaan SQL Injection seperti untuk memodifikasi konten web, sanitasi input, validasi form)
+7. c7: Tampilan Dynamic / Responsive (adaptabilitas mode desktop, tablet, mobile)
+8. c8: Informasi Kontak Perusahaan Lengkap (nama perusahaan, alamat perusahaan, nomor kontak, email. jika lengkap berikan skor tinggi. jika tidak lengkap berikan skor menengah. jika hanya ada salah satu saja berikan skor rendah)
+9. c9: Mekanisme Belanja / Checkout Dijelaskan (alur pemesanan dapat dipahami user)
+10. c10: Direct Checkout & Metode Pembayaran (menyediakan opsi pembayaran melalui WA, QRIS, Transfer, e-wallet. jika lengkap berikan skor tinggi. jika tidak lengkap berikan skor menengah. jika hanya ada salah satu saja berikan skor rendah)
 
 Sangat Penting: Gunakan skor numerik berikut untuk menjamin konsistensi evaluasi untuk URL (${url}):
 ${JSON.stringify(deterministicScores)}
@@ -1125,9 +1125,9 @@ Format output WAJIB JSON persis seperti berikut:
         const evidence = state.auditData.evidence?.[key] || "Pemindaian fitur berhasil diselesaikan.";
         const reason = state.auditData.reasons[key] || "Analisis belum tersedia.";
         const rec = state.auditData.recommendations[key] || "Rekomendasi belum tersedia.";
-        const strengths = state.auditData.strengths?.[key] || ["Memenuhi kriteria dasar audit."];
+        const strengths = state.auditData.strengths?.[key] || ["Memenuhi kriteria dasar."];
         const weaknesses = state.auditData.weaknesses?.[key] || ["Perlu pemeliharaan rutin."];
-        const checklists = state.auditData.checklists?.[key] || [{ item: "Verifikasi Fitur Standard", pass: true }];
+        const checklists = state.auditData.checklists?.[key] || [{ item: "Verifikasi Fitur Standar", pass: true }];
         const contrib = (score * meta.weight).toFixed(2);
 
         let badgeClass = "bg-emerald-100 text-emerald-800 border-emerald-300";
