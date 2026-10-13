@@ -114,11 +114,7 @@
         <div>
           <h1 class="font-extrabold text-base sm:text-xl text-slate-900 tracking-tight flex items-center gap-2">
             Penilaian Prototipe WebApp UMKM
-            <!--<span class="text-xs bg-sky-100 text-sky-800 border border-sky-300 font-mono px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1">
-              <i class="fa-solid fa-gem text-sky-600"></i> Skala Grade A - E
-            </span>-->
           </h1>
-          <!--<p class="text-xs sm:text-sm text-slate-500 font-medium hidden sm:block">Audit Konsisten & Deterministik 10 Kriteria Terbobot dengan Klasifikasi Tier</p>-->
         </div>
       </div>
 
@@ -142,7 +138,7 @@
       </div>
     </div>
 
-    <!-- URL Input Section -->
+    <!-- URL & Developer Input Section -->
     <section class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
       <div class="absolute -right-12 -top-12 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -150,20 +146,29 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h2 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2.5">
-              <i class="fa-solid fa-globe text-sky-600 text-xl"></i> Masukkan URL Prototipe Website UMKM
+              <i class="fa-solid fa-users-gear text-sky-600 text-xl"></i> Masukkan Pasangan Developer & URL Prototipe UMKM
             </h2>
             <p class="text-xs sm:text-sm text-slate-600 mt-1">
-              Masukkan 1 atau beberapa URL
+              Isikan Nama Developer dan URL target secara sejajar (baris ke-1 Developer terhubung dengan baris ke-1 URL).
             </p>
           </div>
-          <!--<button id="btn-insert-sample" class="self-start sm:self-center px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-sky-700 text-xs font-extrabold rounded-xl border border-slate-300 transition flex items-center gap-1.5 shadow-sm">
-            <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Contoh Beberapa URL
-          </button>-->
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
-          <div class="lg:col-span-9 relative">
-            <!--<label for="input-url" class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-1.5">URL Target Prototipe WebApp (Dapat Memasukkan Banyak URL):</label>-->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+          
+          <!-- Column 1: Developer Name per Line -->
+          <div class="lg:col-span-5 space-y-1.5">
+            <label for="input-developer" class="block text-xs font-extrabold uppercase tracking-wider text-slate-500">
+              <i class="fa-solid fa-user-gear text-sky-600 mr-1"></i> Nama Developer (1 Per Baris):
+            </label>
+            <textarea id="input-developer" rows="3" placeholder="Budi Santoso&#10;Tim Alpha UMKM&#10;Siti Rahma" class="w-full px-4 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-bold transition shadow-inner custom-scrollbar resize-none"></textarea>
+          </div>
+
+          <!-- Column 2: URL Target per Line -->
+          <div class="lg:col-span-7 space-y-1.5 relative">
+            <label for="input-url" class="block text-xs font-extrabold uppercase tracking-wider text-slate-500">
+              <i class="fa-solid fa-link text-sky-600 mr-1"></i> URL Prototipe (1 Per Baris):
+            </label>
             <div class="relative">
               <textarea id="input-url" rows="3" placeholder="https://kopi-lokal-nusantara.vercel.app&#10;https://batik-tradisional-solo.vercel.app&#10;https://kerajinan-bambu-bali.vercel.app" class="w-full pl-4 pr-16 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-mono font-bold transition shadow-inner custom-scrollbar resize-none"></textarea>
               
@@ -172,74 +177,14 @@
                 <i class="fa-solid fa-wand-magic-sparkles text-amber-300 text-lg group-hover:rotate-12 transition transform"></i>
               </button>
             </div>
-            <p class="text-[11px] text-slate-500 mt-1.5 font-medium flex items-center gap-1.5">
-              <i class="fa-solid fa-keyboard text-slate-400"></i>
-              <span>Pisahkan tiap URL dengan Enter. Klik ikon <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> atau tekan <kbd class="px-1.5 py-0.5 bg-slate-200 text-slate-800 border border-slate-300 rounded font-mono font-bold text-[10px] shadow-sm">Ctrl + Enter</kbd> untuk mulai menilai.</span>
-            </p>
           </div>
 
-          <!-- Preview Action Button Outside -->
-          <div class="lg:col-span-3 pt-2 lg:pt-6">
-            <button id="btn-load-preview" title="Muat Tampilan Preview (Opsional)" class="w-full h-[88px] bg-slate-100 hover:bg-slate-200 text-slate-700 border-2 border-slate-300 text-xs sm:text-sm font-extrabold rounded-2xl transition flex flex-col items-center justify-center gap-1.5 shadow-sm">
-              <i class="fa-solid fa-eye text-sky-600 text-xl"></i>
-              <span>Preview Website</span>
-              <span class="font-normal text-[10px] text-slate-500">(URL Aktif Terpilih)</span>
-            </button>
-          </div>-->
-        </div>
-      </div>
-    </section>
-
-    <!-- Live Preview Section -->
-    <section id="preview-section" class="hidden bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300">
-      <div class="p-4 bg-slate-900 text-white border-b border-slate-800 flex items-center justify-between gap-3 flex-wrap">
-        <div class="flex items-center gap-3 flex-wrap">
-          <span class="text-xs sm:text-sm font-bold text-slate-200 flex items-center gap-2">
-            <i class="fa-solid fa-display text-sky-400"></i> Live Preview:
-          </span>
-          <div class="flex items-center gap-1 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
-            <button id="device-desktop" class="btn-device active px-3 py-1.5 rounded-lg text-xs font-bold text-sky-400 bg-slate-800 transition flex items-center gap-2">
-              <i class="fa-solid fa-desktop"></i> Desktop (1280px)
-            </button>
-            <button id="device-tablet" class="btn-device px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition flex items-center gap-2">
-              <i class="fa-solid fa-tablet-screen-button"></i> Tablet (768px)
-            </button>
-            <button id="device-mobile" class="btn-device px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition flex items-center gap-2">
-              <i class="fa-solid fa-mobile-screen-button"></i> Mobile (375px)
-            </button>
-          </div>
         </div>
 
-        <div class="flex items-center gap-2.5">
-          <span id="preview-url-status" class="text-xs font-mono text-sky-400 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 max-w-xs truncate hidden sm:inline-block">
-            Menampilkan: -
-          </span>
-          <button id="btn-reload-iframe" title="Muat Ulang Frame" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs transition">
-            <i class="fa-solid fa-rotate-right"></i>
-          </button>
-          <a id="link-external-open" href="#" target="_blank" rel="noopener noreferrer" title="Buka di Tab Baru" class="px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition flex items-center gap-2 shadow-md">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            <span class="hidden md:inline">Buka di Tab Baru</span>
-          </a>
-        </div>
-      </div>
-
-      <div id="iframe-fallback-banner" class="bg-amber-50 border-b border-amber-200 px-5 py-2.5 text-amber-900 text-xs flex items-center justify-between gap-3 font-medium">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-circle-info text-amber-600 text-sm"></i>
-          <span>Jika situs target memblokir preview frame (<code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-amber-900">X-Frame-Options</code>), gunakan tombol 'Buka di Tab Baru'.</span>
-        </div>
-        <a id="banner-open-link" href="#" target="_blank" class="underline font-bold text-amber-800 hover:text-amber-950 whitespace-nowrap">Buka Tab Baru &rarr;</a>
-      </div>
-
-      <div class="bg-slate-200 p-6 flex items-center justify-center overflow-auto custom-scrollbar min-h-[550px]">
-        <div id="iframe-wrapper" class="device-desktop transition-all duration-300 bg-white rounded-2xl overflow-hidden shadow-2xl relative border-2 border-slate-300">
-          <div id="iframe-loading" class="hidden absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-10 text-white">
-            <i class="fa-solid fa-circle-notch fa-spin text-4xl text-sky-400"></i>
-            <p class="text-xs sm:text-sm font-bold">Memuat Preview...</p>
-          </div>
-          <iframe id="preview-iframe" src="about:blank" class="w-full h-full border-0"></iframe>
-        </div>
+        <p class="text-[11px] text-slate-500 mt-1 font-medium flex items-center gap-1.5">
+          <i class="fa-solid fa-circle-info text-sky-600"></i>
+          <span>Pengisian sejajar 1-ke-1: Baris ke-N di kolom Developer terikat langsung dengan URL baris ke-N. Klik ikon <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> atau tekan <kbd class="px-1.5 py-0.5 bg-slate-200 text-slate-800 border border-slate-300 rounded font-mono font-bold text-[10px] shadow-sm">Ctrl + Enter</kbd> untuk mulai menilai.</span>
+        </p>
       </div>
     </section>
 
@@ -265,7 +210,6 @@
           </div>
 
           <button id="btn-trigger-celebration" class="px-6 py-3.5 bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm rounded-2xl shadow-xl shadow-amber-500/30 transition transform hover:scale-105 flex items-center gap-2.5 animate-glow-pulse">
-            <!--<i class="fa-solid fa-wand-magic-sparkles text-base"></i>-->
             <span>Selebrasi 🎉</span>
           </button>
         </div>
@@ -284,7 +228,9 @@
               <i class="fa-solid fa-chart-line text-sky-600 text-2xl"></i>
               Laporan AI Gemini
             </h2>
-            <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Rincian penilaian untuk URL terpilih.</p>
+            <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
+              Developer: <span id="display-developer-name" class="font-bold text-slate-800 font-mono">-</span>
+            </p>
           </div>
 
           <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
@@ -346,7 +292,7 @@
             </div>
           </div>
 
-          <!-- Radar Chart Visualizer -->
+          <!-- Radar Chart Visualizer & Action Buttons -->
           <div class="md:col-span-7 bg-slate-50 border border-slate-200 rounded-3xl p-6 flex flex-col justify-between space-y-4">
             <div class="flex items-center justify-between">
               <h3 class="text-xs sm:text-sm font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-2">
@@ -363,12 +309,73 @@
               -
             </div>
 
-            <button id="btn-view-report-modal" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-extrabold rounded-2xl transition shadow-md shadow-sky-600/20 flex items-center justify-center gap-2">
-              <i class="fa-solid fa-file-pdf text-base"></i>
-              <span>Cetak / Simpan sebagai PDF</span>
-            </button>
+            <!-- Moved Action Buttons: Preview & PDF Export -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button id="btn-load-preview" title="Muat Tampilan Preview Website Terpilih" class="w-full py-3 bg-slate-800 hover:bg-slate-900 text-white text-xs sm:text-sm font-extrabold rounded-2xl transition shadow-md flex items-center justify-center gap-2">
+                <i class="fa-solid fa-eye text-sky-400 text-base"></i>
+                <span>Preview Live Web</span>
+              </button>
+
+              <button id="btn-view-report-modal" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-extrabold rounded-2xl transition shadow-md shadow-sky-600/20 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-file-pdf text-base"></i>
+                <span>Cetak / Simpan PDF</span>
+              </button>
+            </div>
           </div>
 
+        </div>
+      </section>
+
+      <!-- Live Preview Section (Moved to Results Area) -->
+      <section id="preview-section" class="hidden bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300">
+        <div class="p-4 bg-slate-900 text-white border-b border-slate-800 flex items-center justify-between gap-3 flex-wrap">
+          <div class="flex items-center gap-3 flex-wrap">
+            <span class="text-xs sm:text-sm font-bold text-slate-200 flex items-center gap-2">
+              <i class="fa-solid fa-display text-sky-400"></i> Live Preview:
+            </span>
+            <div class="flex items-center gap-1 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
+              <button id="device-desktop" class="btn-device active px-3 py-1.5 rounded-lg text-xs font-bold text-sky-400 bg-slate-800 transition flex items-center gap-2">
+                <i class="fa-solid fa-desktop"></i> Desktop (1280px)
+              </button>
+              <button id="device-tablet" class="btn-device px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition flex items-center gap-2">
+                <i class="fa-solid fa-tablet-screen-button"></i> Tablet (768px)
+              </button>
+              <button id="device-mobile" class="btn-device px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition flex items-center gap-2">
+                <i class="fa-solid fa-mobile-screen-button"></i> Mobile (375px)
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5">
+            <span id="preview-url-status" class="text-xs font-mono text-sky-400 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 max-w-xs truncate hidden sm:inline-block">
+              Menampilkan: -
+            </span>
+            <button id="btn-reload-iframe" title="Muat Ulang Frame" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs transition">
+              <i class="fa-solid fa-rotate-right"></i>
+            </button>
+            <a id="link-external-open" href="#" target="_blank" rel="noopener noreferrer" title="Buka di Tab Baru" class="px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition flex items-center gap-2 shadow-md">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              <span class="hidden md:inline">Buka di Tab Baru</span>
+            </a>
+          </div>
+        </div>
+
+        <div id="iframe-fallback-banner" class="bg-amber-50 border-b border-amber-200 px-5 py-2.5 text-amber-900 text-xs flex items-center justify-between gap-3 font-medium">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-info text-amber-600 text-sm"></i>
+            <span>Jika situs target memblokir preview frame (<code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-amber-900">X-Frame-Options</code>), gunakan tombol 'Buka di Tab Baru'.</span>
+          </div>
+          <a id="banner-open-link" href="#" target="_blank" class="underline font-bold text-amber-800 hover:text-amber-950 whitespace-nowrap">Buka Tab Baru &rarr;</a>
+        </div>
+
+        <div class="bg-slate-200 p-6 flex items-center justify-center overflow-auto custom-scrollbar min-h-[550px]">
+          <div id="iframe-wrapper" class="device-desktop transition-all duration-300 bg-white rounded-2xl overflow-hidden shadow-2xl relative border-2 border-slate-300">
+            <div id="iframe-loading" class="hidden absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-10 text-white">
+              <i class="fa-solid fa-circle-notch fa-spin text-4xl text-sky-400"></i>
+              <p class="text-xs sm:text-sm font-bold">Memuat Preview...</p>
+            </div>
+            <iframe id="preview-iframe" src="about:blank" class="w-full h-full border-0"></iframe>
+          </div>
         </div>
       </section>
 
@@ -450,7 +457,7 @@
             </div>
             <h2 class="text-xl sm:text-2xl font-black text-slate-900">LAPORAN PENILAIAN PROTOTIPE WEBSITE UMKM</h2>
           </div>
-          <p class="text-xs text-slate-500 mt-1 font-medium">Laporan Penilaian</p>
+          <p class="text-xs text-slate-500 mt-1 font-medium">Laporan Hasil Penilaian oleh Gemini AI</p>
         </div>
 
         <div class="text-right text-xs text-slate-500 no-print">
@@ -463,7 +470,11 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-200 text-xs">
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-200 text-xs">
+        <div>
+          <span class="text-slate-500 block font-medium">Developer / Pembuat:</span>
+          <span id="rpt-developer" class="font-extrabold text-slate-900 font-mono text-sm">-</span>
+        </div>
         <div>
           <span class="text-slate-500 block font-medium">URL yang Dinilai:</span>
           <span id="rpt-url" class="font-bold text-slate-900 break-all font-mono">-</span>
@@ -516,7 +527,6 @@
         </div>
         <div class="text-center">
           <p class="mb-12 font-medium">Penilai oleh Gemini AI</p>
-          <!--<p class="font-extrabold text-slate-900">( AI UMKM AUDITOR ENGINE )</p>-->
         </div>
       </div>
 
@@ -526,6 +536,7 @@
   <script>
     const state = {
       url: "",
+      developer: "",
       apiKey: "",
       radarChart: null,
       auditCache: {},
@@ -578,17 +589,36 @@
       };
     }
 
-    function parseUrlsFromInput(rawInput) {
-      if (!rawInput) return [];
-      const lines = rawInput.split(/[\n,]+/);
-      const urlList = [];
-      lines.forEach(line => {
-        const trimmed = line.trim();
-        if (trimmed) {
-          urlList.push(normalizeUrl(trimmed));
+    /**
+     * Parse 1-to-1 Developer and URL pairs from textareas line by line.
+     */
+    function parsePairsFromInputs() {
+      const devRaw = document.getElementById('input-developer')?.value || "";
+      const urlRaw = document.getElementById('input-url')?.value || "";
+
+      const devLines = devRaw.split('\n').map(s => s.trim());
+      const urlLines = urlRaw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+
+      const pairs = [];
+      const uniqueUrls = new Set();
+
+      urlLines.forEach((urlLine, index) => {
+        let cleanUrl = normalizeUrl(urlLine);
+        if (!cleanUrl || uniqueUrls.has(cleanUrl)) return;
+        uniqueUrls.add(cleanUrl);
+
+        let devName = devLines[index] || "";
+        if (!devName) {
+          devName = `Developer ${index + 1}`;
         }
+
+        pairs.push({
+          developer: devName,
+          url: cleanUrl
+        });
       });
-      return [...new Set(urlList)];
+
+      return pairs;
     }
 
     function showToast(title, message, isSuccess = true) {
@@ -664,14 +694,14 @@
     }
 
     function handleShowPreview() {
-      const inputVal = document.getElementById('input-url')?.value || "";
-      const url = normalizeUrl(inputVal);
-      if (!url) {
-        showToast("URL Diperlukan", "Masukkan URL website UMKM terlebih dahulu.", false);
+      const activeUrl = state.url;
+      const activeDev = state.developer;
+
+      if (!activeUrl) {
+        showToast("URL Diperlukan", "Silakan pilih atau jalankan audit URL terlebih dahulu.", false);
         return;
       }
 
-      state.url = url;
       const previewSection = document.getElementById('preview-section');
       const iframe = document.getElementById('preview-iframe');
       const iframeLoading = document.getElementById('iframe-loading');
@@ -680,13 +710,13 @@
       const bannerLink = document.getElementById('banner-open-link');
 
       if (previewSection) previewSection.classList.remove('hidden');
-      if (previewStatus) previewStatus.textContent = `Menampilkan: ${url}`;
-      if (extLink) extLink.href = url;
-      if (bannerLink) bannerLink.href = url;
+      if (previewStatus) previewStatus.textContent = `Menampilkan: ${activeDev} (${activeUrl})`;
+      if (extLink) extLink.href = activeUrl;
+      if (bannerLink) bannerLink.href = activeUrl;
 
       if (iframeLoading) iframeLoading.classList.remove('hidden');
       if (iframe) {
-        iframe.src = url;
+        iframe.src = activeUrl;
         iframe.onload = () => {
           if (iframeLoading) iframeLoading.classList.add('hidden');
         };
@@ -696,11 +726,10 @@
     }
 
     async function runAIAudit() {
-      const inputVal = document.getElementById('input-url')?.value || "";
-      const urls = parseUrlsFromInput(inputVal);
+      const pairs = parsePairsFromInputs();
 
-      if (urls.length === 0) {
-        showToast("URL Diperlukan", "Masukkan minimal 1 URL website UMKM terlebih dahulu.", false);
+      if (pairs.length === 0) {
+        showToast("URL Diperlukan", "Masukkan minimal 1 URL website UMKM beserta Nama Developer.", false);
         return;
       }
 
@@ -710,17 +739,20 @@
 
       if (progressModal) progressModal.classList.remove('hidden');
 
-      for (let i = 0; i < urls.length; i++) {
-        const url = urls[i];
+      for (let i = 0; i < pairs.length; i++) {
+        const { developer, url } = pairs[i];
         state.url = url;
+        state.developer = developer;
 
-        const percent = Math.round(((i + 1) / urls.length) * 100);
+        const percent = Math.round(((i + 1) / pairs.length) * 100);
         if (progressBar) progressBar.style.width = `${percent}%`;
-        if (progressStatus) progressStatus.textContent = `Menilai URL (${i + 1}/${urls.length}): ${url}...`;
+        if (progressStatus) progressStatus.textContent = `Menilai (${i + 1}/${pairs.length}): ${developer} - ${url}...`;
 
-        if (state.auditCache[url]) {
-          state.auditData = state.auditCache[url];
-          saveToHistory(url, state.auditData);
+        const cacheKey = `${url}__${developer}`;
+
+        if (state.auditCache[cacheKey]) {
+          state.auditData = state.auditCache[cacheKey];
+          saveToHistory(url, developer, state.auditData);
           continue;
         }
 
@@ -728,24 +760,25 @@
 
         try {
           const systemPrompt = `Anda adalah Penilai, Penguji, sebagai Auditor untuk menilai Prototipe WebApp UMKM yang berisi Katalog Produk.
+Developer / Pembuat: ${developer}
 Tugas Anda adalah menilai URL website katalog produk UMKM secara obyektif & SANGAT DETAIL berdasarkan 10 kriteria:
 1. c1: Fungsionalitas Elemen (tombol, filter, navigasi)
 2. c2: Tata Letak Elemen (grid produk, spacing, hierarki visual)
 3. c3: UI/UX User Friendly (kontras, kenyamanan, keterbacaan)
 4. c4: Gambar Katalog & Keterangan (kualitas foto, rincian produk)
-5. c5: Pemisahan Akses Admin & Pengunjung (WAJIB PERIKSA apakah ada tautan 'Portal Admin', 'Login Pengelola', '/admin', atau tombol kelola pada navbar/footer/menu website. Jika ada periksa apakah tahan terhadap SQL Injection, lalu periksa penempatannya, apakah disebutkan secara gambar seperti "masuk sebagai Admin" atau sejenisnya, atau hanya menyebutkan "Masuk". Jika tidak secara gamblang menyebutkan "Admin" maka beri skor tinggi, jika secara gamblang maka beri skor rendah kemudian sebutkan lokasinya peletakannya dimana)
-6. c6: Ketahanan Anti SQL Injection (lakukan percobaan SQL Injection seperti untuk memodifikasi konten web, sanitasi input, validasi form)
+5. c5: Pemisahan Akses Admin & Pengunjung (WAJIB PERIKSA apakah ada tautan 'Portal Admin', 'Login Pengelola', '/admin', atau tombol kelola pada navbar/footer/menu website)
+6. c6: Ketahanan Anti SQL Injection (sanitasi input, validasi form)
 7. c7: Tampilan Dynamic / Responsive (adaptabilitas mode desktop, tablet, mobile)
-8. c8: Informasi Kontak Perusahaan Lengkap (nama perusahaan, alamat perusahaan, nomor kontak, email. jika lengkap berikan skor tinggi. jika tidak lengkap berikan skor menengah. jika hanya ada salah satu saja berikan skor rendah)
+8. c8: Informasi Kontak Perusahaan Lengkap (nama perusahaan, alamat perusahaan, nomor kontak, email)
 9. c9: Mekanisme Belanja / Checkout Dijelaskan (alur pemesanan dapat dipahami user)
-10. c10: Direct Checkout & Metode Pembayaran (menyediakan opsi pembayaran melalui WA, QRIS, Transfer, e-wallet. jika lengkap berikan skor tinggi. jika tidak lengkap berikan skor menengah. jika hanya ada salah satu saja berikan skor rendah)
+10. c10: Direct Checkout & Metode Pembayaran (WA, QRIS, Transfer, e-wallet)
 
 Sangat Penting: Gunakan skor numerik berikut untuk menjamin konsistensi evaluasi untuk URL (${url}):
 ${JSON.stringify(deterministicScores)}
 
 Format output WAJIB JSON persis seperti berikut:
 {
-  "executive_summary": "Ringkasan analisis eksekutif mendalam...",
+  "executive_summary": "Ringkasan analisis eksekutif mendalam untuk developer ${developer}...",
   "scores": ${JSON.stringify(deterministicScores)},
   "evidence": { "c1": "Bukti temuan...", "c2": "...", "c3": "...", "c4": "...", "c5": "...", "c6": "...", "c7": "...", "c8": "...", "c9": "...", "c10": "..." },
   "strengths": { "c1": ["Kelebihan 1"], "c2": ["..."], "c3": ["..."], "c4": ["..."], "c5": ["..."], "c6": ["..."], "c7": ["..."], "c8": ["..."], "c9": ["..."], "c10": ["..."] },
@@ -766,7 +799,7 @@ Format output WAJIB JSON persis seperti berikut:
   "recommendations": { "c1": "...", "c2": "...", "c3": "...", "c4": "...", "c5": "...", "c6": "...", "c7": "...", "c8": "...", "c9": "...", "c10": "..." }
 }`;
 
-          const userPrompt = `Lakukan audit deterministik mendalam untuk URL Prototipe Website UMKM berikut: ${url}`;
+          const userPrompt = `Lakukan audit deterministik mendalam untuk URL Prototipe Website UMKM berikut (Developer: ${developer}): ${url}`;
           const apiKey = state.apiKey;
           const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
@@ -787,31 +820,31 @@ Format output WAJIB JSON persis seperti berikut:
               const textContent = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
               if (textContent) {
                 resultData = JSON.parse(textContent);
-                // Guarantee exact score binding to URL Hash
                 resultData.scores = deterministicScores;
               }
             }
           }
 
           if (!resultData) {
-            resultData = generateDeterminisitcFallback(url);
+            resultData = generateDeterminisitcFallback(url, developer);
           }
 
           state.auditData = resultData;
-          state.auditCache[url] = resultData;
-          saveToHistory(url, resultData);
+          state.auditCache[cacheKey] = resultData;
+          saveToHistory(url, developer, resultData);
 
         } catch (err) {
           console.error("Audit error for URL:", url, err);
-          const fallbackData = generateDeterminisitcFallback(url);
+          const fallbackData = generateDeterminisitcFallback(url, developer);
           state.auditData = fallbackData;
-          state.auditCache[url] = fallbackData;
-          saveToHistory(url, fallbackData);
+          state.auditCache[cacheKey] = fallbackData;
+          saveToHistory(url, developer, fallbackData);
         }
       }
 
       if (state.history.length > 0) {
         state.url = state.history[0].url;
+        state.developer = state.history[0].developer;
         state.auditData = state.history[0].auditObj;
       }
 
@@ -831,7 +864,7 @@ Format output WAJIB JSON persis seperti berikut:
       state.history.forEach(item => {
         const option = document.createElement('option');
         option.value = item.url;
-        option.textContent = `${item.url} (${item.totalScore.toFixed(1)}%)`;
+        option.textContent = `${item.developer} - ${item.url} (${item.totalScore.toFixed(1)}%)`;
         if (item.url === state.url) option.selected = true;
         selectEl.appendChild(option);
       });
@@ -841,18 +874,23 @@ Format output WAJIB JSON persis seperti berikut:
         const found = state.history.find(h => h.url === selectedUrl);
         if (found) {
           state.url = found.url;
+          state.developer = found.developer;
           state.auditData = found.auditObj;
+          
+          // Hide iframe preview when switching selected report
+          document.getElementById('preview-section')?.classList.add('hidden');
+          
           updateDashboardDisplays();
           renderGranularMatrixCards();
         }
       };
     }
 
-    function generateDeterminisitcFallback(url) {
+    function generateDeterminisitcFallback(url, developer) {
       const scores = getDeterministicScoresForUrl(url);
 
       return {
-        executive_summary: `Audit mikro deterministik untuk prototipe (${url}) menunjukkan analisis performa katalog terperinci dengan klasifikasi desimal objektif.`,
+        executive_summary: `Audit mikro deterministik untuk prototipe (${url}) yang dikembangkan oleh ${developer} menunjukkan analisis performa katalog terperinci dengan klasifikasi desimal objektif.`,
         scores: scores,
         evidence: {
           c1: "Pemindaian menemukan tombol filter produk, pencarian, dan tautan halaman detail berfungsi tanpa kendala.",
@@ -973,11 +1011,12 @@ Format output WAJIB JSON persis seperti berikut:
       return { grade, tier };
     }
 
-    function saveToHistory(url, auditObj) {
+    function saveToHistory(url, developer, auditObj) {
       const calc = calculateScores(auditObj);
-      const existingIdx = state.history.findIndex(item => item.url === url);
+      const existingIdx = state.history.findIndex(item => item.url === url && item.developer === developer);
       const historyItem = {
         url,
+        developer,
         auditObj,
         totalScore: calc.total,
         calc,
@@ -1035,7 +1074,11 @@ Format output WAJIB JSON persis seperti berikut:
               ${tier.name}
             </span>
             
-            <h3 class="font-extrabold text-xs text-white break-all line-clamp-1 max-w-full my-1 font-mono">
+            <span class="text-[11px] font-bold text-slate-300 line-clamp-1 max-w-full font-sans">
+              <i class="fa-solid fa-user-gear text-sky-400 text-[10px]"></i> ${item.developer}
+            </span>
+
+            <h3 class="font-extrabold text-[11px] text-white break-all line-clamp-1 max-w-full my-0.5 font-mono">
               ${item.url}
             </h3>
 
@@ -1077,6 +1120,9 @@ Format output WAJIB JSON persis seperti berikut:
       const rankIdx = state.history.findIndex(h => h.url === state.url);
       const activeRank = rankIdx >= 0 ? rankIdx + 1 : 1;
       const { grade, tier } = calculateGradeAndTier(calc.total, activeRank);
+
+      const devDisp = document.getElementById('display-developer-name');
+      if (devDisp) devDisp.textContent = state.developer || "Tidak Disebutkan";
 
       const scoreDisp = document.getElementById('overall-score-display');
       const scoreA = document.getElementById('cat-score-a');
@@ -1296,6 +1342,7 @@ Format output WAJIB JSON persis seperti berikut:
     }
 
     function updateReportModalData(totalWeighted, grade, tier) {
+      const rptDev = document.getElementById('rpt-developer');
       const rptUrl = document.getElementById('rpt-url');
       const rptDate = document.getElementById('rpt-date');
       const rptScore = document.getElementById('rpt-score');
@@ -1303,6 +1350,7 @@ Format output WAJIB JSON persis seperti berikut:
       const rptBody = document.getElementById('rpt-table-body');
       const rptPlan = document.getElementById('rpt-action-plan');
 
+      if (rptDev) rptDev.textContent = state.developer || "Tidak Disebutkan";
       if (rptUrl) rptUrl.textContent = state.url;
       if (rptDate) rptDate.textContent = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
       if (rptScore) rptScore.textContent = `${totalWeighted.toFixed(1)}%`;
@@ -1341,10 +1389,10 @@ Format output WAJIB JSON persis seperti berikut:
 
     document.addEventListener('DOMContentLoaded', () => {
 
-      document.getElementById('btn-insert-sample')?.addEventListener('click', () => {
-        const input = document.getElementById('input-url');
-        if (input) {
-          input.value = "https://kopi-lokal-nusantara.vercel.app\nhttps://batik-tradisional-solo.vercel.app\nhttps://kerajinan-bambu-bali.vercel.app";
+      document.getElementById('input-developer')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && e.ctrlKey) {
+          e.preventDefault();
+          runAIAudit();
         }
       });
 
@@ -1389,10 +1437,10 @@ Format output WAJIB JSON persis seperti berikut:
         state.apiKey = keyVal || "";
         const label = document.getElementById('api-status-label');
         if (label) {
-          label.textContent = keyVal ? "Custom Key Aktif" : "Kunci Gemini API";
+          label.textContent = keyVal ? "Custom Key Aktif" : "Gemini API";
         }
         document.getElementById('modal-api-key')?.classList.add('hidden');
-        showToast("Kunci API Disimpan", keyVal ? "Kunci API kustom digunakan." : "Menggunakan kunci API default Canvas.", true);
+        showToast("Kunci API Disimpan", keyVal ? "Kunci API kustom digunakan." : "Menggunakan kunci API default.", true);
       });
 
       document.getElementById('btn-view-report-modal')?.addEventListener('click', () => {
