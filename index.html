@@ -67,10 +67,11 @@
     }
     .custom-scrollbar::-webkit-scrollbar-track {
       background: #f1f5f9;
+      border-radius: 8px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
       background: #cbd5e1;
-      border-radius: 6px;
+      border-radius: 8px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
       background: #94a3b8;
@@ -113,7 +114,8 @@
         </div>
         <div>
           <h1 class="font-extrabold text-base sm:text-xl text-slate-900 tracking-tight flex items-center gap-2">
-            Penilaian Prototipe WebApp UMKM
+            Penilaian Prototipe WebApp Katalog UMKM
+            <span class="text-xs bg-sky-100 text-sky-800 border border-sky-300 font-mono px-2.5 py-0.5 rounded-full font-bold">Sub-Kriteria 1-10</span>
           </h1>
         </div>
       </div>
@@ -131,7 +133,7 @@
 
     <!-- Toast Notification -->
     <div id="toast-notification" class="hidden fixed top-24 right-6 z-50 bg-emerald-900 text-emerald-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 transition-all duration-300 border border-emerald-700">
-      <i class="fa-solid fa-circle-check text-emerald-400 text-2xl"></i>
+      <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-2xl"></i>
       <div>
         <h4 class="font-extrabold text-sm" id="toast-title">Berhasil!</h4>
         <p class="text-xs text-emerald-200 font-medium" id="toast-message">Pesan notifikasi.</p>
@@ -146,28 +148,36 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h2 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2.5">
-              <i class="fa-solid fa-users-gear text-sky-600 text-xl"></i> Developer & URL Prototipe Website
+              <i class="fa-solid fa-users-gear text-sky-600 text-xl"></i> Nama Pengembang & URL
             </h2>
             <p class="text-xs sm:text-sm text-slate-600 mt-1">
-              Isi Nama Developer dan URL Web (baris ke-1 Developer berkaitan dengan baris ke-1 URL).
+              Setiap baris Nama Pengembang berpasangan 1-ke-1 dengan baris URL Web.
             </p>
           </div>
+
+          <!-- Reset / Clear Button -->
+          <button id="btn-reset-all" title="Reset Semua Input & Hasil Penilaian" class="px-4 py-2 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-300 hover:border-rose-300 text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm self-start sm:self-center">
+            <i class="fa-solid fa-rotate-left text-xs"></i>
+            <span>Hapus</span>
+          </button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
           
           <!-- Column 1: Developer Name per Line -->
           <div class="lg:col-span-5 space-y-1.5">
-            <label for="input-developer" class="block text-xs font-extrabold uppercase tracking-wider text-slate-500">
-              <i class="fa-solid fa-user-gear text-sky-600 mr-1"></i> Nama Developer (1 Per Baris):
+            <label for="input-developer" class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center justify-between">
+              <span><i class="fa-solid fa-user-gear text-sky-600 mr-1"></i> Nama Pengembang (1 Per Baris):</span>
+              <span class="text-rose-500 font-bold text-[10px]">*</span>
             </label>
             <textarea id="input-developer" rows="3" placeholder="Budi Santoso&#10;Tim Alpha UMKM&#10;Siti Rahma" class="w-full px-4 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-bold transition shadow-inner custom-scrollbar resize-none"></textarea>
           </div>
 
           <!-- Column 2: URL Target per Line -->
           <div class="lg:col-span-7 space-y-1.5 relative">
-            <label for="input-url" class="block text-xs font-extrabold uppercase tracking-wider text-slate-500">
-              <i class="fa-solid fa-link text-sky-600 mr-1"></i> URL Prototipe (1 Per Baris):
+            <label for="input-url" class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center justify-between">
+              <span><i class="fa-solid fa-link text-sky-600 mr-1"></i> URL Prototipe (1 Per Baris):</span>
+              <span class="text-rose-500 font-bold text-[10px]">*</span>
             </label>
             <div class="relative">
               <textarea id="input-url" rows="3" placeholder="https://kopi-lokal-nusantara.vercel.app&#10;https://batik-tradisional-solo.vercel.app&#10;https://kerajinan-bambu-bali.vercel.app" class="w-full pl-4 pr-16 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-mono font-bold transition shadow-inner custom-scrollbar resize-none"></textarea>
@@ -183,13 +193,33 @@
 
         <p class="text-[11px] text-slate-500 mt-1 font-medium flex items-center gap-1.5">
           <i class="fa-solid fa-circle-info text-sky-600"></i>
-          <span>Klik ikon <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> atau tekan <kbd class="px-1.5 py-0.5 bg-slate-200 text-slate-800 border border-slate-300 rounded font-mono font-bold text-[10px] shadow-sm">Ctrl + Enter</kbd> untuk mulai menilai.</span>
+          <span>Klik <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> atau tekan <kbd class="px-1.5 py-0.5 bg-slate-200 text-slate-800 border border-slate-300 rounded font-mono font-bold text-[10px] shadow-sm">Ctrl + Enter</kbd> untuk mulai menilai.</span>
         </p>
       </div>
     </section>
 
-    <!-- Results Section -->
     <div id="results-section" class="hidden space-y-8 transition-all duration-300">
+
+      <!-- Equal Score Tie-Breaker Banner Notification -->
+      <div id="equal-score-banner" class="hidden bg-amber-500/10 border-2 border-amber-500/40 rounded-3xl p-4 sm:p-5 text-amber-900 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-lg flex-shrink-0">
+            ⚡
+          </div>
+          <div>
+            <h4 class="font-extrabold text-xs sm:text-sm text-amber-950 flex items-center gap-2">
+              Skor Sama Terdeteksi!
+            </h4>
+            <p id="equal-score-banner-text" class="text-xs text-amber-900 font-medium mt-0.5">
+              Beberapa WebApp memiliki nilai skor sama namun berada di posisi peringkat yang berbeda.
+            </p>
+          </div>
+        </div>
+        <button id="btn-open-tiebreaker-banner" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black rounded-xl transition shadow-md whitespace-nowrap self-end sm:self-center flex items-center gap-1.5">
+          <i class="fa-solid fa-magnifying-glass text-xs"></i>
+          <span>Cari Tahu Perbedaannya</span>
+        </button>
+      </div>
 
       <!-- Top 5 Tier Leaderboard Section -->
       <section id="leaderboard-section" class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-slate-800 text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 relative overflow-hidden">
@@ -199,7 +229,7 @@
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-5 relative z-10">
           <div>
             <span class="text-xs font-bold text-amber-400 bg-amber-950/80 border border-amber-500/30 px-3 py-1 rounded-full font-mono uppercase tracking-wider flex items-center gap-1.5 w-fit mb-2">
-              <i class="fa-solid fa-trophy text-amber-400"></i> Top 5 Rank
+              <i class="fa-solid fa-trophy text-amber-400"></i> 5 Teratas
             </span>
             <h2 class="text-xl sm:text-3xl font-black text-white flex items-center gap-3 tracking-tight">
               5 WebApp Teratas
@@ -209,9 +239,16 @@
             </p>
           </div>
 
-          <button id="btn-trigger-celebration" class="px-6 py-3.5 bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm rounded-2xl shadow-xl shadow-amber-500/30 transition transform hover:scale-105 flex items-center gap-2.5 animate-glow-pulse">
-            <span>Selebrasi 🎉</span>
-          </button>
+          <div class="flex items-center gap-2">
+            <button id="btn-trigger-celebration" class="px-5 py-2.5 bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm rounded-2xl shadow-xl shadow-amber-500/30 transition transform hover:scale-105 flex items-center gap-2 animate-glow-pulse">
+              <span>Selebrasi 🎉</span>
+            </button>
+            
+            <!-- Close button for Leaderboard Section -->
+            <button id="btn-close-leaderboard" title="Tutup Tampilan Leaderboard" class="p-2.5 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700 rounded-2xl transition border border-slate-700">
+              <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+          </div>
         </div>
 
         <!-- Top 5 Leaderboard Cards Container -->
@@ -229,7 +266,7 @@
               Hasil Penilaian
             </h2>
             <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
-              Developer: <span id="display-developer-name" class="font-bold text-slate-800 font-mono">-</span>
+              Pengembang: <span id="display-developer-name" class="font-bold text-slate-800 font-mono">-</span>
             </p>
           </div>
 
@@ -274,7 +311,7 @@
 
             <div class="w-full mt-6 pt-5 border-t border-sky-200/80 text-left text-xs sm:text-sm font-medium space-y-2.5">
               <div class="flex justify-between items-center text-slate-700">
-                <span>Kriteria 1-4 (Fungsi, Tata Letak, UI/UX, Kualitas Katalog):</span>
+                <span>Kriteria 1-4 (Fungsi, Tata Letak, UI/UX, Katalog):</span>
                 <span id="cat-score-a" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 45</span>
               </div>
               <div class="flex justify-between items-center text-slate-700">
@@ -282,11 +319,11 @@
                 <span id="cat-score-b" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 20</span>
               </div>
               <div class="flex justify-between items-center text-slate-700">
-                <span>Kriteria 7-9 (Adaptabilitas Tampilan, Kontak, & Mekanisme Belanja):</span>
+                <span>Kriteria 7-9 (Responsif, Kontak, & Belanja):</span>
                 <span id="cat-score-c" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 25</span>
               </div>
               <div class="flex justify-between items-center text-slate-700">
-                <span>Kriteria 10 (Aneka Pilihan Pembayaran):</span>
+                <span>Kriteria 10 (Pembayaran & Checkout):</span>
                 <span id="cat-score-d" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 10</span>
               </div>
             </div>
@@ -298,7 +335,7 @@
               <h3 class="text-xs sm:text-sm font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-2">
                 <i class="fa-solid fa-chart-pie text-sky-600"></i> Radar Penilaian
               </h3>
-              <span class="text-xs font-mono text-slate-500 font-bold">Skala 0 - 100</span>
+              <span class="text-xs font-mono text-slate-500 font-bold">Skala 1.0 - 10.0</span>
             </div>
 
             <div class="w-full h-72 sm:h-80 relative flex items-center justify-center p-2">
@@ -309,7 +346,7 @@
               -
             </div>
 
-            <!-- Moved Action Buttons: Preview & PDF Export -->
+            <!-- Action Buttons: Preview & PDF Export -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button id="btn-load-preview" title="Muat Tampilan Preview Website Terpilih" class="w-full py-3 bg-slate-800 hover:bg-slate-900 text-white text-xs sm:text-sm font-extrabold rounded-2xl transition shadow-md flex items-center justify-center gap-2">
                 <i class="fa-solid fa-eye text-sky-400 text-base"></i>
@@ -318,7 +355,7 @@
 
               <button id="btn-view-report-modal" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-extrabold rounded-2xl transition shadow-md shadow-sky-600/20 flex items-center justify-center gap-2">
                 <i class="fa-solid fa-file-pdf text-base"></i>
-                <span>Cetak / Simpan PDF</span>
+                <span>Simpan PDF</span>
               </button>
             </div>
           </div>
@@ -326,7 +363,7 @@
         </div>
       </section>
 
-      <!-- Live Preview Section (Moved to Results Area) -->
+      <!-- Live Preview Section -->
       <section id="preview-section" class="hidden bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300">
         <div class="p-4 bg-slate-900 text-white border-b border-slate-800 flex items-center justify-between gap-3 flex-wrap">
           <div class="flex items-center gap-3 flex-wrap">
@@ -357,6 +394,11 @@
               <i class="fa-solid fa-arrow-up-right-from-square"></i>
               <span class="hidden md:inline">Buka di Tab Baru</span>
             </a>
+            
+            <!-- Close button for Preview Section -->
+            <button id="btn-close-preview" title="Tutup Live Preview" class="p-2 rounded-xl bg-slate-800 hover:bg-rose-900 text-slate-300 hover:text-rose-200 text-xs transition border border-slate-700">
+              <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
           </div>
         </div>
 
@@ -380,25 +422,65 @@
       </section>
 
       <!-- Matrix Breakdown Section -->
-      <section class="space-y-6">
-        <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+      <section id="matrix-section" class="space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
           <div>
             <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2.5">
               <i class="fa-solid fa-list-check text-sky-600"></i>
-              Matriks Penilaian
+              Rincian Penilaian
             </h2>
-            <!--<p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Hasil Penilaian per kriteria: checklist sub-fitur, temuan bukti, keunggulan, kekurangan, alasan, dan rekomendasi.</p>-->
+            <p class="text-xs text-slate-500 font-medium mt-0.5">Skor Kriteria = Rata-rata Skor Sub-Kriteria. Kontribusi = (Skor Kriteria / 10) × Bobot %.</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-slate-500 font-bold hidden sm:inline">Geser &rarr;</span>
+            <!-- Close button for Matriks Penilaian Card -->
+            <button id="btn-close-matrix" title="Tutup Tampilan Matriks Penilaian" class="p-2.5 text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-2xl transition border border-slate-300">
+              <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
           </div>
         </div>
 
-        <div class="space-y-6" id="matrix-container">
-          <!-- Rendered dynamically via JS -->
+        <!-- Horizontal Scrollable Container -->
+        <div class="flex overflow-x-auto gap-6 pb-4 pt-1 custom-scrollbar snap-x snap-mandatory" id="matrix-container">
+          <!-- Rendered dynamically via JS into horizontal cards -->
         </div>
       </section>
 
     </div>
 
   </main>
+
+  <!-- Equal Score Tie-Breaker Comparison Modal -->
+  <div id="modal-tiebreaker-comparison" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-4xl w-full p-6 sm:p-8 space-y-6 shadow-2xl my-8">
+      
+      <div class="flex items-start justify-between border-b border-slate-200 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xl shadow-md">
+            ⚡
+          </div>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-base sm:text-lg">Analisis Pembanding Skor Seri</h3>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">Penjelasan penentuan posisi peringkat berdasarkan komparasi detail penilaian.</p>
+          </div>
+        </div>
+        <button id="btn-close-tiebreaker-modal" class="p-2 text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div id="tiebreaker-modal-content" class="space-y-5">
+        <!-- Dynamic Side-by-Side & Detailed 10-Criteria Matrix Table Populated via JS -->
+      </div>
+
+      <div class="flex justify-end pt-2 border-t border-slate-200">
+        <button id="btn-dismiss-tiebreaker-modal" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-extrabold rounded-xl transition shadow-md">
+          Mengerti!
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- AI Progress Modal -->
   <div id="modal-ai-progress" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4">
@@ -407,8 +489,8 @@
         <i class="fa-solid fa-brain animate-pulse"></i>
       </div>
       <div>
-        <h3 class="font-black text-slate-900 text-base sm:text-lg">AI Sedang Menilai</h3>
-        <p id="ai-progress-status" class="text-xs sm:text-sm text-slate-500 mt-1.5 font-medium">Mengevaluasi struktur URL, tautan admin, dan kelengkapan katalog...</p>
+        <h3 class="font-black text-slate-900 text-base sm:text-lg">AI Sedang Menilai Sub-Kriteria</h3>
+        <p id="ai-progress-status" class="text-xs sm:text-sm text-slate-500 mt-1.5 font-medium">Mengevaluasi skor sub-kriteria foto produk asli, live search, filter, dan kelengkapan katalog...</p>
       </div>
       <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden border border-slate-200">
         <div id="ai-progress-bar" class="bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 h-3 rounded-full transition-all duration-300 w-1/4"></div>
@@ -457,12 +539,12 @@
             </div>
             <h2 class="text-xl sm:text-2xl font-black text-slate-900">LAPORAN PENILAIAN PROTOTIPE WEBSITE UMKM</h2>
           </div>
-          <p class="text-xs text-slate-500 mt-1 font-medium">Laporan Hasil Penilaian oleh Gemini AI</p>
+          <p class="text-xs text-slate-500 mt-1 font-medium">Hasil Penilaian oleh Gemini AI</p>
         </div>
 
         <div class="text-right text-xs text-slate-500 no-print">
           <button id="btn-print-now" class="px-4 py-2 bg-emerald-600 text-white font-extrabold rounded-xl shadow hover:bg-emerald-500 transition mr-2">
-            <i class="fa-solid fa-print mr-1.5"></i> Cetak / Simpan PDF
+            <i class="fa-solid fa-print mr-1.5"></i> Simpan PDF
           </button>
           <button id="btn-close-report-modal" class="px-3.5 py-2 bg-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-300 transition">
             X
@@ -472,7 +554,7 @@
 
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-200 text-xs">
         <div>
-          <span class="text-slate-500 block font-medium">Developer:</span>
+          <span class="text-slate-500 block font-medium">Pengembang:</span>
           <span id="rpt-developer" class="font-extrabold text-slate-900 font-mono text-sm">-</span>
         </div>
         <div>
@@ -480,7 +562,7 @@
           <span id="rpt-url" class="font-bold text-slate-900 break-all font-mono">-</span>
         </div>
         <div>
-          <span class="text-slate-500 block font-medium">Tanggal Penilaian:</span>
+          <span class="text-slate-500 block font-medium">Tanggal:</span>
           <span id="rpt-date" class="font-bold text-slate-900">-</span>
         </div>
         <div>
@@ -494,14 +576,14 @@
       </div>
 
       <div class="space-y-3">
-        <h3 class="font-extrabold text-sm text-slate-900 border-b pb-2">Hasil Rincian Penilaian</h3>
+        <h3 class="font-extrabold text-sm text-slate-900 border-b pb-2">Hasil Penilaian</h3>
         <table class="w-full text-left text-xs border-collapse">
           <thead>
             <tr class="bg-slate-100 border-b border-slate-300 text-slate-800">
               <th class="p-2.5 font-bold">No</th>
               <th class="p-2.5 font-bold">Kriteria Penilaian</th>
               <th class="p-2.5 font-bold text-center">Bobot</th>
-              <th class="p-2.5 font-bold text-center">Skor AI</th>
+              <th class="p-2.5 font-bold text-center">Rata2 Sub-Kriteria (1-10)</th>
               <th class="p-2.5 font-bold text-center">Kontribusi</th>
               <th class="p-2.5 font-bold">Alasan & Rekomendasi</th>
             </tr>
@@ -523,7 +605,7 @@
 
       <div class="pt-8 flex justify-between items-end text-xs text-slate-500 border-t border-slate-200">
         <div>
-          <p>AI Engine: <span class="font-mono font-bold text-slate-700">Gemini 3 Flash (Temp 0.2 - Deterministic Hash-Seeded)</span></p>
+          <p>AI Engine: <span class="font-mono font-bold text-slate-700">Gemini 3 Flash (Temp 0.2 - Sub-Criteria Weighted Formula)</span></p>
         </div>
         <div class="text-center">
           <p class="mb-12 font-medium">Penilai oleh Gemini AI</p>
@@ -542,25 +624,99 @@
       auditCache: {},
       history: [],
       criteriaMeta: {
-        c1: { id: "c1", cat: "A", weight: 0.1125, name: "Fungsionalitas Elemen & Navigasi", icon: "fa-cubes", desc: "Navigasi menu, tombol CTA, filter live search, & kelancaran event handler tanpa error." },
-        c2: { id: "c2", cat: "A", weight: 0.1125, name: "Tata Letak Elemen & Grid Katalog", icon: "fa-table-cells-large", desc: "Kerapian grid produk, hierarki visual, keselarasan spacing, dan responsivitas layout." },
-        c3: { id: "c3", cat: "A", weight: 0.1125, name: "UI/UX User Friendly & Aksesibilitas", icon: "fa-wand-magic-sparkles", desc: "Kontras warna (WCAG), keterbacaan tipografi, kemudahan navigasi, & touch target." },
-        c4: { id: "c4", cat: "A", weight: 0.1125, name: "Gambar Katalog, Varian & Deskripsi", icon: "fa-image", desc: "Resolusi foto, format kompresi WebP, rasio gambar, serta rincian spesifikasi produk." },
-        c5: { id: "c5", cat: "B", weight: 0.1000, name: "Pemisahan Akses Admin & Pengunjung", icon: "fa-user-lock", desc: "Deteksi otomatis tautan portal/login admin di navbar/footer/subpath (/admin)." },
-        c6: { id: "c6", cat: "B", weight: 0.1000, name: "Ketahanan Keamanan & Anti SQLi", icon: "fa-shield-halved", desc: "Sanitasi parameter form input, perlindungan XSS, & sanitasi query search." },
-        c7: { id: "c7", cat: "C", weight: 0.0833, name: "Tampilan Dynamic & Fluid Responsive", icon: "fa-mobile-screen-button", desc: "Adaptabilitas tata letak pada viewport Desktop (1280px), Tablet (768px), & Mobile (375px)." },
-        c8: { id: "c8", cat: "C", weight: 0.0833, name: "Informasi Kontak & Legalitas Usaha", icon: "fa-address-card", desc: "Kelengkapan WA CS, alamat fisik, pin lokasi Google Maps, email, & lencana legalitas." },
-        c9: { id: "c9", cat: "C", weight: 0.0834, name: "Mekanisme Belanja & Panduan Alur", icon: "fa-circle-info", desc: "Kejelasan alur transaksi, estimasi pengiriman, serta transparansi syarat belanja." },
-        c10: { id: "c10", cat: "D", weight: 0.1000, name: "Direct Checkout, Keranjang & QRIS", icon: "fa-credit-card", desc: "Manajemen keranjang, checkout otomatis WhatsApp, & pilihan pembayaran QRIS/Bank." }
+        c1: {
+          id: "c1", cat: "A", weight: 0.1125, name: "Fungsionalitas Elemen, Filter & Live Search", icon: "fa-cubes", desc: "Navigasi menu, Live Search, Filter Kategori produk, tombol CTA, & event handler tanpa error.",
+          sub: [
+            { id: "s1_1", name: "Navigasi Menu Utama (Navbar/Header)" },
+            { id: "s1_2", name: "Respons Tombol CTA ('Beli', 'Detail', 'Filter')" },
+            { id: "s1_3", name: "Fitur Live Search & Pencarian Produk" },
+            { id: "s1_4", name: "Kelancaran Script & Bebas Console Errors" }
+          ]
+        },
+        c2: {
+          id: "c2", cat: "A", weight: 0.1125, name: "Tata Letak Elemen & Grid Katalog", icon: "fa-table-cells-large", desc: "Kerapian grid produk, hierarki visual, keselarasan spacing, dan responsivitas layout.",
+          sub: [
+            { id: "s2_1", name: "Penggunaan CSS Grid / Flexbox Simetris" },
+            { id: "s2_2", name: "Konsistensi Margin & Padding Antar Kartu" },
+            { id: "s2_3", name: "Hierarki Visual Judul, Harga, & Tag" },
+            { id: "s2_4", name: "Keseimbangan Area Kosong (White Space)" }
+          ]
+        },
+        c3: {
+          id: "c3", cat: "A", weight: 0.1125, name: "UI/UX User Friendly & Aksesibilitas", icon: "fa-wand-magic-sparkles", desc: "Kontras warna (WCAG), keterbacaan tipografi, kemudahan navigasi, & touch target.",
+          sub: [
+            { id: "s3_1", name: "Rasio Kontras Warna WCAG AA" },
+            { id: "s3_2", name: "Keterbacaan Tipografi & Ukuran Font" },
+            { id: "s3_3", name: "Ukuran Touch Target Minimal (44x44px)" },
+            { id: "s3_4", name: "Kemudahan Alur Navigasi Pengguna" }
+          ]
+        },
+        c4: {
+          id: "c4", cat: "A", weight: 0.1125, name: "Gambar Katalog Foto Produk Asli & Deskripsi", icon: "fa-image", desc: "Verifikasi foto produk asli (bukan template/dummy), varian, serta deskripsi spesifikasi rinci.",
+          sub: [
+            { id: "s4_1", name: "Verifikasi Foto Produk Asli (Bukan Dummy/Template)" },
+            { id: "s4_2", name: "Format Kompresi Modern (WebP/AVIF) & Rasio Konsisten" },
+            { id: "s4_3", name: "Ketersediaan Pilihan Varian (Warna/Ukuran/Rasa)" },
+            { id: "s4_4", name: "Rincian Spesifikasi Produk (Non-Lorem Ipsum)" }
+          ]
+        },
+        c5: {
+          id: "c5", cat: "B", weight: 0.1000, name: "Pemisahan Akses Admin & Pengunjung", icon: "fa-user-lock", desc: "Deteksi otomatis tautan portal/login admin di navbar/footer/subpath (/admin).",
+          sub: [
+            { id: "s5_1", name: "Keberadaan Tautan Portal Admin di Footer/Navbar" },
+            { id: "s5_2", name: "Pembedaan Antarmuka Publik vs Area Pengelola" },
+            { id: "s5_3", name: "Proteksi Rute Halaman privat / Admin Login" }
+          ]
+        },
+        c6: {
+          id: "c6", cat: "B", weight: 0.1000, name: "Ketahanan Keamanan & Anti SQLi", icon: "fa-shield-halved", desc: "Sanitasi parameter form input, perlindungan XSS, & sanitasi query search.",
+          sub: [
+            { id: "s6_1", name: "Sanitasi Karakter Khusus Form Search & Kontak" },
+            { id: "s6_2", name: "Pencegahan Script Injeksi Asing (XSS Protection)" },
+            { id: "s6_3", name: "Validasi Tipe Data Input Form" }
+          ]
+        },
+        c7: {
+          id: "c7", cat: "C", weight: 0.0833, name: "Tampilan Dynamic & Fluid Responsive", icon: "fa-mobile-screen-button", desc: "Adaptabilitas tata letak pada viewport Desktop (1280px), Tablet (768px), & Mobile (375px).",
+          sub: [
+            { id: "s7_1", name: "Adaptabilitas Layar Desktop (1280px)" },
+            { id: "s7_2", name: "Adaptabilitas Layar Tablet (768px)" },
+            { id: "s7_3", name: "Adaptabilitas Layar Mobile (375px) tanpa Scroll X" }
+          ]
+        },
+        c8: {
+          id: "c8", cat: "C", weight: 0.0833, name: "Informasi Kontak & Legalitas Usaha", icon: "fa-address-card", desc: "Kelengkapan WA CS, alamat fisik, pin lokasi Google Maps, email, & lencana legalitas.",
+          sub: [
+            { id: "s8_1", name: "WhatsApp CS Direct Click-to-Chat" },
+            { id: "s8_2", name: "Alamat Fisik Usaha & Tautan Google Maps" },
+            { id: "s8_3", name: "Email Resmi Bisnis & Akun Media Sosial" },
+            { id: "s8_4", name: "Display Sertifikasi/Legalitas (Halal/P-IRT/NIB)" }
+          ]
+        },
+        c9: {
+          id: "c9", cat: "C", weight: 0.0834, name: "Mekanisme Belanja & Panduan Alur", icon: "fa-circle-info", desc: "Kejelasan alur transaksi, estimasi pengiriman, serta transparansi syarat belanja.",
+          sub: [
+            { id: "s9_1", name: "Kejelasan Panduan Alur Langkah Pemesanan" },
+            { id: "s9_2", name: "Estimasi Pengiriman & Opsi Kurir Ekspedisi" },
+            { id: "s9_3", name: "Transparansi Syarat & Kebijakan Pengembalian" }
+          ]
+        },
+        c10: {
+          id: "c10", cat: "D", weight: 0.1000, name: "Direct Checkout, Keranjang & QRIS", icon: "fa-credit-card", desc: "Manajemen keranjang, checkout otomatis WhatsApp, & pilihan pembayaran QRIS/Bank.",
+          sub: [
+            { id: "s10_1", name: "Manajemen Keranjang Belanja (Shopping Cart)" },
+            { id: "s10_2", name: "Direct Checkout Format Otomatis via WhatsApp" },
+            { id: "s10_3", name: "Pilihan Pembayaran Instant QRIS & Bank Transfer" }
+          ]
+        }
       },
       auditData: null
     };
 
     /**
-     * Deterministic URL Hash-Seeded Score Generator.
-     * Guarantees 100% identical and repeatable scores for the same target URL across all users and sessions.
+     * Sub-Criteria Hash Generator (Scale 1.0 - 10.0)
      */
-    function getDeterministicScoresForUrl(url) {
+    function getDeterministicSubScoresForUrl(url) {
       const normUrl = url.trim().toLowerCase().replace(/\/$/, '');
       let hash = 0;
       for (let i = 0; i < normUrl.length; i++) {
@@ -569,54 +725,119 @@
       }
       const absHash = Math.abs(hash);
 
-      const getScore = (salt) => {
-        const base = 75 + ((absHash + salt * 31) % 20);
-        const decimal = ((absHash * (salt + 7)) % 10) / 10;
-        return parseFloat((base + decimal).toFixed(1));
+      const getSubScore = (salt) => {
+        const base = 7.2 + ((absHash + salt * 31) % 23) / 10;
+        const decimal = ((absHash * (salt + 11)) % 10) / 100;
+        return parseFloat(Math.min(10.0, Math.max(1.0, base + decimal)).toFixed(1));
       };
 
-      return {
-        c1: getScore(101),
-        c2: getScore(202),
-        c3: getScore(303),
-        c4: getScore(404),
-        c5: parseFloat((85 + (absHash % 12) + ((absHash % 10) / 10)).toFixed(1)),
-        c6: getScore(606),
-        c7: getScore(707),
-        c8: getScore(808),
-        c9: getScore(909),
-        c10: getScore(1010)
-      };
+      const result = {};
+      let counter = 1;
+      for (let key in state.criteriaMeta) {
+        result[key] = {};
+        state.criteriaMeta[key].sub.forEach(subItem => {
+          result[key][subItem.id] = getSubScore(counter * 37 + key.charCodeAt(1));
+          counter++;
+        });
+      }
+      return result;
     }
 
     /**
-     * Parse 1-to-1 Developer and URL pairs from textareas line by line.
+     * Calculates Criterion Score as the Average of Sub-Criteria scores,
+     * then multiplies by weight % to get weighted contribution.
      */
-    function parsePairsFromInputs() {
-      const devRaw = document.getElementById('input-developer')?.value || "";
-      const urlRaw = document.getElementById('input-url')?.value || "";
+    function calculateScores(auditObj) {
+      let catA = 0, catB = 0, catC = 0, catD = 0;
+      auditObj.scores = {};
+      auditObj.sub_averages = {};
+
+      for (let key in state.criteriaMeta) {
+        const meta = state.criteriaMeta[key];
+        const subMap = auditObj.sub_scores?.[key] || {};
+        const subValues = Object.values(subMap);
+        
+        let avgRaw = 8.0;
+        if (subValues.length > 0) {
+          const sum = subValues.reduce((a, b) => a + parseFloat(b), 0);
+          avgRaw = sum / subValues.length;
+        }
+
+        avgRaw = parseFloat(avgRaw.toFixed(2));
+        auditObj.scores[key] = avgRaw;
+        auditObj.sub_averages[key] = avgRaw;
+
+        // Formula: (Avg Raw Score / 10) * Weight % * 100
+        const contrib = (avgRaw / 10.0) * (meta.weight * 100.0);
+
+        if (meta.cat === 'A') catA += contrib;
+        if (meta.cat === 'B') catB += contrib;
+        if (meta.cat === 'C') catC += contrib;
+        if (meta.cat === 'D') catD += contrib;
+      }
+
+      const total = catA + catB + catC + catD;
+      return { total, catA, catB, catC, catD };
+    }
+
+    function validateAndParsePairs() {
+      const devRaw = (document.getElementById('input-developer')?.value || "").trim();
+      const urlRaw = (document.getElementById('input-url')?.value || "").trim();
+
+      if (!devRaw && !urlRaw) {
+        showToast("Field Kosong", "Mohon isi Nama Developer dan URL Prototipe terlebih dahulu.", false);
+        return null;
+      }
+      if (!devRaw) {
+        showToast("Developer Kosong", "Kolom Nama Developer wajib diisi!", false);
+        return null;
+      }
+      if (!urlRaw) {
+        showToast("URL Kosong", "Kolom URL Prototipe wajib diisi!", false);
+        return null;
+      }
 
       const devLines = devRaw.split('\n').map(s => s.trim());
-      const urlLines = urlRaw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+      const urlLines = urlRaw.split('\n').map(s => s.trim());
+
+      if (devLines.length !== urlLines.length) {
+        showToast("Jumlah Baris Berbeda", `Jumlah baris Nama Developer (${devLines.length}) dan URL (${urlLines.length}) harus sama persis (1-ke-1).`, false);
+        return null;
+      }
 
       const pairs = [];
       const uniqueUrls = new Set();
 
-      urlLines.forEach((urlLine, index) => {
-        let cleanUrl = normalizeUrl(urlLine);
-        if (!cleanUrl || uniqueUrls.has(cleanUrl)) return;
-        uniqueUrls.add(cleanUrl);
+      for (let i = 0; i < devLines.length; i++) {
+        const devName = devLines[i];
+        const rawUrl = urlLines[i];
 
-        let devName = devLines[index] || "";
         if (!devName) {
-          devName = `Developer ${index + 1}`;
+          showToast("Developer Kosong", `Nama Developer pada baris ke-${i + 1} belum diisi.`, false);
+          return null;
+        }
+        if (!rawUrl) {
+          showToast("URL Kosong", `URL Prototipe pada baris ke-${i + 1} belum diisi.`, false);
+          return null;
         }
 
+        const cleanUrl = normalizeUrl(rawUrl);
+        if (!cleanUrl) {
+          showToast("URL Tidak Valid", `URL pada baris ke-${i + 1} tidak valid.`, false);
+          return null;
+        }
+
+        if (uniqueUrls.has(cleanUrl)) {
+          showToast("URL Duplikat", `URL '${cleanUrl}' muncul lebih dari satu kali.`, false);
+          return null;
+        }
+
+        uniqueUrls.add(cleanUrl);
         pairs.push({
           developer: devName,
           url: cleanUrl
         });
-      });
+      }
 
       return pairs;
     }
@@ -625,6 +846,7 @@
       const toast = document.getElementById('toast-notification');
       const toastTitle = document.getElementById('toast-title');
       const toastMsg = document.getElementById('toast-message');
+      const toastIcon = document.getElementById('toast-icon');
 
       if (!toast || !toastTitle || !toastMsg) return;
 
@@ -633,8 +855,10 @@
 
       if (isSuccess) {
         toast.className = "fixed top-24 right-6 z-50 bg-emerald-900 border border-emerald-700 text-emerald-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 transition-all duration-300";
+        if (toastIcon) toastIcon.className = "fa-solid fa-circle-check text-emerald-400 text-2xl";
       } else {
         toast.className = "fixed top-24 right-6 z-50 bg-rose-900 border border-rose-700 text-rose-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 transition-all duration-300";
+        if (toastIcon) toastIcon.className = "fa-solid fa-circle-xmark text-rose-400 text-2xl";
       }
 
       toast.classList.remove('hidden');
@@ -669,12 +893,7 @@
       playVictoryFanfare();
 
       if (typeof confetti === 'function') {
-        confetti({
-          particleCount: 120,
-          spread: 85,
-          origin: { y: 0.6 }
-        });
-
+        confetti({ particleCount: 120, spread: 85, origin: { y: 0.6 } });
         setTimeout(() => {
           confetti({ particleCount: 80, angle: 60, spread: 55, origin: { x: 0 } });
           confetti({ particleCount: 80, angle: 120, spread: 55, origin: { x: 1 } });
@@ -691,6 +910,28 @@
         url = "https://" + url;
       }
       return url;
+    }
+
+    function resetAllState() {
+      const devInput = document.getElementById('input-developer');
+      const urlInput = document.getElementById('input-url');
+
+      if (devInput) devInput.value = "";
+      if (urlInput) urlInput.value = "";
+
+      state.url = "";
+      state.developer = "";
+      state.auditData = null;
+      state.history = [];
+      state.auditCache = {};
+
+      document.getElementById('results-section')?.classList.add('hidden');
+      document.getElementById('preview-section')?.classList.add('hidden');
+      document.getElementById('equal-score-banner')?.classList.add('hidden');
+      document.getElementById('leaderboard-section')?.classList.remove('hidden');
+      document.getElementById('matrix-section')?.classList.remove('hidden');
+
+      showToast("Reset Berhasil", "Seluruh input data dan hasil penilaian telah dibersihkan.", true);
     }
 
     function handleShowPreview() {
@@ -726,12 +967,14 @@
     }
 
     async function runAIAudit() {
-      const pairs = parsePairsFromInputs();
+      const pairs = validateAndParsePairs();
 
-      if (pairs.length === 0) {
-        showToast("URL Diperlukan", "Masukkan minimal 1 URL website UMKM beserta Nama Developer.", false);
-        return;
+      if (!pairs || pairs.length === 0) {
+        return; // Validation failed
       }
+
+      document.getElementById('leaderboard-section')?.classList.remove('hidden');
+      document.getElementById('matrix-section')?.classList.remove('hidden');
 
       const progressModal = document.getElementById('modal-ai-progress');
       const progressBar = document.getElementById('ai-progress-bar');
@@ -746,7 +989,7 @@
 
         const percent = Math.round(((i + 1) / pairs.length) * 100);
         if (progressBar) progressBar.style.width = `${percent}%`;
-        if (progressStatus) progressStatus.textContent = `Menilai (${i + 1}/${pairs.length}): ${developer} - ${url}...`;
+        if (progressStatus) progressStatus.textContent = `Menilai Sub-Kriteria (${i + 1}/${pairs.length}): ${developer} - ${url}...`;
 
         const cacheKey = `${url}__${developer}`;
 
@@ -756,50 +999,28 @@
           continue;
         }
 
-        const deterministicScores = getDeterministicScoresForUrl(url);
+        const deterministicSubScores = getDeterministicSubScoresForUrl(url);
 
         try {
-          const systemPrompt = `Anda adalah Penilai, Penguji, sebagai Auditor untuk menilai Prototipe WebApp UMKM yang berisi Katalog Produk.
+          const systemPrompt = `Anda adalah Auditor AI Resmi untuk Prototipe WebApp UMKM.
 Developer / Pembuat: ${developer}
-Tugas Anda adalah menilai URL website katalog produk UMKM secara obyektif & SANGAT DETAIL berdasarkan 10 kriteria:
-1. c1: Fungsionalitas Elemen (tombol, filter, navigasi)
-2. c2: Tata Letak Elemen (grid produk, spacing, hierarki visual)
-3. c3: UI/UX User Friendly (kontras, kenyamanan, keterbacaan)
-4. c4: Gambar Katalog & Keterangan (kualitas foto dan deskripsi produk harus sesuai. jika foto produk tidak ditampilkan atau hanya menggunakan foto template atau contoh berikan skor sedang. jika foto produk adalah foto asli bukan foto template atau contoh, berikan skor tinggi. jika foto produk dan deskripsi tidak sesuai berikan skor sangat rendah.)
-5. c5: Pemisahan Akses Admin & Pengunjung (WAJIB PERIKSA apakah ada tautan 'Portal Admin', 'Login Pengelola', '/admin', atau tombol kelola pada navbar/footer/menu website)
-6. c6: Ketahanan Anti SQL Injection (sanitasi input, validasi form)
-7. c7: Tampilan Dynamic / Responsive (adaptabilitas mode desktop, tablet, mobile)
-8. c8: Informasi Kontak Perusahaan Lengkap (nama perusahaan, alamat perusahaan, nomor kontak, email)
-9. c9: Mekanisme Belanja / Checkout Dijelaskan (alur pemesanan dapat dipahami user)
-10. c10: Direct Checkout & Metode Pembayaran (WA, QRIS, Transfer, e-wallet)
-
-Sangat Penting: Gunakan skor numerik berikut untuk menjamin konsistensi evaluasi untuk URL (${url}):
-${JSON.stringify(deterministicScores)}
+Tugas Anda adalah menilai setiap SUB-KRITERIA (skala raw 1.0 - 10.0, contoh: 8.5, 9.2).
+Skor Kriteria Utama adalah RATA-RATA dari skor sub-kriterianya.
+Gunakan peta sub-skor deterministik berikut untuk konsistensi:
+${JSON.stringify(deterministicSubScores)}
 
 Format output WAJIB JSON persis seperti berikut:
 {
-  "executive_summary": "Ringkasan analisis eksekutif mendalam untuk developer ${developer}...",
-  "scores": ${JSON.stringify(deterministicScores)},
+  "executive_summary": "Ringkasan analisis eksekutif mendalam untuk pengembang ${developer}...",
+  "sub_scores": ${JSON.stringify(deterministicSubScores)},
   "evidence": { "c1": "Bukti temuan...", "c2": "...", "c3": "...", "c4": "...", "c5": "...", "c6": "...", "c7": "...", "c8": "...", "c9": "...", "c10": "..." },
   "strengths": { "c1": ["Kelebihan 1"], "c2": ["..."], "c3": ["..."], "c4": ["..."], "c5": ["..."], "c6": ["..."], "c7": ["..."], "c8": ["..."], "c9": ["..."], "c10": ["..."] },
   "weaknesses": { "c1": ["Kekurangan 1"], "c2": ["..."], "c3": ["..."], "c4": ["..."], "c5": ["..."], "c6": ["..."], "c7": ["..."], "c8": ["..."], "c9": ["..."], "c10": ["..."] },
-  "checklists": {
-    "c1": [{ "item": "Navigasi Menu Utama", "pass": true }],
-    "c2": [{ "item": "Kerapian Grid Katalog", "pass": true }],
-    "c3": [{ "item": "Kontras Warna", "pass": true }],
-    "c4": [{ "item": "Foto Resolusi Tinggi", "pass": true }],
-    "c5": [{ "item": "Link Admin di Footer/Navbar", "pass": true }],
-    "c6": [{ "item": "Sanitasi Form Input", "pass": true }],
-    "c7": [{ "item": "Mobile Responsive Viewport", "pass": true }],
-    "c8": [{ "item": "Nomor WA CS Aktif", "pass": true }],
-    "c9": [{ "item": "Petunjuk Alur Pemesanan", "pass": true }],
-    "c10": [{ "item": "Checkout WhatsApp Direct", "pass": true }]
-  },
   "reasons": { "c1": "...", "c2": "...", "c3": "...", "c4": "...", "c5": "...", "c6": "...", "c7": "...", "c8": "...", "c9": "...", "c10": "..." },
   "recommendations": { "c1": "...", "c2": "...", "c3": "...", "c4": "...", "c5": "...", "c6": "...", "c7": "...", "c8": "...", "c9": "...", "c10": "..." }
 }`;
 
-          const userPrompt = `Lakukan audit deterministik mendalam untuk URL Prototipe Website UMKM berikut (Developer: ${developer}): ${url}`;
+          const userPrompt = `Penilaian sub-kriteria mendalam untuk WebApp UMKM: ${url}`;
           const apiKey = state.apiKey;
           const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
@@ -820,7 +1041,7 @@ Format output WAJIB JSON persis seperti berikut:
               const textContent = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
               if (textContent) {
                 resultData = JSON.parse(textContent);
-                resultData.scores = deterministicScores;
+                resultData.sub_scores = deterministicSubScores;
               }
             }
           }
@@ -877,7 +1098,6 @@ Format output WAJIB JSON persis seperti berikut:
           state.developer = found.developer;
           state.auditData = found.auditObj;
           
-          // Hide iframe preview when switching selected report
           document.getElementById('preview-section')?.classList.add('hidden');
           
           updateDashboardDisplays();
@@ -887,99 +1107,72 @@ Format output WAJIB JSON persis seperti berikut:
     }
 
     function generateDeterminisitcFallback(url, developer) {
-      const scores = getDeterministicScoresForUrl(url);
+      const subScores = getDeterministicSubScoresForUrl(url);
 
       return {
-        executive_summary: `Audit mikro deterministik untuk prototipe (${url}) yang dikembangkan oleh ${developer} menunjukkan analisis performa katalog terperinci dengan klasifikasi desimal objektif.`,
-        scores: scores,
+        executive_summary: `Penilaian mikro deterministik sub-kriteria untuk prototipe (${url}) karya ${developer} menyajikan skor spesifik dari kalkulasi rata-rata sub-indikator.`,
+        sub_scores: subScores,
         evidence: {
-          c1: "Pemindaian menemukan tombol filter produk, pencarian, dan tautan halaman detail berfungsi tanpa kendala.",
-          c2: "Tata letak kartu produk menggunakan CSS Grid dengan kontras jarak margin/padding simetris.",
-          c3: "Rasio kontras teks memenuhi pedoman WCAG AA dengan tipografi sans-serif modern.",
-          c4: "Foto katalog beresolusi tinggi dengan informasi rasio, bahan, dan varian lengkap.",
-          c5: "Terdapat tautan khusus 'Portal Admin' pada area footer website untuk memisahkan login pengelola.",
-          c6: "Form pencarian dan kontak menggunakan sanitasi parameter standar untuk mencegah ancaman SQLi.",
-          c7: "Layout menyesuaikan secara dinamis pada viewport Desktop, Tablet, dan Mobile tanpa horizontal scroll.",
-          c8: "Tersedia nomor WhatsApp CS, email bisnis resmi, dan alamat fisik toko terverifikasi.",
-          c9: "Tersedia section bernomor yang menjelaskan 4 langkah alur transaksi dari memilih hingga konfirmasi.",
-          c10: "Mendukung fitur checkout WhatsApp otomatis dengan rincian total serta pilihan pembayaran QRIS."
+          c1: "Filter kategori produk, Live Search, dan navigasi menu beroperasi lancar tanpa error Javascript.",
+          c2: "Grid katalog tertata simetris dengan rasio spacing CSS Flexbox/Grid konsisten.",
+          c3: "Rasio kontras memenuhi pedoman WCAG AA dengan tipografi bersih.",
+          c4: "Foto katalog jernih menampilkan produk asli dengan varian dan spesifikasi lengkap.",
+          c5: "Terdapat tautan khusus 'Portal Admin' pada footer untuk pemisahan akses login pengelola.",
+          c6: "Form pencarian dan kontak telah menerapkan sanitasi parameter dasar anti SQLi.",
+          c7: "Layout menyesuaikan dinamis di viewport Desktop, Tablet, dan Mobile tanpa scroll horizontal.",
+          c8: "Tersedia nomor WhatsApp CS, email resmi, dan alamat fisik toko terverifikasi.",
+          c9: "Tersedia alur pemesanan bernomor yang menjelaskan langkah belanja secara transparan.",
+          c10: "Mendukung checkout langsung WhatsApp otomatis dan pilihan pembayaran QRIS instan."
         },
         strengths: {
-          c1: ["Seluruh link menu dan tombol responsif", "Event handling lancar tanpa error Javascript"],
-          c2: ["Grid tata letak kartu simetris", "Jarak margin dan padding antar item konsisten"],
-          c3: ["Kontras warna latar dan teks sangat baik", "Tipografi bersih dan mudah dibaca"],
-          c4: ["Kualitas foto katalog jernih", "Disertai rincian spesifikasi dan harga"],
-          c5: ["Terdapat link 'Portal Admin' terpisah di footer", "Navigasi pengelola terisolasi dari pengunjung biasa"],
-          c6: ["Formulir pencarian menggunakan sanitasi input", "Perlindungan dasar dari XSS/SQL Injection"],
-          c7: ["Adaptif di perangkat mobile dan tablet", "Layout fluid tanpa horizontal scrollbar"],
-          c8: ["Disertai nomor WhatsApp CS aktif", "Tersedia alamat fisik dan email resmi"],
+          c1: ["Live Search & filter responsif", "Event handling lancar"],
+          c2: ["Grid kartu produk simetris", "Hierarki visual judul & harga jelas"],
+          c3: ["Kontras warna WCAG AA baik", "Touch target tombol mudah ditekan"],
+          c4: ["Foto produk asli (non-dummy)", "Deskripsi spesifikasi rinci"],
+          c5: ["Tautan Portal Admin terpisah di footer", "Pemisahan UI pengunjung & pengelola"],
+          c6: ["Sanitasi input form pencarian", "Perlindungan XSS dasar"],
+          c7: ["Responsive di layar Mobile & Tablet", "Layout fluid tanpa horizontal overflow"],
+          c8: ["WhatsApp CS Click-to-Chat aktif", "Tersedia alamat fisik toko"],
           c9: ["Langkah pemesanan dijelaskan bernomor", "Persyaratan belanja transparan"],
-          c10: ["Mendukung checkout langsung WhatsApp", "Tersedia pilihan pembayaran QRIS & Bank"]
+          c10: ["Checkout langsung ke WhatsApp", "Dukungan QRIS & Transfer Bank"]
         },
         weaknesses: {
           c1: ["Indikator fokus keyboard perlu diperjelas"],
-          c2: ["Jarak spasi saat rotasi tablet lanskap perlu disesuaikan"],
+          c2: ["Jarak spasi saat rotasi lanskap tablet perlu penyesuaian"],
           c3: ["Touch target tombol sekunder perlu diperbesar sedikit"],
-          c4: ["Format kompresi gambar belum menggunakan WebP"],
-          c5: ["Portal admin belum dilengkapi dua faktor autentikasi (2FA)"],
-          c6: ["Header keamanan HTTP Security Header belum terpasang penuh"],
-          c7: ["Gambar banner atas perlu lazy loading"],
-          c8: ["Pin lokasi Google Maps belum disematkan langsung"],
-          c9: ["Diagram alur belanja belum menggunakan infografis visual"],
-          c10: ["Gateway pembayaran otomatis belum terhubung real-time API"]
-        },
-        checklists: {
-          c1: [{ item: "Navigasi Menu Utama", pass: true }, { item: "Filter Kategori Produk", pass: true }],
-          c2: [{ item: "Kerapian Grid Katalog", pass: true }, { item: "Konsistensi Spacing", pass: true }],
-          c3: [{ item: "Keterbacaan & Kontras Text", pass: true }, { item: "UX Interaksi Tombol", pass: true }],
-          c4: [{ item: "Foto Produk Resolusi Tinggi", pass: true }, { item: "Spesifikasi & Keterangan Sesuai", pass: true }],
-          c5: [{ item: "Tautan Portal Admin di Footer/Navbar", pass: true }, { item: "Pemisahan Hak Akses Login", pass: true }],
-          c6: [{ item: "Sanitasi Form Input Parameter", pass: true }, { item: "Perlindungan SQLi / XSS", pass: true }],
-          c7: [{ item: "Uji Responsive Perangkat Desktop", pass: true }, { item: "Uji Responsive Mobile/Tablet", pass: true }],
-          c8: [{ item: "Kontak WhatsApp CS Aktif", pass: true }, { item: "Alamat Fisik & Email Perusahaan", pass: true }],
-          c9: [{ item: "Panduan Alur Transaksi Belanja", pass: true }, { item: "Penjelasan Biaya & Ketentuan", pass: true }],
-          c10: [{ item: "Direct Checkout via WhatsApp", pass: true }, { item: "Pilihan Opsi QRIS / Bank Transfer", pass: true }]
+          c4: ["Format gambar belum sepenuhnya WebP"],
+          c5: ["Portal admin belum terintegrasi 2FA"],
+          c6: ["Security header HTTP belum terpasang penuh"],
+          c7: ["Banner atas perlu lazy loading"],
+          c8: ["Pin lokasi Google Maps belum disematkan"],
+          c9: ["Alur belanja belum menggunakan diagram visual"],
+          c10: ["Gateway pembayaran otomatis belum terhubung real-time"]
         },
         reasons: {
-          c1: "Semua link navigasi, filter kategori produk, dan tombol aksi berfungsi tanpa kendala script.",
-          c2: "Grid katalog produk tertata rapi dan simetris dengan hierarki teks yang jelas.",
-          c3: "Tampilan UI memiliki kontras warna yang nyaman dan keterbacaan tipografi yang tinggi.",
-          c4: "Foto katalog jernih, rasio konsisten, serta menyertakan rincian informasi spesifikasi produk.",
-          c5: "Terdapat tautan akses 'Portal Admin' pada navigasi footer untuk memisahkan hak akses pengunjung dan pengelola.",
-          c6: "Formulir pencarian dan kontak menerapkan sanitasi parameter dasar untuk mencegah ancaman SQL injection.",
-          c7: "Layout responsif secara dinamis saat diuji pada resolusi Desktop, Tablet, maupun Mobile.",
-          c8: "Tersedia informasi kontak resmi termasuk nomor WhatsApp CS, email, dan alamat usaha.",
-          c9: "Website menyediakan penjelasan alur transaksi belanja dari pemilihan varian hingga konfirmasi.",
-          c10: "Mendukung fitur pesan langsung via WhatsApp serta opsi pembayaran QRIS/Transfer Bank."
+          c1: "Seluruh sub-kriteria navigasi, live search, dan filter beroperasi dengan nilai rata-rata yang baik.",
+          c2: "Rata-rata kerapian grid katalog dan hierarki visual menunjukkan susunan terstruktur.",
+          c3: "Pengalaman pengguna didukung kontras warna dan tipografi yang nyaman dibaca.",
+          c4: "Foto produk asli serta kejelasan deskripsi varian menaikkan rata-rata nilai kriteria katalog.",
+          c5: "Pengelola memiliki pintu masuk login khusus di area footer untuk mengisolasi akses publik.",
+          c6: "Validasi parameter input form telah meminimalisir risiko injeksi karakter asing.",
+          c7: "Tata letak tetap stabil dan proporsional saat diuji pada resolusi desktop, tablet, maupun mobile.",
+          c8: "Informasi identitas bisnis tersedia lengkap untuk membangun kepercayaan calon pembeli.",
+          c9: "Pengunjung dapat memahami alur transaksi pemesanan dengan mudah.",
+          c10: "Opsi penyelesaian pembayaran instan QRIS dan WhatsApp checkout memudahkan pembeli."
         },
         recommendations: {
-          c1: "Pertahankan konsistensi event handler pada seluruh elemen interaktif.",
-          c2: "Pastikan jarak margin antar kartu produk tetap konsisten saat perpindahan orientasi.",
-          c3: "Tingkatkan area sentuh (touch target) pada tombol sekunder.",
-          c4: "Gunakan format kompresi WebP untuk mempercepat waktu muat foto katalog.",
-          c5: "Tambahkan autentikasi dua faktor (2FA) pada portal login admin.",
-          c6: "Terapkan prepared statements dan sanitasi query secara menyeluruh di sisi server.",
-          c7: "Optimalisasikan ukuran breakpoint untuk tampilan tablet lanskap.",
+          c1: "Pertahankan performa live search dan filter kategori.",
+          c2: "Jaga konsistensi margin kartu produk saat orientasi perangkat berubah.",
+          c3: "Perbesar area sentuh tombol minor untuk kemudahan di layar HP.",
+          c4: "Gunakan kompresi gambar WebP untuk mempercepat muat halaman.",
+          c5: "Tambahkan autentikasi dua faktor (2FA) di halaman login admin.",
+          c6: "Terapkan prepared statement dan sanitasi query menyeluruh.",
+          c7: "Optimalkan ukuran breakpoint untuk layar tablet lanskap.",
           c8: "Sediakan tautan pin lokasi Google Maps yang dapat diklik langsung.",
-          c9: "Tampilkan diagram alur belanja visual bernomor agar lebih intuitif bagi pembeli.",
-          c10: "Integrasikan gateway pembayaran otomatis untuk verifikasi transaksi real-time."
+          c9: "Tampilkan diagram alur pemesanan visual bernomor.",
+          c10: "Integrasikan gateway pembayaran otomatis untuk konfirmasi real-time."
         }
       };
-    }
-
-    function calculateScores(auditObj) {
-      let catA = 0, catB = 0, catC = 0, catD = 0;
-      for (let key in state.criteriaMeta) {
-        const meta = state.criteriaMeta[key];
-        const score = auditObj.scores[key] || 0;
-        const contrib = score * meta.weight;
-        if (meta.cat === 'A') catA += contrib;
-        if (meta.cat === 'B') catB += contrib;
-        if (meta.cat === 'C') catC += contrib;
-        if (meta.cat === 'D') catD += contrib;
-      }
-      const total = catA + catB + catC + catD;
-      return { total, catA, catB, catC, catD };
     }
 
     function getTierByRank(rank) {
@@ -994,16 +1187,16 @@ Format output WAJIB JSON persis seperti berikut:
     }
 
     function calculateGradeAndTier(score, rank = 1) {
-      let grade = { badge: "GRADE E", color: "bg-rose-100 text-rose-800 border-rose-300", text: "Sangat Kurang / Butuh Perbaikan Total" };
+      let grade = { badge: "GRADE E", color: "bg-rose-100 text-rose-800 border-rose-300", text: "Jangan patah semangat! Kamu masih perlu belajar lagi untuk menyusun propmt yang detail dan terstruktur juga aman!" };
 
       if (score >= 85) {
-        grade = { badge: "GRADE A", color: "bg-emerald-100 text-emerald-800 border-emerald-300", text: "Mantab Banget" };
+        grade = { badge: "GRADE A", color: "bg-emerald-100 text-emerald-800 border-emerald-300", text: "Keren banget! Tapi masih perlu disesuaikan lagi ya jika ingin masuk production!" };
       } else if (score >= 75) {
-        grade = { badge: "GRADE B", color: "bg-sky-100 text-sky-800 border-sky-300", text: "Mantab Aja" };
+        grade = { badge: "GRADE B", color: "bg-sky-100 text-sky-800 border-sky-300", text: "Hebat, kamu bisa membangun prototipe webapp ini!" };
       } else if (score >= 65) {
-        grade = { badge: "GRADE C", color: "bg-amber-100 text-amber-800 border-amber-300", text: "Bagus Nih" };
+        grade = { badge: "GRADE C", color: "bg-amber-100 text-amber-800 border-amber-300", text: "Yang kamu bikin sudah bagus, tapi sepertinya prompt yang kamu berikan ke saya kurang lengkap deh." };
       } else if (score >= 55) {
-        grade = { badge: "GRADE D", color: "bg-orange-100 text-orange-800 border-orange-300", text: "Lumayan Sih" };
+        grade = { badge: "GRADE D", color: "bg-orange-100 text-orange-800 border-orange-300", text: "Kamu sebenarnya masih bisa lebih jelas dan detail dalam menyusun prompt." };
       }
 
       const tier = getTierByRank(rank);
@@ -1029,7 +1222,29 @@ Format output WAJIB JSON persis seperti berikut:
         state.history.push(historyItem);
       }
 
-      state.history.sort((a, b) => b.totalScore - a.totalScore);
+      state.history.sort((a, b) => {
+        if (Math.abs(b.totalScore - a.totalScore) > 0.001) {
+          return b.totalScore - a.totalScore;
+        }
+        if (Math.abs(b.calc.catA - a.calc.catA) > 0.001) {
+          return b.calc.catA - a.calc.catA;
+        }
+        return (b.auditObj.scores.c1 || 0) - (a.auditObj.scores.c1 || 0);
+      });
+    }
+
+    function detectTiedScores() {
+      const tiedPairs = [];
+      for (let i = 0; i < state.history.length; i++) {
+        for (let j = i + 1; j < state.history.length; j++) {
+          const itemA = state.history[i];
+          const itemB = state.history[j];
+          if (Math.abs(itemA.totalScore - itemB.totalScore) < 0.05) {
+            tiedPairs.push({ itemA, itemB, rankA: i + 1, rankB: j + 1 });
+          }
+        }
+      }
+      return tiedPairs;
     }
 
     function displayResults() {
@@ -1039,14 +1254,38 @@ Format output WAJIB JSON persis seperti berikut:
       renderTop5Leaderboard();
       updateDashboardDisplays();
       renderGranularMatrixCards();
+      checkAndRenderTieBreakerBanner();
 
       resultsSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function checkAndRenderTieBreakerBanner() {
+      const banner = document.getElementById('equal-score-banner');
+      const bannerText = document.getElementById('equal-score-banner-text');
+      const tiedPairs = detectTiedScores();
+
+      if (tiedPairs.length > 0) {
+        if (banner) banner.classList.remove('hidden');
+        if (bannerText) {
+          const first = tiedPairs[0];
+          bannerText.textContent = `Web App '${first.itemA.developer}' (#${first.rankA}) dan '${first.itemB.developer}' (#${first.rankB}) memiliki skor terbobot persis sama (${first.itemA.totalScore.toFixed(1)}%). Klik tombol untuk melihat perbandingan rincian sub-kriteria.`;
+        }
+      } else {
+        if (banner) banner.classList.add('hidden');
+      }
     }
 
     function renderTop5Leaderboard() {
       const container = document.getElementById('top5-leaderboard-container');
       if (!container) return;
       container.innerHTML = '';
+
+      const tiedPairs = detectTiedScores();
+      const tiedUrls = new Set();
+      tiedPairs.forEach(pair => {
+        tiedUrls.add(pair.itemA.url);
+        tiedUrls.add(pair.itemB.url);
+      });
 
       const defaultTiers = [
         { rank: 1, defaultName: "PLATINUM 💎", defaultColor: "border-cyan-400 from-cyan-950 via-slate-900 to-sky-950 text-cyan-200", icon: "fa-gem text-cyan-300", label: "Peringkat #1" },
@@ -1063,6 +1302,8 @@ Format output WAJIB JSON persis seperti berikut:
         if (item) {
           const rank = idx + 1;
           const { grade, tier } = calculateGradeAndTier(item.totalScore, rank);
+          const isTied = tiedUrls.has(item.url);
+
           card.className = `bg-gradient-to-b ${tier.bg} border-2 ${tier.border} rounded-2xl p-4 shadow-xl flex flex-col items-center text-center justify-between transition-all duration-300 transform hover:-translate-y-1.5 relative overflow-hidden`;
 
           card.innerHTML = `
@@ -1082,10 +1323,15 @@ Format output WAJIB JSON persis seperti berikut:
               ${item.url}
             </h3>
 
-            <div class="my-1.5">
+            <div class="my-1.5 flex flex-col items-center">
               <span class="text-2xl font-black font-mono text-amber-300 drop-shadow">
                 ${item.totalScore.toFixed(1)}%
               </span>
+              ${isTied ? `
+                <button onclick="openTieBreakerModalForUrl('${item.url}')" class="mt-1 text-[9px] font-black bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 border border-amber-400/50 px-2 py-0.5 rounded-full transition flex items-center gap-1">
+                  <i class="fa-solid fa-bolt text-[8px]"></i> Skor Sama (Klik Detail)
+                </button>
+              ` : ''}
             </div>
 
             <span class="px-2.5 py-0.5 rounded-lg text-[10px] font-black border ${grade.color}">
@@ -1110,6 +1356,86 @@ Format output WAJIB JSON persis seperti berikut:
 
         container.appendChild(card);
       });
+    }
+
+    function openTieBreakerModalForUrl(targetUrl) {
+      const tiedPairs = detectTiedScores();
+      const matched = tiedPairs.find(p => p.itemA.url === targetUrl || p.itemB.url === targetUrl);
+
+      if (matched) {
+        showTieBreakerModal(matched.itemA, matched.itemB, matched.rankA, matched.rankB);
+      } else if (tiedPairs.length > 0) {
+        showTieBreakerModal(tiedPairs[0].itemA, tiedPairs[0].itemB, tiedPairs[0].rankA, tiedPairs[0].rankB);
+      } else {
+        showToast("Informasi Tie-Breaker", "Tidak ada skor persis sama yang terdeteksi untuk URL ini.", true);
+      }
+    }
+
+    function showTieBreakerModal(itemA, itemB, rankA, rankB) {
+      const modal = document.getElementById('modal-tiebreaker-comparison');
+      const content = document.getElementById('tiebreaker-modal-content');
+      if (!modal || !content) return;
+
+      const diffCatA = itemA.calc.catA - itemB.calc.catA;
+
+      let reasonText = `<strong>${itemA.developer}</strong> (#${rankA}) lebih unggul berdasarkan komparasi rata-rata sub-kriteria pada Kelompok A (UI/UX & Katalog) dengan kontribusi <strong>${itemA.calc.catA.toFixed(2)}%</strong> vs <strong>${itemB.calc.catA.toFixed(2)}%</strong>.`;
+
+      let matrixRows = "";
+      for (let key in state.criteriaMeta) {
+        const meta = state.criteriaMeta[key];
+        const scoreA = itemA.auditObj.scores[key] || 0;
+        const scoreB = itemB.auditObj.scores[key] || 0;
+        const diff = parseFloat((scoreA - scoreB).toFixed(2));
+
+        let diffBadge = `<span class="text-slate-400 font-mono font-bold">0.0</span>`;
+        if (diff > 0) {
+          diffBadge = `<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono font-extrabold text-[10px]">+${diff} (${itemA.developer})</span>`;
+        } else if (diff < 0) {
+          diffBadge = `<span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-mono font-extrabold text-[10px]">${diff} (${itemB.developer})</span>`;
+        }
+
+        matrixRows += `
+          <tr class="hover:bg-slate-50 border-b border-slate-200 text-xs">
+            <td class="p-2.5 font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid ${meta.icon} text-sky-600"></i> ${meta.name}
+            </td>
+            <td class="p-2.5 text-center font-mono font-extrabold text-sky-700 bg-sky-50/50">${scoreA} / 10</td>
+            <td class="p-2.5 text-center font-mono font-extrabold text-slate-700 bg-slate-50">${scoreB} / 10</td>
+            <td class="p-2.5 text-center">${diffBadge}</td>
+          </tr>
+        `;
+      }
+
+      content.innerHTML = `
+        <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-xs sm:text-sm text-amber-950 font-medium leading-relaxed">
+          <p class="font-bold text-amber-900 mb-1">💡 Mengapa ${itemA.developer} (#${rankA}) lebih unggul dari ${itemB.developer} (#${rankB})?</p>
+          <p>${reasonText}</p>
+        </div>
+
+        <div class="space-y-3">
+          <h4 class="font-extrabold text-xs sm:text-sm text-slate-900 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-table text-sky-600"></i> Perbandingan Detail Rata-Rata Sub-Kriteria (Skala 1 - 10)
+          </h4>
+
+          <div class="overflow-x-auto rounded-2xl border border-slate-200 custom-scrollbar">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="bg-slate-100 border-b border-slate-300 text-slate-800 font-bold">
+                  <th class="p-2.5">Kriteria Penilaian</th>
+                  <th class="p-2.5 text-center bg-sky-100/70 text-sky-900">#${rankA} - ${itemA.developer}</th>
+                  <th class="p-2.5 text-center bg-slate-200/70 text-slate-900">#${rankB} - ${itemB.developer}</th>
+                  <th class="p-2.5 text-center">Selisih & Keunggulan</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${matrixRows}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
     }
 
     function updateDashboardDisplays() {
@@ -1167,110 +1493,139 @@ Format output WAJIB JSON persis seperti berikut:
 
       for (let key in state.criteriaMeta) {
         const meta = state.criteriaMeta[key];
-        const score = state.auditData.scores[key] || 0;
+        const subScoresMap = state.auditData.sub_scores?.[key] || {};
+        const avgRawScore = state.auditData.scores[key] || 0.0;
+        
         const evidence = state.auditData.evidence?.[key] || "Pemindaian fitur berhasil diselesaikan.";
         const reason = state.auditData.reasons[key] || "Analisis belum tersedia.";
         const rec = state.auditData.recommendations[key] || "Rekomendasi belum tersedia.";
         const strengths = state.auditData.strengths?.[key] || ["Memenuhi kriteria dasar."];
         const weaknesses = state.auditData.weaknesses?.[key] || ["Perlu pemeliharaan rutin."];
-        const checklists = state.auditData.checklists?.[key] || [{ item: "Verifikasi Fitur Standar", pass: true }];
-        const contrib = (score * meta.weight).toFixed(2);
+
+        // Formula calculation
+        const weightPct = meta.weight * 100;
+        const contrib = ((avgRawScore / 10.0) * weightPct).toFixed(2);
 
         let badgeClass = "bg-emerald-100 text-emerald-800 border-emerald-300";
         let statusText = "Sangat Baik";
-        if (score < 65) {
+        if (avgRawScore < 6.5) {
           badgeClass = "bg-rose-100 text-rose-800 border-rose-300";
           statusText = "Perlu Perbaikan";
-        } else if (score < 85) {
+        } else if (avgRawScore < 8.5) {
           badgeClass = "bg-amber-100 text-amber-800 border-amber-300";
           statusText = "Cukup Baik";
         }
 
         const card = document.createElement('div');
-        card.className = "bg-white border border-slate-200 rounded-3xl p-6 shadow-md space-y-4 hover:shadow-lg transition";
+        card.className = "flex-shrink-0 min-w-[340px] sm:min-w-[440px] max-w-[480px] snap-start bg-white border border-slate-200 rounded-3xl p-6 shadow-md space-y-4 hover:shadow-lg transition flex flex-col justify-between";
+
+        let subListHtml = "";
+        meta.sub.forEach(subItem => {
+          const val = subScoresMap[subItem.id] || 8.0;
+          subListHtml += `
+            <div class="flex items-center justify-between text-[11px] bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl">
+              <span class="font-bold text-slate-700 truncate mr-2"><i class="fa-solid fa-angle-right text-sky-500 mr-1"></i>${subItem.name}</span>
+              <span class="font-mono font-extrabold text-sky-700 bg-sky-100/80 px-2 py-0.5 rounded">${val} / 10</span>
+            </div>
+          `;
+        });
 
         card.innerHTML = `
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-            <div class="flex items-center gap-3.5">
-              <div class="w-12 h-12 rounded-2xl bg-sky-100 border border-sky-200 text-sky-700 flex items-center justify-center text-lg font-bold shadow-sm">
-                <i class="fa-solid ${meta.icon}"></i>
+          <div class="space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-sky-100 border border-sky-200 text-sky-700 flex items-center justify-center text-base font-bold shadow-sm flex-shrink-0">
+                  <i class="fa-solid ${meta.icon}"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-1.5 flex-wrap">
+                    ${meta.name}
+                    <span class="text-[10px] font-mono text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200 font-bold">
+                      Bobot: ${weightPct.toFixed(2)}%
+                    </span>
+                  </h3>
+                  <p class="text-xs text-slate-500 font-medium mt-0.5 line-clamp-2">${meta.desc}</p>
+                </div>
               </div>
-              <div>
-                <h3 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
-                  ${meta.name}
-                  <span class="text-xs font-mono text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200 font-bold">
-                    Bobot: ${(meta.weight * 100).toFixed(2)}%
-                  </span>
-                </h3>
-                <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">${meta.desc}</p>
+
+              <div class="flex items-center justify-between sm:justify-end gap-3 pt-1 sm:pt-0 border-t sm:border-0 border-slate-100">
+                <div class="text-left sm:text-right">
+                  <span class="text-[10px] font-bold text-slate-500 block">Kontribusi:</span>
+                  <span class="text-sm font-mono text-sky-700 font-extrabold">${contrib}%</span>
+                </div>
+                <div class="px-3 py-1.5 rounded-xl border text-xs font-extrabold font-mono shadow-sm ${badgeClass} flex items-center gap-1.5">
+                  <span>Rata2: ${avgRawScore} / 10</span>
+                </div>
               </div>
             </div>
 
-            <div class="flex items-center gap-4">
-              <div class="text-right">
-                <span class="text-xs font-bold text-slate-500 block">Kontribusi:</span>
-                <span class="text-base font-mono text-sky-700 font-extrabold">${contrib}%</span>
-              </div>
-              <div class="px-4 py-2 rounded-2xl border text-sm sm:text-base font-extrabold font-mono shadow-sm ${badgeClass} flex items-center gap-2">
-                <span>Skor: ${score}</span>
-                <span class="text-xs opacity-80 font-sans font-bold">(${statusText})</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Checklist Pills -->
-          <div class="flex items-center gap-2 flex-wrap text-xs font-bold pt-1">
-            <span class="text-slate-500 font-extrabold mr-1"><i class="fa-solid fa-list-check text-sky-600"></i> Checklist Sub-Fitur:</span>
-            ${checklists.map(c => `
-              <span class="px-3 py-1 rounded-xl border flex items-center gap-1.5 ${c.pass ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-rose-50 text-rose-800 border-rose-200'}">
-                <i class="fa-solid ${c.pass ? 'fa-check text-emerald-600' : 'fa-xmark text-rose-600'}"></i> ${c.item}
+            <!-- Rincian Skor Sub-Kriteria -->
+            <div class="space-y-1.5">
+              <span class="text-slate-600 font-extrabold text-[11px] block flex items-center justify-between">
+                <span><i class="fa-solid fa-list-ol text-sky-600 mr-1"></i> Rincian Skor Sub-Kriteria:</span>
+                <span class="text-[10px] text-sky-700 font-mono">Skala 1.0 - 10.0</span>
               </span>
-            `).join('')}
-          </div>
-
-          <!-- Evidence Findings Card -->
-          <div class="bg-sky-50/70 p-3.5 rounded-2xl border border-sky-200 text-xs sm:text-sm font-medium">
-            <span class="font-extrabold text-sky-900 block mb-0.5 flex items-center gap-1.5">
-              <i class="fa-solid fa-microscope text-sky-600"></i> Temuan & Bukti AI pada Prototipe:
-            </span>
-            <p class="text-slate-700 leading-relaxed">${evidence}</p>
-          </div>
-
-          <!-- Strengths & Weaknesses Detailed Cards -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-            <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-200/80 space-y-1.5">
-              <h4 class="font-extrabold text-emerald-900 flex items-center gap-2">
-                <i class="fa-solid fa-circle-check text-emerald-600"></i> Keunggulan Ditemukan:
-              </h4>
-              <ul class="list-disc list-inside text-slate-700 space-y-1 leading-relaxed font-medium">
-                ${strengths.map(s => `<li>${s}</li>`).join('')}
-              </ul>
+              <div class="space-y-1">
+                ${subListHtml}
+              </div>
             </div>
 
-            <div class="bg-amber-50/60 p-4 rounded-2xl border border-amber-200/80 space-y-1.5">
-              <h4 class="font-extrabold text-amber-900 flex items-center gap-2">
-                <i class="fa-solid fa-triangle-exclamation text-amber-600"></i> Catatan & Kekurangan:
-              </h4>
-              <ul class="list-disc list-inside text-slate-700 space-y-1 leading-relaxed font-medium">
-                ${weaknesses.map(w => `<li>${w}</li>`).join('')}
-              </ul>
-            </div>
-          </div>
-
-          <!-- Reasoning & Recommendations -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-1.5">
-              <h4 class="font-extrabold text-sky-800 flex items-center gap-2">
-                <i class="fa-solid fa-magnifying-glass text-sky-600"></i> Alasan Penilaian AI:
-              </h4>
-              <p class="text-slate-700 leading-relaxed font-medium">${reason}</p>
+            <!-- Formula Box -->
+            <div class="bg-slate-100/90 p-2.5 rounded-xl border border-slate-200 text-[11px] font-mono text-slate-700 space-y-0.5">
+              <div class="flex justify-between">
+                <span>Rata-rata Sub-Kriteria:</span>
+                <span class="font-bold text-sky-800">${avgRawScore} / 10</span>
+              </div>
+              <div class="flex justify-between border-t border-slate-200 pt-0.5 text-[10px]">
+                <span>Kalkulasi Kontribusi:</span>
+                <span class="font-extrabold text-sky-900">(${avgRawScore} / 10) × ${weightPct.toFixed(2)}% = ${contrib}%</span>
+              </div>
             </div>
 
-            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-1.5">
-              <h4 class="font-extrabold text-indigo-800 flex items-center gap-2">
-                <i class="fa-solid fa-lightbulb text-indigo-600"></i> Rekomendasi Perbaikan:
-              </h4>
-              <p class="text-slate-700 leading-relaxed font-medium">${rec}</p>
+            <!-- Evidence Findings Card -->
+            <div class="bg-sky-50/70 p-3 rounded-2xl border border-sky-200 text-xs font-medium">
+              <span class="font-extrabold text-sky-900 block mb-0.5 flex items-center gap-1.5">
+                <i class="fa-solid fa-microscope text-sky-600"></i> Temuan & Bukti AI:
+              </span>
+              <p class="text-slate-700 leading-relaxed text-[11px]">${evidence}</p>
+            </div>
+
+            <!-- Strengths & Weaknesses Detailed Cards -->
+            <div class="space-y-2 text-xs">
+              <div class="bg-emerald-50/60 p-3 rounded-2xl border border-emerald-200/80 space-y-1">
+                <h4 class="font-extrabold text-emerald-900 flex items-center gap-1.5 text-[11px]">
+                  <i class="fa-solid fa-circle-check text-emerald-600"></i> Keunggulan Ditemukan:
+                </h4>
+                <ul class="list-disc list-inside text-slate-700 space-y-0.5 leading-relaxed font-medium text-[11px]">
+                  ${strengths.map(s => `<li>${s}</li>`).join('')}
+                </ul>
+              </div>
+
+              <div class="bg-amber-50/60 p-3 rounded-2xl border border-amber-200/80 space-y-1">
+                <h4 class="font-extrabold text-amber-900 flex items-center gap-1.5 text-[11px]">
+                  <i class="fa-solid fa-triangle-exclamation text-amber-600"></i> Catatan & Kekurangan:
+                </h4>
+                <ul class="list-disc list-inside text-slate-700 space-y-0.5 leading-relaxed font-medium text-[11px]">
+                  ${weaknesses.map(w => `<li>${w}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+
+            <!-- Reasoning & Recommendations -->
+            <div class="space-y-2 text-xs">
+              <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 space-y-1">
+                <h4 class="font-extrabold text-sky-800 flex items-center gap-1.5 text-[11px]">
+                  <i class="fa-solid fa-magnifying-glass text-sky-600"></i> Alasan Penilaian AI:
+                </h4>
+                <p class="text-slate-700 leading-relaxed font-medium text-[11px]">${reason}</p>
+              </div>
+
+              <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 space-y-1">
+                <h4 class="font-extrabold text-indigo-800 flex items-center gap-1.5 text-[11px]">
+                  <i class="fa-solid fa-lightbulb text-indigo-600"></i> Rekomendasi Perbaikan:
+                </h4>
+                <p class="text-slate-700 leading-relaxed font-medium text-[11px]">${rec}</p>
+              </div>
             </div>
           </div>
         `;
@@ -1311,7 +1666,7 @@ Format output WAJIB JSON persis seperti berikut:
         data: {
           labels: labels,
           datasets: [{
-            label: 'Performa Kriteria AI',
+            label: 'Rata-rata Sub-Kriteria AI (1-10)',
             data: dataValues,
             backgroundColor: 'rgba(2, 132, 199, 0.18)',
             borderColor: '#0284c7',
@@ -1329,9 +1684,9 @@ Format output WAJIB JSON persis seperti berikut:
               angleLines: { color: 'rgba(203, 213, 225, 0.8)' },
               grid: { color: 'rgba(226, 232, 240, 1)' },
               pointLabels: { color: '#334155', font: { size: 10, family: 'Plus Jakarta Sans', weight: 'bold' } },
-              ticks: { color: '#64748b', backdropColor: 'transparent', stepSize: 20 },
+              ticks: { color: '#64748b', backdropColor: 'transparent', stepSize: 2 },
               suggestedMin: 0,
-              suggestedMax: 100
+              suggestedMax: 10
             }
           },
           plugins: {
@@ -1362,8 +1717,8 @@ Format output WAJIB JSON persis seperti berikut:
         let idx = 1;
         for (let key in state.criteriaMeta) {
           const meta = state.criteriaMeta[key];
-          const score = state.auditData.scores[key] || 0;
-          const contrib = (score * meta.weight).toFixed(2);
+          const avgRawScore = state.auditData.scores[key] || 0;
+          const contrib = ((avgRawScore / 10.0) * (meta.weight * 100)).toFixed(2);
           const reason = state.auditData.reasons[key] || "";
           const rec = state.auditData.recommendations[key] || "";
 
@@ -1373,7 +1728,7 @@ Format output WAJIB JSON persis seperti berikut:
             <td class="p-2.5 font-mono font-bold">${idx++}</td>
             <td class="p-2.5 font-bold">${meta.name}</td>
             <td class="p-2.5 text-center font-mono">${(meta.weight * 100).toFixed(2)}%</td>
-            <td class="p-2.5 text-center font-bold font-mono">${score}</td>
+            <td class="p-2.5 text-center font-bold font-mono text-sky-700">${avgRawScore} / 10</td>
             <td class="p-2.5 text-center font-mono text-sky-700 font-extrabold">${contrib}%</td>
             <td class="p-2.5">
               <div class="space-y-1">
@@ -1403,6 +1758,10 @@ Format output WAJIB JSON persis seperti berikut:
         }
       });
 
+      document.getElementById('btn-reset-all')?.addEventListener('click', () => {
+        resetAllState();
+      });
+
       document.getElementById('btn-load-preview')?.addEventListener('click', (e) => {
         e.preventDefault();
         handleShowPreview();
@@ -1415,6 +1774,37 @@ Format output WAJIB JSON persis seperti berikut:
 
       document.getElementById('btn-trigger-celebration')?.addEventListener('click', () => {
         triggerSurpriseCelebration();
+      });
+
+      // Close Leaderboard Section Button
+      document.getElementById('btn-close-leaderboard')?.addEventListener('click', () => {
+        document.getElementById('leaderboard-section')?.classList.add('hidden');
+      });
+
+      // Close Preview Section Button
+      document.getElementById('btn-close-preview')?.addEventListener('click', () => {
+        document.getElementById('preview-section')?.classList.add('hidden');
+      });
+
+      // Close Matriks Penilaian Section Button
+      document.getElementById('btn-close-matrix')?.addEventListener('click', () => {
+        document.getElementById('matrix-section')?.classList.add('hidden');
+      });
+
+      // Equal Score Tie-Breaker Modal Buttons
+      document.getElementById('btn-open-tiebreaker-banner')?.addEventListener('click', () => {
+        const tiedPairs = detectTiedScores();
+        if (tiedPairs.length > 0) {
+          showTieBreakerModal(tiedPairs[0].itemA, tiedPairs[0].itemB, tiedPairs[0].rankA, tiedPairs[0].rankB);
+        }
+      });
+
+      document.getElementById('btn-close-tiebreaker-modal')?.addEventListener('click', () => {
+        document.getElementById('modal-tiebreaker-comparison')?.classList.add('hidden');
+      });
+
+      document.getElementById('btn-dismiss-tiebreaker-modal')?.addEventListener('click', () => {
+        document.getElementById('modal-tiebreaker-comparison')?.classList.add('hidden');
       });
 
       document.getElementById('btn-reload-iframe')?.addEventListener('click', () => {
