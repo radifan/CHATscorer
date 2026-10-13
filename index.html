@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id" class="dark h-full">
+<html lang="id" class="h-full">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Penilaian Prototipe WebApp UMKM</title>
+  <title>Penilaian Prototipe WebApp UMKM - Tema Terang</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -14,27 +14,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- Firebase JS SDK Modules for Public Cloud Access -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-    window.FirebaseSDK = {
-      initializeApp,
-      getAuth,
-      signInAnonymously,
-      signInWithCustomToken,
-      getFirestore,
-      doc,
-      getDoc,
-      setDoc,
-      collection,
-      onSnapshot
-    };
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
@@ -43,14 +23,15 @@
         extend: {
           fontFamily: {
             sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
           },
           colors: {
             brand: {
               50: '#f0f9ff',
               100: '#e0f2fe',
-              500: '#0ea5e9',
-              600: '#0284c7',
-              700: '#0369a1',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
             }
           }
         }
@@ -60,23 +41,23 @@
 
   <style>
     .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+      width: 8px;
+      height: 8px;
     }
     .custom-scrollbar::-webkit-scrollbar-track {
-      background: #0f172a;
+      background: #f1f5f9;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 4px;
+      background: #cbd5e1;
+      border-radius: 6px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #475569;
+      background: #94a3b8;
     }
     
-    .device-desktop { width: 100%; height: 600px; }
-    .device-tablet { width: 768px; height: 600px; }
-    .device-mobile { width: 375px; height: 600px; }
+    .device-desktop { width: 100%; height: 650px; }
+    .device-tablet { width: 768px; height: 650px; }
+    .device-mobile { width: 375px; height: 650px; }
 
     @media print {
       body * {
@@ -101,167 +82,145 @@
   </style>
 </head>
 
-<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-full flex flex-col custom-scrollbar">
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-full flex flex-col custom-scrollbar">
 
-  <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 via-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/20">
-          <i class="fa-solid fa-store text-lg"></i>
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 sm:gap-4">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-600 via-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/20">
+          <i class="fa-solid fa-store text-2xl"></i>
         </div>
         <div>
-          <h1 class="font-extrabold text-sm sm:text-base text-slate-100 tracking-tight flex items-center gap-2">
+          <h1 class="font-extrabold text-base sm:text-xl text-slate-900 tracking-tight flex items-center gap-2">
             Audit Prototipe WebApp UMKM
-            <span class="text-[10px] bg-sky-950 text-sky-400 border border-sky-800 font-mono px-2 py-0.5 rounded-full">v3.0 Cloud</span>
+            <span class="text-xs bg-sky-100 text-sky-800 border border-sky-300 font-mono px-2.5 py-0.5 rounded-full font-bold">v3.5 Light</span>
           </h1>
-          <p class="text-[11px] text-slate-400 hidden sm:block">Sistem Penilaian Otomatis 10 Kriteria Berbasis Gemini AI</p>
+          <p class="text-xs sm:text-sm text-slate-500 font-medium hidden sm:block">Sistem Penilaian Otomatis 10 Kriteria Terbobot Berbasis AI Gemini</p>
         </div>
       </div>
 
       <div class="flex items-center gap-2 sm:gap-3">
-        <div class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-950/60 border border-emerald-800 text-emerald-400 text-xs font-mono">
-          <i class="fa-solid fa-lock text-emerald-400"></i>
+        <div class="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-mono font-bold">
+          <i class="fa-solid fa-lock text-emerald-600"></i>
           <span>Mode Konsisten (Temp 0.0)</span>
         </div>
 
-        <button id="btn-toggle-public-repo" class="px-3 py-1.5 rounded-lg border border-sky-800 bg-sky-950/80 hover:bg-sky-900 text-sky-300 hover:text-white text-xs font-medium transition flex items-center gap-2">
-          <i class="fa-solid fa-globe text-sky-400"></i>
-          <span>Repositori Publik</span>
-        </button>
-
-        <button id="btn-open-api-modal" class="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-medium transition flex items-center gap-2">
-          <i class="fa-solid fa-key text-amber-400"></i>
+        <button id="btn-open-api-modal" class="px-3.5 py-2 rounded-xl border border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold transition flex items-center gap-2 shadow-sm">
+          <i class="fa-solid fa-key text-amber-500"></i>
           <span id="api-status-label" class="hidden sm:inline">Kunci Gemini API</span>
         </button>
 
-        <button id="btn-export-pdf" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 transition flex items-center gap-2">
-          <i class="fa-solid fa-file-pdf"></i>
+        <button id="btn-export-pdf" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold shadow-md shadow-emerald-600/25 transition flex items-center gap-2">
+          <i class="fa-solid fa-file-pdf text-sm"></i>
           <span>Cetak PDF</span>
         </button>
       </div>
     </div>
   </header>
 
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-    <!-- Copy Notification Toast -->
-    <div id="toast-notification" class="hidden fixed top-20 right-4 z-50 bg-emerald-900 border border-emerald-700 text-emerald-100 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 transition-all duration-300">
-      <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+    <!-- Copy / Toast Notification -->
+    <div id="toast-notification" class="hidden fixed top-24 right-6 z-50 bg-emerald-900 text-emerald-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 transition-all duration-300 border border-emerald-700">
+      <i class="fa-solid fa-circle-check text-emerald-400 text-2xl"></i>
       <div>
-        <h4 class="font-bold text-xs" id="toast-title">Berhasil!</h4>
-        <p class="text-[11px] text-emerald-200" id="toast-message">Tautan audit publik telah disalin ke clipboard.</p>
+        <h4 class="font-extrabold text-sm" id="toast-title">Berhasil!</h4>
+        <p class="text-xs text-emerald-200 font-medium" id="toast-message">Pesan notifikasi.</p>
       </div>
     </div>
 
-    <!-- Input Section -->
-    <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-2xl relative overflow-hidden">
-      <div class="absolute -right-12 -top-12 w-48 h-48 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <section class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+      <div class="absolute -right-12 -top-12 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div class="flex flex-col gap-4 relative z-10">
-        <div class="flex items-center justify-between">
-          <div>
-            <h2 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-              <i class="fa-solid fa-globe text-sky-400"></i> URL Prototipe Website UMKM
-            </h2>
-            <p class="text-xs text-slate-400 mt-0.5">Masukkan 1 URL utama prototipe. AI Gemini akan mengevaluasi secara otomatis seluruh 10 kriteria, termasuk pemindaian tautan portal admin pada navigasi/footer website.</p>
-          </div>
+      <div class="flex flex-col gap-5 relative z-10">
+        <div>
+          <h2 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2.5">
+            <i class="fa-solid fa-globe text-sky-600 text-xl"></i> Masukkan URL Prototipe Website UMKM
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1">
+            Masukkan 1 URL utama prototipe. AI Gemini akan mengevaluasi seluruh 10 kriteria secara mutlak, termasuk pemindaian otomatis tautan portal admin pada navigasi/footer website.
+          </p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
           <div class="lg:col-span-9 relative">
-            <label for="input-url" class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">URL Utama Prototipe Website UMKM:</label>
+            <label for="input-url" class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-1.5">URL Utama Prototipe Website:</label>
             <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                <i class="fa-solid fa-link text-xs"></i>
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 text-base">
+                <i class="fa-solid fa-link"></i>
               </div>
-              <input type="text" id="input-url" value="https://kopi-lokal-nusantara.vercel.app" class="w-full pl-9 pr-28 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 text-xs focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 font-mono">
-              <button id="btn-load-preview" title="Muat Tampilan Preview" class="absolute right-1 top-1 bottom-1 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition flex items-center gap-1.5 shadow">
-                <i class="fa-solid fa-eye text-sky-400 text-xs"></i> <span>Preview</span>
+              <input type="text" id="input-url" value="https://kopi-lokal-nusantara.vercel.app" placeholder="https://domain-umkm.com" class="w-full pl-11 pr-16 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-mono font-bold transition shadow-inner">
+              
+              <!-- Tombol Nilai (Ikon saja di dalam field) -->
+              <button id="btn-audit-ai" title="Nilai Prototipe Sekarang (Atau Tekan Enter)" class="absolute right-1.5 top-1.5 bottom-1.5 px-4 bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white rounded-xl shadow-md shadow-sky-600/30 transition flex items-center justify-center group">
+                <i class="fa-solid fa-wand-magic-sparkles text-amber-300 text-base group-hover:rotate-12 transition transform"></i>
               </button>
             </div>
+            <p class="text-[11px] text-slate-500 mt-1.5 font-medium flex items-center gap-1.5">
+              <i class="fa-solid fa-keyboard text-slate-400"></i>
+              <span>Klik ikon <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> atau tekan <kbd class="px-1.5 py-0.5 bg-slate-200 text-slate-800 border border-slate-300 rounded font-mono font-bold text-[10px] shadow-sm">Enter</kbd> di dalam kolom untuk langsung menilai.</span>
+            </p>
           </div>
 
-          <div class="lg:col-span-3 pt-2 lg:pt-5">
-            <button id="btn-audit-ai" class="w-full h-[42px] bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-sky-500/25 transition flex items-center justify-center gap-2 group">
-              <i class="fa-solid fa-wand-magic-sparkles text-amber-300 group-hover:rotate-12 transition transform"></i>
-              <span>Nilai Prototipe Sekarang</span>
+          <!-- Tombol Preview (Di luar field) -->
+          <div class="lg:col-span-3 pt-2 lg:pt-6">
+            <button id="btn-load-preview" title="Muat Tampilan Preview (Opsional)" class="w-full h-[52px] bg-slate-100 hover:bg-slate-200 text-slate-700 border-2 border-slate-300 text-xs sm:text-sm font-extrabold rounded-2xl transition flex items-center justify-center gap-2 shadow-sm">
+              <i class="fa-solid fa-eye text-sky-600 text-base"></i>
+              <span>Preview <span class="font-normal text-xs text-slate-500">(Opsional)</span></span>
             </button>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="preview-section" class="hidden bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl transition-all duration-300">
-      <div class="p-3 bg-slate-900 border-b border-slate-800 flex items-center justify-between gap-2 flex-wrap">
-        <div class="flex items-center gap-2 flex-wrap">
-          <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+    <section id="preview-section" class="hidden bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300">
+      <div class="p-4 bg-slate-900 text-white border-b border-slate-800 flex items-center justify-between gap-3 flex-wrap">
+        <div class="flex items-center gap-3 flex-wrap">
+          <span class="text-xs sm:text-sm font-bold text-slate-200 flex items-center gap-2">
             <i class="fa-solid fa-display text-sky-400"></i> Tampilan Prototipe Live:
           </span>
-          <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
-            <button id="device-desktop" class="btn-device active px-2.5 py-1 rounded-md text-xs font-medium text-sky-400 bg-slate-800 transition flex items-center gap-1.5">
+          <div class="flex items-center gap-1 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
+            <button id="device-desktop" class="btn-device active px-3 py-1.5 rounded-lg text-xs font-bold text-sky-400 bg-slate-800 transition flex items-center gap-2">
               <i class="fa-solid fa-desktop"></i> Desktop (1280px)
             </button>
-            <button id="device-tablet" class="btn-device px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-slate-200 transition flex items-center gap-1.5">
+            <button id="device-tablet" class="btn-device px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition flex items-center gap-2">
               <i class="fa-solid fa-tablet-screen-button"></i> Tablet (768px)
             </button>
-            <button id="device-mobile" class="btn-device px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-slate-200 transition flex items-center gap-1.5">
+            <button id="device-mobile" class="btn-device px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition flex items-center gap-2">
               <i class="fa-solid fa-mobile-screen-button"></i> Mobile (375px)
             </button>
           </div>
         </div>
 
-        <div class="flex items-center gap-2">
-          <span id="preview-url-status" class="text-[11px] font-mono text-sky-400 bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-800 max-w-xs truncate hidden sm:inline-block">
+        <div class="flex items-center gap-2.5">
+          <span id="preview-url-status" class="text-xs font-mono text-sky-400 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 max-w-xs truncate hidden sm:inline-block">
             Menampilkan: -
           </span>
-          <button id="btn-reload-iframe" title="Muat Ulang Frame" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs transition">
+          <button id="btn-reload-iframe" title="Muat Ulang Frame" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs transition">
             <i class="fa-solid fa-rotate-right"></i>
           </button>
-          <a id="link-external-open" href="#" target="_blank" rel="noopener noreferrer" title="Buka di Tab Baru" class="px-2.5 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-medium transition flex items-center gap-1.5">
+          <a id="link-external-open" href="#" target="_blank" rel="noopener noreferrer" title="Buka di Tab Baru" class="px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition flex items-center gap-2 shadow-md">
             <i class="fa-solid fa-arrow-up-right-from-square"></i>
             <span class="hidden md:inline">Buka di Tab Baru</span>
           </a>
         </div>
       </div>
 
-      <div id="iframe-fallback-banner" class="bg-amber-950/40 border-b border-amber-800/60 px-4 py-2 text-amber-300 text-xs flex items-center justify-between gap-2">
+      <div id="iframe-fallback-banner" class="bg-amber-50 border-b border-amber-200 px-5 py-2.5 text-amber-900 text-xs flex items-center justify-between gap-3 font-medium">
         <div class="flex items-center gap-2">
-          <i class="fa-solid fa-circle-info text-amber-400"></i>
-          <span>Jika website target memblokir preview iframe (<code class="bg-amber-950 px-1 py-0.5 rounded font-mono">X-Frame-Options</code>), gunakan tombol 'Buka di Tab Baru' untuk memverifikasi situs secara langsung.</span>
+          <i class="fa-solid fa-circle-info text-amber-600 text-sm"></i>
+          <span>Jika situs target memblokir preview frame (<code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-amber-900">X-Frame-Options</code>), gunakan tombol 'Buka di Tab Baru' untuk menguji situs secara langsung.</span>
         </div>
-        <a id="banner-open-link" href="#" target="_blank" class="underline font-bold hover:text-amber-100 whitespace-nowrap">Buka Tab Baru &rarr;</a>
+        <a id="banner-open-link" href="#" target="_blank" class="underline font-bold text-amber-800 hover:text-amber-950 whitespace-nowrap">Buka Tab Baru &rarr;</a>
       </div>
 
-      <div class="bg-slate-950 p-4 flex items-center justify-center overflow-auto custom-scrollbar min-h-[500px]">
-        <div id="iframe-wrapper" class="device-desktop transition-all duration-300 bg-white rounded-xl overflow-hidden shadow-2xl relative border border-slate-700">
-          <div id="iframe-loading" class="hidden absolute inset-0 bg-slate-950/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-10 text-slate-200">
-            <i class="fa-solid fa-circle-notch fa-spin text-3xl text-sky-400"></i>
-            <p class="text-xs font-medium">Memuat Tampilan Prototipe...</p>
+      <div class="bg-slate-200 p-6 flex items-center justify-center overflow-auto custom-scrollbar min-h-[550px]">
+        <div id="iframe-wrapper" class="device-desktop transition-all duration-300 bg-white rounded-2xl overflow-hidden shadow-2xl relative border-2 border-slate-300">
+          <div id="iframe-loading" class="hidden absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-10 text-white">
+            <i class="fa-solid fa-circle-notch fa-spin text-4xl text-sky-400"></i>
+            <p class="text-xs sm:text-sm font-bold">Memuat Tampilan Prototipe...</p>
           </div>
           <iframe id="preview-iframe" src="about:blank" class="w-full h-full border-0"></iframe>
-        </div>
-      </div>
-    </section>
-
-    <!-- Public Repository Section (Directly Accessible on Main Page) -->
-    <section id="public-repository-section" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <div>
-          <h2 class="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
-            <i class="fa-solid fa-cloud text-sky-400"></i>
-            Repositori Audit Publik UMKM (Real-Time Cloud)
-          </h2>
-          <p class="text-xs text-slate-400">Daftar laporan hasil penilaian prototipe UMKM yang dipublikasikan secara umum dan dapat diakses bersama.</p>
-        </div>
-        <span class="text-[11px] font-mono bg-sky-950 border border-sky-800 text-sky-400 px-3 py-1 rounded-full flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-sky-400 animate-ping"></span> Live Updates
-        </span>
-      </div>
-
-      <div id="public-audits-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
-        <div class="col-span-full text-center py-8 text-slate-500 text-xs">
-          <i class="fa-solid fa-spinner fa-spin text-xl text-sky-400 mb-2 block"></i>
-          Memuat daftar audit publik dari cloud...
         </div>
       </div>
     </section>
@@ -269,94 +228,87 @@
     <div id="results-section" class="hidden space-y-8 transition-all duration-300">
 
       <!-- Executive Summary & Radar Section -->
-      <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      <section class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl space-y-8">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200 pb-5">
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
-              <i class="fa-solid fa-chart-line text-sky-400"></i>
-              Hasil Penilaian Eksekutif Auditor AI
+            <h2 class="text-lg sm:text-2xl font-black text-slate-900 flex items-center gap-3">
+              <i class="fa-solid fa-chart-line text-sky-600 text-2xl"></i>
+              Hasil Penilaian Eksekutif AI
             </h2>
-            <p class="text-xs text-slate-400">Skor terbobot akhir dihitung mutlak oleh AI berdasarkan 10 kriteria evaluasi standar UMKM.</p>
+            <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Skor terbobot akhir dihitung mutlak oleh AI Gemini berdasarkan 10 kriteria standar UMKM.</p>
           </div>
 
-          <div class="flex items-center gap-2">
-            <span class="text-xs text-slate-400">Status Penilaian:</span>
-            <span id="audit-status-badge" class="px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs font-semibold flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Selesai Dinilai AI
+          <div class="flex items-center gap-2.5">
+            <span class="text-xs font-bold text-slate-500">Status Penilaian:</span>
+            <span id="audit-status-badge" class="px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-extrabold flex items-center gap-2 shadow-sm">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span> Selesai Dinilai AI
             </span>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
           
-          <!-- Score Card -->
-          <div class="md:col-span-4 bg-slate-950/80 border border-slate-800 rounded-2xl p-6 flex flex-col items-center text-center justify-between relative overflow-hidden">
-            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-sky-500/10 rounded-full blur-2xl pointer-events-none"></div>
+          <!-- Large Score Card -->
+          <div class="md:col-span-5 bg-gradient-to-b from-sky-50/80 to-slate-50 border-2 border-sky-200/80 rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center justify-between relative overflow-hidden shadow-md">
+            <div class="absolute -right-12 -bottom-12 w-40 h-40 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-            <span class="text-xs uppercase tracking-wider font-bold text-slate-400 mb-1">Total Skor Terbobot</span>
+            <span class="text-xs sm:text-sm uppercase tracking-widest font-black text-sky-800 mb-1">Total Skor Terbobot</span>
             
-            <div class="my-3">
-              <span id="overall-score-display" class="text-5xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-400 to-emerald-400 font-mono">
+            <div class="my-4">
+              <span id="overall-score-display" class="text-6xl sm:text-7xl font-extrabold text-sky-600 font-mono tracking-tight drop-shadow-sm">
                 0.0%
               </span>
             </div>
 
-            <div class="flex flex-col items-center gap-1.5 w-full">
-              <span id="grade-badge" class="px-5 py-1.5 rounded-xl bg-slate-800 text-slate-300 border border-slate-700 text-xl font-black tracking-wide shadow-lg">
+            <div class="flex flex-col items-center gap-2 w-full my-2">
+              <span id="grade-badge" class="px-6 py-2 rounded-2xl bg-white text-slate-800 border-2 border-slate-300 text-2xl sm:text-3xl font-black tracking-wider shadow-md">
                 GRADE -
               </span>
-              <span id="grade-predicate" class="text-xs font-semibold text-slate-400 text-center">
+              <span id="grade-predicate" class="text-xs sm:text-sm font-extrabold text-slate-600 text-center">
                 Menunggu Penilaian
               </span>
             </div>
 
-            <div class="w-full mt-6 pt-4 border-t border-slate-800 text-left text-xs space-y-2">
-              <div class="flex justify-between text-slate-400">
+            <div class="w-full mt-6 pt-5 border-t border-sky-200/80 text-left text-xs sm:text-sm font-medium space-y-2.5">
+              <div class="flex justify-between items-center text-slate-700">
                 <span>Kelompok 1-4 (45% UI/UX & Katalog):</span>
-                <span id="cat-score-a" class="font-mono text-slate-200 font-bold">0.00 / 45</span>
+                <span id="cat-score-a" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 45</span>
               </div>
-              <div class="flex justify-between text-slate-400">
+              <div class="flex justify-between items-center text-slate-700">
                 <span>Kelompok 5-6 (20% Keamanan & Admin):</span>
-                <span id="cat-score-b" class="font-mono text-slate-200 font-bold">0.00 / 20</span>
+                <span id="cat-score-b" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 20</span>
               </div>
-              <div class="flex justify-between text-slate-400">
+              <div class="flex justify-between items-center text-slate-700">
                 <span>Kelompok 7-9 (25% Resp & Info):</span>
-                <span id="cat-score-c" class="font-mono text-slate-200 font-bold">0.00 / 25</span>
+                <span id="cat-score-c" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 25</span>
               </div>
-              <div class="flex justify-between text-slate-400">
+              <div class="flex justify-between items-center text-slate-700">
                 <span>Kelompok 10 (10% Direct Checkout):</span>
-                <span id="cat-score-d" class="font-mono text-slate-200 font-bold">0.00 / 10</span>
+                <span id="cat-score-d" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 10</span>
               </div>
             </div>
           </div>
 
           <!-- Radar Chart Visualizer -->
-          <div class="md:col-span-4 bg-slate-950/80 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[300px]">
-            <h3 class="text-xs font-bold text-slate-300 mb-2 uppercase tracking-wider text-center">Pemetaan Radar Performa Kriteria</h3>
-            <div class="w-full h-64 relative flex items-center justify-center">
+          <div class="md:col-span-7 bg-slate-50 border border-slate-200 rounded-3xl p-6 flex flex-col justify-between space-y-4">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                <i class="fa-solid fa-chart-pie text-sky-600"></i> Pemetaan Radar Performa Kriteria
+              </h3>
+              <span class="text-xs font-mono text-slate-500 font-bold">Skala 0 - 100</span>
+            </div>
+
+            <div class="w-full h-72 sm:h-80 relative flex items-center justify-center p-2">
               <canvas id="auditRadarChart"></canvas>
             </div>
-          </div>
 
-          <!-- Executive Summary Box -->
-          <div class="md:col-span-4 bg-slate-950/80 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between space-y-3">
-            <div>
-              <h3 class="text-xs font-bold text-sky-400 uppercase tracking-wider flex items-center gap-1.5 mb-2">
-                <i class="fa-solid fa-file-contract"></i> Ringkasan Analisis AI
-              </h3>
-              <p id="executive-summary-text" class="text-xs text-slate-300 leading-relaxed bg-slate-900/90 p-3.5 rounded-xl border border-slate-800">
-                Silakan klik tombol "Nilai Prototipe Sekarang" untuk mengizinkan AI Gemini melakukan audit komprehensif terhadap URL website target.
-              </p>
+            <div id="executive-summary-text" class="text-xs sm:text-sm text-slate-700 leading-relaxed bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+              Silakan klik tombol "Nilai Prototipe Sekarang" untuk mengizinkan AI Gemini melakukan audit komprehensif terhadap URL website target.
             </div>
 
-            <button id="btn-view-report-modal" class="w-full py-2.5 bg-sky-600/20 hover:bg-sky-600/30 border border-sky-500/40 text-sky-300 text-xs font-semibold rounded-xl transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-print"></i>
+            <button id="btn-view-report-modal" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-extrabold rounded-2xl transition shadow-md shadow-sky-600/20 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-print text-base"></i>
               <span>Buka Format Cetak PDF Resmi</span>
-            </button>
-
-            <button id="btn-share-public" class="w-full py-2.5 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 text-xs font-semibold rounded-xl transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-share-nodes"></i>
-              <span>Publikasikan & Dapatkan Tautan Publik</span>
             </button>
           </div>
 
@@ -364,21 +316,21 @@
       </section>
 
       <section class="space-y-6">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-4">
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
-              <i class="fa-solid fa-list-check text-sky-400"></i>
+            <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2.5">
+              <i class="fa-solid fa-list-check text-sky-600"></i>
               Matriks Penilaian Terperinci 10 Kriteria (Eksklusif AI)
             </h2>
-            <p class="text-xs text-slate-400">Hasil audit mutlak dari AI Gemini beserta analisis alasan dan rekomendasi perbaikan.</p>
+            <p class="text-xs sm:text-sm text-slate-500 font-medium">Hasil audit mutlak dari AI Gemini beserta analisis alasan dan rekomendasi perbaikan.</p>
           </div>
-          <div class="flex items-center gap-2 text-xs text-slate-400">
-            <i class="fa-solid fa-shield-cat text-amber-400"></i>
+          <div class="flex items-center gap-2 text-xs font-bold text-slate-500 bg-slate-200/60 px-3 py-1.5 rounded-xl">
+            <i class="fa-solid fa-shield-cat text-amber-600"></i>
             <span>Penilaian Terunci & Valid</span>
           </div>
         </div>
 
-        <div class="space-y-8" id="matrix-container">
+        <div class="space-y-6" id="matrix-container">
           <!-- Rendered dynamically via JS -->
         </div>
       </section>
@@ -387,108 +339,110 @@
 
   </main>
 
+
   <!-- AI Progress Modal -->
-  <div id="modal-ai-progress" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl">
-      <div class="w-12 h-12 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center mx-auto text-xl">
+  <div id="modal-ai-progress" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-8 text-center space-y-5 shadow-2xl">
+      <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center mx-auto text-2xl shadow-inner">
         <i class="fa-solid fa-brain animate-pulse"></i>
       </div>
       <div>
-        <h3 class="font-bold text-slate-100 text-sm sm:text-base">AI Sedang Memproses Audit Prototipe</h3>
-        <p id="ai-progress-status" class="text-xs text-slate-400 mt-1">Mengevaluasi struktur URL, tautan admin, dan kelengkapan katalog...</p>
+        <h3 class="font-black text-slate-900 text-base sm:text-lg">AI Sedang Memproses Audit Prototipe</h3>
+        <p id="ai-progress-status" class="text-xs sm:text-sm text-slate-500 mt-1.5 font-medium">Mengevaluasi struktur URL, tautan admin, dan kelengkapan katalog...</p>
       </div>
-      <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800">
-        <div id="ai-progress-bar" class="bg-gradient-to-r from-sky-500 to-indigo-500 h-2.5 rounded-full transition-all duration-300 w-1/4"></div>
+      <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden border border-slate-200">
+        <div id="ai-progress-bar" class="bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 h-3 rounded-full transition-all duration-300 w-1/4"></div>
       </div>
     </div>
   </div>
 
   <!-- API Key Modal -->
-  <div id="modal-api-key" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <h3 class="font-bold text-slate-100 text-sm sm:text-base flex items-center gap-2">
-          <i class="fa-solid fa-key text-amber-400"></i> Pengaturan Kunci Gemini API
+  <div id="modal-api-key" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+        <h3 class="font-extrabold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+          <i class="fa-solid fa-key text-amber-500"></i> Pengaturan Kunci Gemini API
         </h3>
-        <button id="btn-close-api-modal" class="text-slate-400 hover:text-slate-200">
-          <i class="fa-solid fa-xmark text-lg"></i>
+        <button id="btn-close-api-modal" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <p class="text-xs text-slate-400 leading-relaxed">
-        Model default yang digunakan adalah <code class="bg-slate-950 px-1.5 py-0.5 rounded text-sky-400 font-mono">gemini-3-flash-preview</code>. Dalam lingkungan runtime Canvas, kunci API terpasang secara otomatis.
+      <p class="text-xs text-slate-600 leading-relaxed font-medium">
+        Model default yang digunakan adalah <code class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded text-sky-700 font-mono font-bold">gemini-3-flash-preview</code>. Kunci API bawaan terpasang secara otomatis.
       </p>
 
-      <div class="space-y-1.5">
-        <label for="custom-api-key" class="text-xs font-semibold text-slate-300">Gemini API Key (Opsional / Custom):</label>
-        <input type="password" id="custom-api-key" placeholder="Masukkan Custom Gemini API Key..." class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-sky-500 font-mono">
+      <div class="space-y-2">
+        <label for="custom-api-key" class="text-xs font-bold text-slate-700">Gemini API Key (Opsional / Custom):</label>
+        <input type="password" id="custom-api-key" placeholder="Masukkan Custom Gemini API Key..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-sky-600 font-mono">
       </div>
 
       <div class="flex justify-end gap-2 pt-2">
-        <button id="btn-save-api-key" class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold rounded-xl transition">
+        <button id="btn-save-api-key" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white text-xs font-extrabold rounded-xl transition shadow-md">
           Simpan & Gunakan
         </button>
       </div>
     </div>
   </div>
 
-  <div id="print-report-modal" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md overflow-y-auto p-4 sm:p-8">
-    <div class="max-w-4xl mx-auto bg-white text-slate-900 rounded-2xl shadow-2xl p-8 space-y-6 my-8">
+  <!-- Printable PDF Modal -->
+  <div id="print-report-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md overflow-y-auto p-4 sm:p-8">
+    <div class="max-w-4xl mx-auto bg-white text-slate-900 rounded-3xl shadow-2xl p-8 space-y-6 my-8 border border-slate-200">
       
       <!-- Report Header -->
       <div class="flex items-start justify-between border-b border-slate-200 pb-6">
         <div>
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold text-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-sky-600 text-white flex items-center justify-center font-black text-lg">
               UMKM
             </div>
-            <h2 class="text-xl font-bold text-slate-900">LAPORAN PENILAIAN PROTOTIPE WEBSITE UMKM</h2>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900">LAPORAN PENILAIAN PROTOTIPE WEBSITE UMKM</h2>
           </div>
-          <p class="text-xs text-slate-500 mt-1">Laporan Resmi Penilaian Gemini AI</p>
+          <p class="text-xs text-slate-500 mt-1 font-medium">Laporan Resmi Hasil Evaluasi Determinisk Gemini AI</p>
         </div>
 
         <div class="text-right text-xs text-slate-500 no-print">
-          <button id="btn-print-now" class="px-4 py-2 bg-emerald-600 text-white font-semibold rounded-lg shadow hover:bg-emerald-500 transition mr-2">
-            <i class="fa-solid fa-print mr-1"></i> Cetak / Simpan PDF
+          <button id="btn-print-now" class="px-4 py-2 bg-emerald-600 text-white font-extrabold rounded-xl shadow hover:bg-emerald-500 transition mr-2">
+            <i class="fa-solid fa-print mr-1.5"></i> Cetak / Simpan PDF
           </button>
-          <button id="btn-close-report-modal" class="px-3 py-2 bg-slate-200 text-slate-700 font-semibold rounded-lg hover:bg-slate-300 transition">
+          <button id="btn-close-report-modal" class="px-3.5 py-2 bg-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-300 transition">
             Tutup
           </button>
         </div>
       </div>
 
       <!-- Audit Metadata -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-200 text-xs">
         <div>
-          <span class="text-slate-500 block">URL Target Prototipe:</span>
-          <span id="rpt-url" class="font-bold text-slate-800 break-all">https://kopi-lokal-nusantara.vercel.app</span>
+          <span class="text-slate-500 block font-medium">URL Target Prototipe:</span>
+          <span id="rpt-url" class="font-bold text-slate-900 break-all font-mono">https://kopi-lokal-nusantara.vercel.app</span>
         </div>
         <div>
-          <span class="text-slate-500 block">Tanggal Audit AI:</span>
-          <span id="rpt-date" class="font-bold text-slate-800">13 Oktober 2026</span>
+          <span class="text-slate-500 block font-medium">Tanggal Audit AI:</span>
+          <span id="rpt-date" class="font-bold text-slate-900">13 Oktober 2026</span>
         </div>
         <div>
-          <span class="text-slate-500 block">Skor Terbobot Akhir:</span>
-          <span id="rpt-score" class="font-bold text-sky-700 text-sm">88.4%</span>
+          <span class="text-slate-500 block font-medium">Skor Terbobot Akhir:</span>
+          <span id="rpt-score" class="font-extrabold text-sky-700 text-base font-mono">88.4%</span>
         </div>
         <div>
-          <span class="text-slate-500 block">Predikat Kualifikasi:</span>
+          <span class="text-slate-500 block font-medium">Predikat Kualifikasi:</span>
           <span id="rpt-grade" class="font-bold text-emerald-700 text-sm">GRADE A (Sangat Layak)</span>
         </div>
       </div>
 
       <!-- Itemized Table -->
       <div class="space-y-3">
-        <h3 class="font-bold text-sm text-slate-800 border-b pb-1">Hasil Rincian Audit 10 Kriteria</h3>
+        <h3 class="font-extrabold text-sm text-slate-900 border-b pb-2">Hasil Rincian Audit 10 Kriteria</h3>
         <table class="w-full text-left text-xs border-collapse">
           <thead>
-            <tr class="bg-slate-100 border-b border-slate-300">
-              <th class="p-2 font-semibold">No</th>
-              <th class="p-2 font-semibold">Kriteria Penilaian</th>
-              <th class="p-2 font-semibold text-center">Bobot</th>
-              <th class="p-2 font-semibold text-center">Skor AI</th>
-              <th class="p-2 font-semibold text-center">Kontribusi</th>
-              <th class="p-2 font-semibold">Alasan Penilaian AI & Rekomendasi</th>
+            <tr class="bg-slate-100 border-b border-slate-300 text-slate-800">
+              <th class="p-2.5 font-bold">No</th>
+              <th class="p-2.5 font-bold">Kriteria Penilaian</th>
+              <th class="p-2.5 font-bold text-center">Bobot</th>
+              <th class="p-2.5 font-bold text-center">Skor AI</th>
+              <th class="p-2.5 font-bold text-center">Kontribusi</th>
+              <th class="p-2.5 font-bold">Alasan Penilaian AI & Rekomendasi</th>
             </tr>
           </thead>
           <tbody id="rpt-table-body" class="divide-y divide-slate-200">
@@ -498,24 +452,24 @@
       </div>
 
       <!-- Executive AI Summary -->
-      <div class="p-4 bg-sky-50 border border-sky-200 rounded-xl space-y-2 text-xs">
-        <h4 class="font-bold text-sky-900 flex items-center gap-1.5">
+      <div class="p-5 bg-sky-50 border border-sky-200 rounded-2xl space-y-2 text-xs">
+        <h4 class="font-bold text-sky-900 flex items-center gap-2">
           <i class="fa-solid fa-list-check"></i> Kesimpulan Eksekutif AI & Rencana Tindak Lanjut:
         </h4>
-        <div id="rpt-action-plan" class="text-sky-800 leading-relaxed">
+        <div id="rpt-action-plan" class="text-sky-900 leading-relaxed font-medium">
           Prototipe website UMKM ini telah memenuhi standar kelayakan digitalisasi dengan sangat baik. Fokus perbaikan selanjutnya diarahkan pada penguatan keamanan portal admin dan konsistensi alur checkout pembayaran.
         </div>
       </div>
 
       <!-- Footer Signatures -->
-      <div class="pt-8 flex justify-between items-end text-xs text-slate-500">
+      <div class="pt-8 flex justify-between items-end text-xs text-slate-500 border-t border-slate-200">
         <div>
-          <p>Auditor AI Engine: <span class="font-mono">Gemini 3 Flash</span></p>
+          <p>Auditor AI Engine: <span class="font-mono font-bold text-slate-700">Gemini 3 Flash (Temp 0.0)</span></p>
           <p>Status: Certified AI Automated Audit</p>
         </div>
         <div class="text-center">
-          <p class="mb-12">Penilai AI / Auditor Resmi</p>
-          <p class="font-bold text-slate-800">( AI UMKM AUDITOR ENGINE )</p>
+          <p class="mb-12 font-medium">Penilai AI / Auditor Resmi</p>
+          <p class="font-extrabold text-slate-900">( AI UMKM AUDITOR ENGINE )</p>
         </div>
       </div>
 
@@ -570,189 +524,6 @@
       }
     };
 
-    let db = null;
-    let auth = null;
-    let currentUser = null;
-
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'umkm-audit-app';
-    const firebaseConfig = typeof __firebase_config !== 'undefined' 
-      ? JSON.parse(__firebase_config) 
-      : {
-          apiKey: "AIzaSyDummyKeyForLocalDevTest",
-          authDomain: "dummy.firebaseapp.com",
-          projectId: "dummy-project",
-          storageBucket: "dummy.appspot.com",
-          messagingSenderId: "123456789",
-          appId: "1:123456789:web:abcdef"
-        };
-
-    async function initCloudStorage() {
-      try {
-        if (!window.FirebaseSDK) return;
-        const { initializeApp, getAuth, signInAnonymously, signInWithCustomToken, getFirestore } = window.FirebaseSDK;
-        const app = initializeApp(firebaseConfig);
-        db = getFirestore(app);
-        auth = getAuth(app);
-
-        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-          const userCred = await signInWithCustomToken(auth, __initial_auth_token);
-          currentUser = userCred.user;
-        } else {
-          const userCred = await signInAnonymously(auth);
-          currentUser = userCred.user;
-        }
-
-        listenPublicAudits();
-        checkUrlForAuditParam();
-      } catch (err) {
-        console.warn("Cloud Storage offline mode fallback:", err);
-      }
-    }
-
-    async function publishAuditToPublic() {
-      if (!db || !currentUser) {
-        showToast("Mode Offline", "Koneksi cloud belum siap. Coba beberapa saat lagi.", false);
-        return;
-      }
-
-      try {
-        const { doc, setDoc } = window.FirebaseSDK;
-        const auditId = "audit_" + Date.now();
-        const publicDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'public_audits', auditId);
-
-        let totalWeighted = 0;
-        for (let key in state.criteriaMeta) {
-          totalWeighted += (state.auditData.scores[key] || 0) * state.criteriaMeta[key].weight;
-        }
-
-        const payload = {
-          id: auditId,
-          url: state.url,
-          score: totalWeighted,
-          auditData: state.auditData,
-          createdAt: new Date().toISOString(),
-          publisherId: currentUser.uid
-        };
-
-        await setDoc(publicDocRef, payload);
-
-        const shareUrl = `${window.location.origin}${window.location.pathname}?auditId=${auditId}`;
-        
-        const tempInput = document.createElement('input');
-        tempInput.value = shareUrl;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempInput);
-
-        showToast("Audit Dipublikasikan!", "Hasil audit tersimpan di cloud & tautan publik disalin ke clipboard.", true);
-      } catch (err) {
-        console.error("Gagal mempublikasikan audit:", err);
-        showToast("Gagal Mempublikasikan", "Terjadi kesalahan saat menyimpan ke repositori publik.", false);
-      }
-    }
-
-    function listenPublicAudits() {
-      if (!db) return;
-      const { collection, onSnapshot } = window.FirebaseSDK;
-      const publicColRef = collection(db, 'artifacts', appId, 'public', 'data', 'public_audits');
-
-      onSnapshot(publicColRef, (snapshot) => {
-        const grid = document.getElementById('public-audits-grid');
-        if (!grid) return;
-
-        if (snapshot.empty) {
-          grid.innerHTML = `
-            <div class="col-span-full text-center py-6 text-slate-500 text-xs">
-              Belum ada audit publik. Klik "Publikasikan & Dapatkan Tautan Publik" untuk menjadi yang pertama.
-            </div>
-          `;
-          return;
-        }
-
-        const docs = [];
-        snapshot.forEach(docSnap => docs.push(docSnap.data()));
-        docs.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-
-        grid.innerHTML = '';
-        docs.forEach(item => {
-          const card = document.createElement('div');
-          card.className = "bg-slate-950 border border-slate-800 rounded-xl p-4 hover:border-sky-500/50 transition cursor-pointer flex flex-col justify-between space-y-3 group";
-          
-          const gradeInfo = calculateGrade(item.score || 0);
-          const formattedDate = item.createdAt ? new Date(item.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Terbaru';
-
-          card.innerHTML = `
-            <div>
-              <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 mb-1">
-                <span>${formattedDate}</span>
-                <span class="px-2 py-0.5 rounded ${gradeInfo.color} font-bold">${gradeInfo.badge}</span>
-              </div>
-              <h4 class="text-xs font-bold text-slate-200 group-hover:text-sky-400 transition truncate" title="${item.url}">
-                <i class="fa-solid fa-globe text-sky-500 mr-1"></i> ${item.url}
-              </h4>
-              <p class="text-[11px] text-slate-400 mt-1 line-clamp-2">${item.auditData?.executive_summary || ''}</p>
-            </div>
-            <div class="flex items-center justify-between border-t border-slate-900 pt-2 text-[11px]">
-              <span class="font-mono text-sky-400 font-bold">Skor: ${(item.score || 0).toFixed(1)}%</span>
-              <span class="text-xs text-sky-400 font-semibold group-hover:underline">Buka Laporan &rarr;</span>
-            </div>
-          `;
-
-          card.addEventListener('click', () => {
-            state.url = item.url;
-            state.auditData = item.auditData;
-            const inputEl = document.getElementById('input-url');
-            if (inputEl) inputEl.value = item.url;
-            
-            const resultsSection = document.getElementById('results-section');
-            if (resultsSection) {
-              resultsSection.classList.remove('hidden');
-              renderMatrixCards();
-              updateDashboardDisplays();
-              resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-            showToast("Laporan Dimuat", `Menampilkan hasil audit publik untuk ${item.url}`, true);
-          });
-
-          grid.appendChild(card);
-        });
-      }, (err) => {
-        console.error("Subscription error:", err);
-      });
-    }
-
-    async function checkUrlForAuditParam() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const auditId = urlParams.get('auditId');
-      if (!auditId || !db) return;
-
-      try {
-        const { doc, getDoc } = window.FirebaseSDK;
-        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'public_audits', auditId);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          const item = docSnap.data();
-          state.url = item.url;
-          state.auditData = item.auditData;
-          const inputEl = document.getElementById('input-url');
-          if (inputEl) inputEl.value = item.url;
-
-          const resultsSection = document.getElementById('results-section');
-          if (resultsSection) {
-            resultsSection.classList.remove('hidden');
-            renderMatrixCards();
-            updateDashboardDisplays();
-            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-          showToast("Audit Publik Dimuat", `Berhasil memuat audit publik terverifikasi.`, true);
-        }
-      } catch (err) {
-        console.error("Gagal memuat audit dari param URL:", err);
-      }
-    }
-
     function showToast(title, message, isSuccess = true) {
       const toast = document.getElementById('toast-notification');
       const toastTitle = document.getElementById('toast-title');
@@ -764,9 +535,9 @@
       toastMsg.textContent = message;
 
       if (isSuccess) {
-        toast.className = "fixed top-20 right-4 z-50 bg-emerald-900 border border-emerald-700 text-emerald-100 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 transition-all duration-300";
+        toast.className = "fixed top-24 right-6 z-50 bg-emerald-900 border border-emerald-700 text-emerald-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 transition-all duration-300";
       } else {
-        toast.className = "fixed top-20 right-4 z-50 bg-rose-900 border border-rose-700 text-rose-100 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 transition-all duration-300";
+        toast.className = "fixed top-24 right-6 z-50 bg-rose-900 border border-rose-700 text-rose-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 transition-all duration-300";
       }
 
       toast.classList.remove('hidden');
@@ -852,7 +623,7 @@ Tugas Anda adalah menilai URL website katalog produk UMKM secara obyektif berdas
 2. c2: Tata Letak Elemen (grid produk, spacing, hierarki visual)
 3. c3: UI/UX User Friendly (kontras, kenyamanan, keterbacaan)
 4. c4: Gambar Katalog & Keterangan (kualitas foto, rincian produk)
-5. c5: Pemisahan Akses Admin & Pengunjung (WAJIB PERIKSA apakah ada tautan 'Portal Admin', 'Login Pengelola', '/admin', atau tombol kelola pada navbar/footer. Jika ada, berikan skor tinggi 85-100 dan sebutkan lokasinya)
+5. c5: Pemisahan Akses Admin & Pengunjung (WAJIB PERIKSA apakah ada tautan 'Portal Admin', 'Login Pengelola', '/admin', atau tombol kelola pada navbar/footer/menu website. Jika ada, berikan skor tinggi 85-100 dan sebutkan lokasinya)
 6. c6: Ketahanan Anti SQL Injection (sanitasi input, validasi form)
 7. c7: Tampilan Dynamic / Responsive (adaptabilitas desktop, tablet, mobile)
 8. c8: Informasi Kontak Perusahaan Lengkap (alamat, WhatsApp, email)
@@ -921,7 +692,7 @@ Format output WAJIB JSON persis seperti berikut:
       } catch (err) {
         console.error("Audit error:", err);
         if (progressModal) progressModal.classList.add('hidden');
-        showToast("Audit Terganggu", "Menggunakan hasil heurisik deterministik fallback.", false);
+        showToast("Audit Terganggu", "Menggunakan hasil heuristik deterministik fallback.", false);
         
         state.auditData = generateDeterminisitcFallback(url);
         state.auditCache[url] = state.auditData;
@@ -942,7 +713,7 @@ Format output WAJIB JSON persis seperti berikut:
       }
       const absHash = Math.abs(hash);
 
-      const scoreFor = (offset) => 80 + ((absHash + offset) % 18);
+      const scoreFor = (offset) => 82 + ((absHash + offset) % 15);
 
       return {
         executive_summary: `Prototipe website UMKM (${url}) menyajikan katalog produk digital yang fungsional dengan integrasi portal admin terpisah pada navigasi footer dan mekanisme checkout langsung.`,
@@ -991,61 +762,61 @@ Format output WAJIB JSON persis seperti berikut:
         const rec = state.auditData.recommendations[key] || "Rekomendasi belum tersedia.";
         const contribution = (score * meta.weight).toFixed(2);
 
-        let badgeClass = "bg-emerald-950/80 text-emerald-400 border-emerald-800";
+        let badgeClass = "bg-emerald-100 text-emerald-800 border-emerald-300";
         let statusText = "Sangat Baik";
         if (score < 70) {
-          badgeClass = "bg-rose-950/80 text-rose-400 border-rose-800";
+          badgeClass = "bg-rose-100 text-rose-800 border-rose-300";
           statusText = "Perlu Perbaikan";
         } else if (score < 85) {
-          badgeClass = "bg-amber-950/80 text-amber-400 border-amber-800";
+          badgeClass = "bg-amber-100 text-amber-800 border-amber-300";
           statusText = "Cukup Baik";
         }
 
         const card = document.createElement('div');
-        card.className = "bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4 hover:border-slate-700 transition";
+        card.className = "bg-white border border-slate-200 rounded-3xl p-6 shadow-md space-y-4 hover:shadow-lg transition";
 
         card.innerHTML = `
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
-            <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-xl bg-sky-950 border border-sky-800 text-sky-400 flex items-center justify-center text-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+            <div class="flex items-center gap-3.5">
+              <div class="w-12 h-12 rounded-2xl bg-sky-100 border border-sky-200 text-sky-700 flex items-center justify-center text-lg font-bold shadow-sm">
                 <i class="fa-solid ${meta.icon}"></i>
               </div>
               <div>
-                <h3 class="text-sm font-bold text-slate-100 flex items-center gap-2">
+                <h3 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
                   ${meta.name}
-                  <span class="text-[10px] font-mono text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+                  <span class="text-xs font-mono text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200 font-bold">
                     Bobot: ${(meta.weight * 100).toFixed(2)}%
                   </span>
                 </h3>
-                <p class="text-[11px] text-slate-400 mt-0.5">${meta.desc}</p>
+                <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">${meta.desc}</p>
               </div>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-4">
               <div class="text-right">
-                <span class="text-xs font-mono text-slate-400 block">Kontribusi: <strong class="text-sky-400 font-bold">${contribution}%</strong></span>
-                <span class="text-[10px] text-slate-500">dari 100% total</span>
+                <span class="text-xs font-bold text-slate-500 block">Kontribusi:</span>
+                <span class="text-base font-mono text-sky-700 font-extrabold">${contribution}%</span>
               </div>
-              <div class="px-3.5 py-1.5 rounded-xl border text-xs font-bold font-mono ${badgeClass} flex items-center gap-1.5">
+              <div class="px-4 py-2 rounded-2xl border text-sm sm:text-base font-extrabold font-mono shadow-sm ${badgeClass} flex items-center gap-2">
                 <span>Skor: ${score}</span>
-                <span class="text-[10px] opacity-75">(${statusText})</span>
+                <span class="text-xs opacity-80 font-sans font-bold">(${statusText})</span>
               </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-            <div class="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800 space-y-1.5">
-              <h4 class="font-bold text-sky-400 flex items-center gap-1.5">
-                <i class="fa-solid fa-magnifying-glass font-normal"></i> Alasan Penilaian AI:
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-2">
+              <h4 class="font-extrabold text-sky-800 flex items-center gap-2">
+                <i class="fa-solid fa-magnifying-glass text-sky-600"></i> Alasan Penilaian AI:
               </h4>
-              <p class="text-slate-300 leading-relaxed">${reason}</p>
+              <p class="text-slate-700 leading-relaxed font-medium">${reason}</p>
             </div>
 
-            <div class="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800 space-y-1.5">
-              <h4 class="font-bold text-emerald-400 flex items-center gap-1.5">
-                <i class="fa-solid fa-lightbulb font-normal"></i> Rekomendasi Perbaikan:
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-2">
+              <h4 class="font-extrabold text-emerald-800 flex items-center gap-2">
+                <i class="fa-solid fa-lightbulb text-emerald-600"></i> Rekomendasi Perbaikan:
               </h4>
-              <p class="text-slate-300 leading-relaxed">${rec}</p>
+              <p class="text-slate-700 leading-relaxed font-medium">${rec}</p>
             </div>
           </div>
         `;
@@ -1055,11 +826,11 @@ Format output WAJIB JSON persis seperti berikut:
     }
 
     function calculateGrade(score) {
-      if (score >= 93) return { badge: "GRADE A+", color: "bg-emerald-950 text-emerald-400 border-emerald-800", text: "Sangat Unggul & Layak Penuh" };
-      if (score >= 85) return { badge: "GRADE A", color: "bg-emerald-950 text-emerald-400 border-emerald-800", text: "Sangat Layak & Profesional" };
-      if (score >= 75) return { badge: "GRADE B", color: "bg-sky-950 text-sky-400 border-sky-800", text: "Layak Dengan Catatan Ringan" };
-      if (score >= 65) return { badge: "GRADE C", color: "bg-amber-950 text-amber-400 border-amber-800", text: "Cukup Layak / Perlu Perbaikan" };
-      return { badge: "GRADE F", color: "bg-rose-950 text-rose-400 border-rose-800", text: "Kurang Layak / Butuh Perbaikan Total" };
+      if (score >= 93) return { badge: "GRADE A+", color: "bg-emerald-100 text-emerald-800 border-emerald-300", text: "Sangat Unggul & Layak Penuh" };
+      if (score >= 85) return { badge: "GRADE A", color: "bg-emerald-100 text-emerald-800 border-emerald-300", text: "Sangat Layak & Profesional" };
+      if (score >= 75) return { badge: "GRADE B", color: "bg-sky-100 text-sky-800 border-sky-300", text: "Layak Dengan Catatan Ringan" };
+      if (score >= 65) return { badge: "GRADE C", color: "bg-amber-100 text-amber-800 border-amber-300", text: "Cukup Layak / Perlu Perbaikan" };
+      return { badge: "GRADE F", color: "bg-rose-100 text-rose-800 border-rose-300", text: "Kurang Layak / Butuh Perbaikan Total" };
     }
 
     function updateDashboardDisplays() {
@@ -1097,7 +868,7 @@ Format output WAJIB JSON persis seperti berikut:
 
       if (gradeBadge) {
         gradeBadge.textContent = gradeInfo.badge;
-        gradeBadge.className = `px-5 py-1.5 rounded-xl border text-xl font-black tracking-wide shadow-lg ${gradeInfo.color}`;
+        gradeBadge.className = `px-6 py-2 rounded-2xl border-2 text-2xl sm:text-3xl font-black tracking-wider shadow-md ${gradeInfo.color}`;
       }
 
       if (gradePred) gradePred.textContent = gradeInfo.text;
@@ -1139,13 +910,14 @@ Format output WAJIB JSON persis seperti berikut:
           datasets: [{
             label: 'Performa Kriteria AI',
             data: dataValues,
-            backgroundColor: 'rgba(14, 165, 233, 0.25)',
-            borderColor: '#0ea5e9',
-            borderWidth: 2,
-            pointBackgroundColor: '#38bdf8',
+            backgroundColor: 'rgba(2, 132, 199, 0.18)',
+            borderColor: '#0284c7',
+            borderWidth: 2.5,
+            pointBackgroundColor: '#0284c7',
             pointBorderColor: '#fff',
             pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: '#38bdf8'
+            pointHoverBorderColor: '#0284c7',
+            pointRadius: 4
           }]
         },
         options: {
@@ -1153,9 +925,9 @@ Format output WAJIB JSON persis seperti berikut:
           maintainAspectRatio: false,
           scales: {
             r: {
-              angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
-              grid: { color: 'rgba(255, 255, 255, 0.1)' },
-              pointLabels: { color: '#94a3b8', font: { size: 9, family: 'Plus Jakarta Sans' } },
+              angleLines: { color: 'rgba(203, 213, 225, 0.8)' },
+              grid: { color: 'rgba(226, 232, 240, 1)' },
+              pointLabels: { color: '#334155', font: { size: 10, family: 'Plus Jakarta Sans', weight: 'bold' } },
               ticks: { color: '#64748b', backdropColor: 'transparent', stepSize: 20 },
               suggestedMin: 0,
               suggestedMax: 100
@@ -1195,12 +967,12 @@ Format output WAJIB JSON persis seperti berikut:
           const tr = document.createElement('tr');
           tr.className = "hover:bg-slate-50";
           tr.innerHTML = `
-            <td class="p-2 font-mono font-bold">${idx++}</td>
-            <td class="p-2 font-medium">${meta.name}</td>
-            <td class="p-2 text-center font-mono">${(meta.weight * 100).toFixed(2)}%</td>
-            <td class="p-2 text-center font-bold font-mono">${score}</td>
-            <td class="p-2 text-center font-mono text-sky-700 font-bold">${contrib}%</td>
-            <td class="p-2">
+            <td class="p-2.5 font-mono font-bold">${idx++}</td>
+            <td class="p-2.5 font-bold">${meta.name}</td>
+            <td class="p-2.5 text-center font-mono">${(meta.weight * 100).toFixed(2)}%</td>
+            <td class="p-2.5 text-center font-bold font-mono">${score}</td>
+            <td class="p-2.5 text-center font-mono text-sky-700 font-extrabold">${contrib}%</td>
+            <td class="p-2.5">
               <div class="space-y-1">
                 <p><strong>Analisis:</strong> ${reason}</p>
                 <p class="text-slate-600"><strong>Saran:</strong> ${rec}</p>
@@ -1215,7 +987,14 @@ Format output WAJIB JSON persis seperti berikut:
     document.addEventListener('DOMContentLoaded', () => {
       renderMatrixCards();
       updateDashboardDisplays();
-      initCloudStorage();
+
+      // Memungkinkan pengguna menekan tombol Enter pada input URL untuk langsung menilai
+      document.getElementById('input-url')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          runAIAudit();
+        }
+      });
 
       document.getElementById('btn-load-preview')?.addEventListener('click', (e) => {
         e.preventDefault();
@@ -1225,19 +1004,6 @@ Format output WAJIB JSON persis seperti berikut:
       document.getElementById('btn-audit-ai')?.addEventListener('click', (e) => {
         e.preventDefault();
         runAIAudit();
-      });
-
-      document.getElementById('btn-share-public')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        publishAuditToPublic();
-      });
-
-      document.getElementById('btn-toggle-public-repo')?.addEventListener('click', () => {
-        const repoSection = document.getElementById('public-repository-section');
-        if (repoSection) {
-          repoSection.classList.remove('hidden');
-          repoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
       });
 
       document.getElementById('btn-reload-iframe')?.addEventListener('click', () => {
@@ -1285,15 +1051,15 @@ Format output WAJIB JSON persis seperti berikut:
       // Responsive device toggles
       const wrapper = document.getElementById('iframe-wrapper');
       document.getElementById('device-desktop')?.addEventListener('click', (e) => {
-        if (wrapper) wrapper.className = "device-desktop transition-all duration-300 bg-white rounded-xl overflow-hidden shadow-2xl relative border border-slate-700";
+        if (wrapper) wrapper.className = "device-desktop transition-all duration-300 bg-white rounded-2xl overflow-hidden shadow-2xl relative border-2 border-slate-300";
         updateDeviceActiveState(e.currentTarget);
       });
       document.getElementById('device-tablet')?.addEventListener('click', (e) => {
-        if (wrapper) wrapper.className = "device-tablet transition-all duration-300 bg-white rounded-xl overflow-hidden shadow-2xl relative border border-slate-700";
+        if (wrapper) wrapper.className = "device-tablet transition-all duration-300 bg-white rounded-2xl overflow-hidden shadow-2xl relative border-2 border-slate-300";
         updateDeviceActiveState(e.currentTarget);
       });
       document.getElementById('device-mobile')?.addEventListener('click', (e) => {
-        if (wrapper) wrapper.className = "device-mobile transition-all duration-300 bg-white rounded-xl overflow-hidden shadow-2xl relative border border-slate-700";
+        if (wrapper) wrapper.className = "device-mobile transition-all duration-300 bg-white rounded-2xl overflow-hidden shadow-2xl relative border-2 border-slate-300";
         updateDeviceActiveState(e.currentTarget);
       });
 
