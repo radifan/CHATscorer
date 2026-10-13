@@ -243,6 +243,29 @@
       </div>
     </section>
 
+    <!-- Public Repository Section (Directly Accessible on Main Page) -->
+    <section id="public-repository-section" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
+            <i class="fa-solid fa-cloud text-sky-400"></i>
+            Repositori Audit Publik UMKM (Real-Time Cloud)
+          </h2>
+          <p class="text-xs text-slate-400">Daftar laporan hasil penilaian prototipe UMKM yang dipublikasikan secara umum dan dapat diakses bersama.</p>
+        </div>
+        <span class="text-[11px] font-mono bg-sky-950 border border-sky-800 text-sky-400 px-3 py-1 rounded-full flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-sky-400 animate-ping"></span> Live Updates
+        </span>
+      </div>
+
+      <div id="public-audits-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+        <div class="col-span-full text-center py-8 text-slate-500 text-xs">
+          <i class="fa-solid fa-spinner fa-spin text-xl text-sky-400 mb-2 block"></i>
+          Memuat daftar audit publik dari cloud...
+        </div>
+      </div>
+    </section>
+
     <div id="results-section" class="hidden space-y-8 transition-all duration-300">
 
       <!-- Executive Summary & Radar Section -->
@@ -337,28 +360,6 @@
             </button>
           </div>
 
-        </div>
-      </section>
-
-      <section id="public-repository-section" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-          <div>
-            <h2 class="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
-              <i class="fa-solid fa-cloud text-sky-400"></i>
-              Repositori Audit Publik UMKM (Real-Time Cloud)
-            </h2>
-            <p class="text-xs text-slate-400">Daftar laporan hasil penilaian prototipe UMKM yang dipublikasikan secara umum dan dapat diakses bersama.</p>
-          </div>
-          <span class="text-[11px] font-mono bg-sky-950 border border-sky-800 text-sky-400 px-3 py-1 rounded-full flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-sky-400 animate-ping"></span> Live Updates
-          </span>
-        </div>
-
-        <div id="public-audits-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
-          <div class="col-span-full text-center py-8 text-slate-500 text-xs">
-            <i class="fa-solid fa-spinner fa-spin text-xl text-sky-400 mb-2 block"></i>
-            Memuat daftar audit publik dari cloud...
-          </div>
         </div>
       </section>
 
@@ -1233,7 +1234,10 @@ Format output WAJIB JSON persis seperti berikut:
 
       document.getElementById('btn-toggle-public-repo')?.addEventListener('click', () => {
         const repoSection = document.getElementById('public-repository-section');
-        repoSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (repoSection) {
+          repoSection.classList.remove('hidden');
+          repoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       });
 
       document.getElementById('btn-reload-iframe')?.addEventListener('click', () => {
