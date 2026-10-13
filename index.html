@@ -146,10 +146,10 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h2 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2.5">
-              <i class="fa-solid fa-users-gear text-sky-600 text-xl"></i> Masukkan Pasangan Developer & URL Prototipe UMKM
+              <i class="fa-solid fa-users-gear text-sky-600 text-xl"></i> Developer & URL Prototipe Website
             </h2>
             <p class="text-xs sm:text-sm text-slate-600 mt-1">
-              Isikan Nama Developer dan URL target secara sejajar (baris ke-1 Developer terhubung dengan baris ke-1 URL).
+              Isi Nama Developer dan URL Web (baris ke-1 Developer berkaitan dengan baris ke-1 URL).
             </p>
           </div>
         </div>
@@ -183,7 +183,7 @@
 
         <p class="text-[11px] text-slate-500 mt-1 font-medium flex items-center gap-1.5">
           <i class="fa-solid fa-circle-info text-sky-600"></i>
-          <span>Pengisian sejajar 1-ke-1: Baris ke-N di kolom Developer terikat langsung dengan URL baris ke-N. Klik ikon <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> atau tekan <kbd class="px-1.5 py-0.5 bg-slate-200 text-slate-800 border border-slate-300 rounded font-mono font-bold text-[10px] shadow-sm">Ctrl + Enter</kbd> untuk mulai menilai.</span>
+          <span>Klik ikon <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> atau tekan <kbd class="px-1.5 py-0.5 bg-slate-200 text-slate-800 border border-slate-300 rounded font-mono font-bold text-[10px] shadow-sm">Ctrl + Enter</kbd> untuk mulai menilai.</span>
         </p>
       </div>
     </section>
@@ -202,7 +202,7 @@
               <i class="fa-solid fa-trophy text-amber-400"></i> Top 5 Rank
             </span>
             <h2 class="text-xl sm:text-3xl font-black text-white flex items-center gap-3 tracking-tight">
-              5 WebApp UMKM Teratas
+              5 WebApp Teratas
             </h2>
             <p class="text-xs sm:text-sm text-slate-400 mt-1">
               Hasil Penilaian oleh Gemini AI
@@ -226,7 +226,7 @@
           <div>
             <h2 class="text-lg sm:text-2xl font-black text-slate-900 flex items-center gap-3">
               <i class="fa-solid fa-chart-line text-sky-600 text-2xl"></i>
-              Laporan AI Gemini
+              Hasil Penilaian
             </h2>
             <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
               Developer: <span id="display-developer-name" class="font-bold text-slate-800 font-mono">-</span>
@@ -235,7 +235,7 @@
 
           <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
             <div class="flex items-center gap-2">
-              <label for="select-active-url" class="text-xs font-extrabold text-slate-600 whitespace-nowrap">Tampilkan Laporan:</label>
+              <label for="select-active-url" class="text-xs font-extrabold text-slate-600 whitespace-nowrap">Pilih WebApp</label>
               <select id="select-active-url" class="bg-slate-100 border-2 border-sky-300 text-sky-900 font-mono font-bold text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-sky-600 shadow-sm max-w-xs">
                 <!-- Dynamically populated options -->
               </select>
@@ -274,19 +274,19 @@
 
             <div class="w-full mt-6 pt-5 border-t border-sky-200/80 text-left text-xs sm:text-sm font-medium space-y-2.5">
               <div class="flex justify-between items-center text-slate-700">
-                <span>Kriteria 1-4 (45% UI/UX & Katalog):</span>
+                <span>Kriteria 1-4 (Fungsi, Tata Letak, UI/UX, Kualitas Katalog):</span>
                 <span id="cat-score-a" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 45</span>
               </div>
               <div class="flex justify-between items-center text-slate-700">
-                <span>Kriteria 5-6 (20% Keamanan & Admin):</span>
+                <span>Kriteria 5-6 (Admin & Keamanan):</span>
                 <span id="cat-score-b" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 20</span>
               </div>
               <div class="flex justify-between items-center text-slate-700">
-                <span>Kriteria 7-9 (25% Resp & Info):</span>
+                <span>Kriteria 7-9 (Adaptabilitas Tampilan, Kontak, & Mekanisme Belanja):</span>
                 <span id="cat-score-c" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 25</span>
               </div>
               <div class="flex justify-between items-center text-slate-700">
-                <span>Kriteria 10 (10% Direct Checkout):</span>
+                <span>Kriteria 10 (Aneka Pilihan Pembayaran):</span>
                 <span id="cat-score-d" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 10</span>
               </div>
             </div>
@@ -296,7 +296,7 @@
           <div class="md:col-span-7 bg-slate-50 border border-slate-200 rounded-3xl p-6 flex flex-col justify-between space-y-4">
             <div class="flex items-center justify-between">
               <h3 class="text-xs sm:text-sm font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                <i class="fa-solid fa-chart-pie text-sky-600"></i> Grafik Penilaian
+                <i class="fa-solid fa-chart-pie text-sky-600"></i> Radar Penilaian
               </h3>
               <span class="text-xs font-mono text-slate-500 font-bold">Skala 0 - 100</span>
             </div>
@@ -313,7 +313,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button id="btn-load-preview" title="Muat Tampilan Preview Website Terpilih" class="w-full py-3 bg-slate-800 hover:bg-slate-900 text-white text-xs sm:text-sm font-extrabold rounded-2xl transition shadow-md flex items-center justify-center gap-2">
                 <i class="fa-solid fa-eye text-sky-400 text-base"></i>
-                <span>Preview Live Web</span>
+                <span>Previu WebApp</span>
               </button>
 
               <button id="btn-view-report-modal" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-extrabold rounded-2xl transition shadow-md shadow-sky-600/20 flex items-center justify-center gap-2">
@@ -331,7 +331,7 @@
         <div class="p-4 bg-slate-900 text-white border-b border-slate-800 flex items-center justify-between gap-3 flex-wrap">
           <div class="flex items-center gap-3 flex-wrap">
             <span class="text-xs sm:text-sm font-bold text-slate-200 flex items-center gap-2">
-              <i class="fa-solid fa-display text-sky-400"></i> Live Preview:
+              <i class="fa-solid fa-display text-sky-400"></i> Previu Langsung:
             </span>
             <div class="flex items-center gap-1 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
               <button id="device-desktop" class="btn-device active px-3 py-1.5 rounded-lg text-xs font-bold text-sky-400 bg-slate-800 transition flex items-center gap-2">
@@ -372,7 +372,7 @@
           <div id="iframe-wrapper" class="device-desktop transition-all duration-300 bg-white rounded-2xl overflow-hidden shadow-2xl relative border-2 border-slate-300">
             <div id="iframe-loading" class="hidden absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-10 text-white">
               <i class="fa-solid fa-circle-notch fa-spin text-4xl text-sky-400"></i>
-              <p class="text-xs sm:text-sm font-bold">Memuat Preview...</p>
+              <p class="text-xs sm:text-sm font-bold">Memuat Previu...</p>
             </div>
             <iframe id="preview-iframe" src="about:blank" class="w-full h-full border-0"></iframe>
           </div>
@@ -387,7 +387,7 @@
               <i class="fa-solid fa-list-check text-sky-600"></i>
               Matriks Penilaian
             </h2>
-            <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Hasil Penilaian per kriteria: checklist sub-fitur, temuan bukti, keunggulan, kekurangan, alasan, dan rekomendasi.</p>
+            <!--<p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Hasil Penilaian per kriteria: checklist sub-fitur, temuan bukti, keunggulan, kekurangan, alasan, dan rekomendasi.</p>-->
           </div>
         </div>
 
@@ -472,15 +472,15 @@
 
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-200 text-xs">
         <div>
-          <span class="text-slate-500 block font-medium">Developer / Pembuat:</span>
+          <span class="text-slate-500 block font-medium">Developer:</span>
           <span id="rpt-developer" class="font-extrabold text-slate-900 font-mono text-sm">-</span>
         </div>
         <div>
-          <span class="text-slate-500 block font-medium">URL yang Dinilai:</span>
+          <span class="text-slate-500 block font-medium">Alamat URL:</span>
           <span id="rpt-url" class="font-bold text-slate-900 break-all font-mono">-</span>
         </div>
         <div>
-          <span class="text-slate-500 block font-medium">Tanggal Penilaian AI:</span>
+          <span class="text-slate-500 block font-medium">Tanggal Penilaian:</span>
           <span id="rpt-date" class="font-bold text-slate-900">-</span>
         </div>
         <div>
@@ -765,7 +765,7 @@ Tugas Anda adalah menilai URL website katalog produk UMKM secara obyektif & SANG
 1. c1: Fungsionalitas Elemen (tombol, filter, navigasi)
 2. c2: Tata Letak Elemen (grid produk, spacing, hierarki visual)
 3. c3: UI/UX User Friendly (kontras, kenyamanan, keterbacaan)
-4. c4: Gambar Katalog & Keterangan (kualitas foto, rincian produk)
+4. c4: Gambar Katalog & Keterangan (kualitas foto dan deskripsi produk harus sesuai. jika foto produk tidak ditampilkan atau hanya menggunakan foto template atau contoh berikan skor sedang. jika foto produk adalah foto asli bukan foto template atau contoh, berikan skor tinggi. jika foto produk dan deskripsi tidak sesuai berikan skor sangat rendah.)
 5. c5: Pemisahan Akses Admin & Pengunjung (WAJIB PERIKSA apakah ada tautan 'Portal Admin', 'Login Pengelola', '/admin', atau tombol kelola pada navbar/footer/menu website)
 6. c6: Ketahanan Anti SQL Injection (sanitasi input, validasi form)
 7. c7: Tampilan Dynamic / Responsive (adaptabilitas mode desktop, tablet, mobile)
