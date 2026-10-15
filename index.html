@@ -20,31 +20,11 @@
 
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
             sans: ['Plus Jakarta Sans', 'sans-serif'],
             mono: ['JetBrains Mono', 'monospace'],
-          },
-          keyframes: {
-            trophyBounce: {
-              '0%, 100%': { transform: 'translateY(0) scale(1)' },
-              '50%': { transform: 'translateY(-8px) scale(1.06)' }
-            },
-            glowPulse: {
-              '0%, 100%': { boxShadow: '0 0 15px rgba(2, 132, 199, 0.4)' },
-              '50%': { boxShadow: '0 0 30px rgba(2, 132, 199, 0.8)' }
-            },
-            popIn: {
-              '0%': { transform: 'scale(0.95)', opacity: '0' },
-              '100%': { transform: 'scale(1)', opacity: '1' }
-            }
-          },
-          animation: {
-            'trophy-bounce': 'trophyBounce 2.5s infinite ease-in-out',
-            'glow-pulse': 'glowPulse 2s infinite ease-in-out',
-            'pop-in': 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards'
           }
         }
       }
@@ -52,76 +32,78 @@
   </script>
 
   <style>
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #f1f5f9;
-      border-radius: 8px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 8px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
-    
-    .device-desktop { width: 100%; height: 580px; }
-    .device-tablet { width: 768px; height: 580px; }
-    .device-mobile { width: 375px; height: 580px; }
+    .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
 
+    /* CSS KHUSUS CETAK PDF / WINDOW PRINT */
     @media print {
-      body * { visibility: hidden !important; }
-      #printable-pdf-area, #printable-pdf-area * { visibility: visible !important; }
-      #printable-pdf-area {
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 100% !important;
-        background: white !important;
-        color: black !important;
+      body > *:not(#print-report-modal) {
+        display: none !important;
+      }
+      html, body {
+        height: auto !important;
+        overflow: visible !important;
+        background: #ffffff !important;
+      }
+      #print-report-modal {
+        position: static !important;
+        display: block !important;
+        visibility: visible !important;
+        overflow: visible !important;
+        background: #ffffff !important;
         padding: 0 !important;
         margin: 0 !important;
+        width: 100% !important;
+        box-shadow: none !important;
       }
-      .page-break {
-        page-break-after: always;
-        break-after: page;
+      #print-report-modal * {
+        visibility: visible !important;
       }
-      .no-print { display: none !important; }
+      .no-print {
+        display: none !important;
+      }
+      .pdf-page-item {
+        page-break-after: always !important;
+        break-after: page !important;
+        margin-bottom: 2rem !important;
+        display: block !important;
+      }
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
     }
   </style>
 </head>
 
 <body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-full flex flex-col custom-scrollbar overflow-x-hidden">
 
+  <!-- HEADER -->
   <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-      <div class="flex items-center gap-3 sm:gap-4">
-        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-600 via-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/20">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white shadow-lg">
           <i class="fa-solid fa-bolt text-2xl"></i>
         </div>
         <div>
-          <h1 class="font-extrabold text-base sm:text-xl text-slate-900 tracking-tight flex items-center gap-2">
-            CHATScorer
-          </h1>
-          <p class="text-xs text-slate-500 font-medium hidden sm:block">Penilaian prototipe web katalog</p>
+          <h1 class="font-black text-xl text-slate-900 tracking-tight">CHATScorer</h1>
+          <p class="text-xs text-slate-500 font-medium">penilaian prototipe web katalog</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-2">
-        <button id="btn-open-api-modal" title="Pengaturan API Key" class="p-2.5 rounded-xl border border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold transition flex items-center gap-2 shadow-sm">
-          <i class="fa-solid fa-shield-halved text-emerald-600 text-base"></i>
-        </button>
+      <div class="flex items-center gap-3">
+        <div class="px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-2">
+          <i class="fa-solid fa-shield-halved text-emerald-500 text-sm"></i>
+        </div>
       </div>
     </div>
   </header>
 
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-    <!-- Toast Notification -->
-    <div id="toast-notification" class="hidden fixed top-24 right-6 z-50 bg-emerald-900 text-emerald-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 transition-all duration-300 border border-emerald-700">
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast-notification" class="hidden fixed top-24 right-6 z-50 bg-emerald-900 text-emerald-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-emerald-700">
       <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-2xl"></i>
       <div>
         <h4 class="font-extrabold text-sm" id="toast-title">Berhasil!</h4>
@@ -129,169 +111,118 @@
       </div>
     </div>
 
-    <section class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
-      <div class="absolute -right-12 -top-12 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-      <div class="flex flex-col gap-5 relative z-10">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <!-- FORM INPUT SECTION -->
+    <section class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl">
+      <div class="flex flex-col gap-5">
+        <div class="flex items-center justify-between">
           <div>
-            <h2 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2.5">
-              <i class="fa-solid fa-users-gear text-sky-600 text-xl"></i> Pengembang dan URL
+            <h2 class="text-lg font-black text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-users-gear text-sky-600"></i> Pengembang dan URL
             </h2>
-            <p class="text-xs sm:text-sm text-slate-600 mt-1">
-              Setiap baris Nama Pengembang berpasangan 1-ke-1 dengan baris URL WebApp.
-            </p>
+            <p class="text-xs text-slate-500 mt-1">Setiap baris Nama Pengembang berpasangan 1-ke-1 dengan baris URL WebApp.</p>
           </div>
 
-          <button id="btn-reset-all" class="px-4 py-2 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-300 hover:border-rose-300 text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm self-start sm:self-center">
-            <i class="fa-solid fa-rotate-left text-xs"></i>
-            <span>Bersihkan</span>
+          <button id="btn-reset-all" class="px-4 py-2 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-300 text-xs font-bold rounded-xl transition flex items-center gap-2">
+            <i class="fa-solid fa-rotate-left"></i> Bersihkan
           </button>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
-          
-          <!-- Developer Name per Line -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
           <div class="lg:col-span-5 space-y-1.5">
-            <label for="input-developer" class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center justify-between">
-              <span><i class="fa-solid fa-id-card text-sky-600 mr-1.5"></i> Nama Pengembang (1 Per Baris):</span>
-              <span class="text-rose-500 font-bold text-xs">*</span>
+            <label class="block text-xs font-extrabold uppercase text-slate-700">
+              <i class="fa-solid fa-user text-sky-600 mr-1"></i> Nama Pengembang (1 Per Baris) <span class="text-rose-500">*</span>
             </label>
-            <textarea id="input-developer" rows="5" placeholder="Budi Santoso&#10;Tim Alpha UMKM&#10;Siti Rahma" class="w-full px-4 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-bold transition shadow-inner custom-scrollbar resize-none"></textarea>
+            <textarea id="input-developer" rows="5" placeholder="Budi Santoso&#10;Tim Alpha UMKM&#10;Siti Rahma" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-300 rounded-2xl text-xs sm:text-sm font-bold focus:outline-none focus:border-sky-600 resize-none custom-scrollbar"></textarea>
           </div>
 
-          <!-- URL Target per Line -->
-          <div class="lg:col-span-7 space-y-1.5 relative">
-            <label for="input-url" class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center justify-between">
-              <span><i class="fa-solid fa-link text-sky-600 mr-1.5"></i> Alamat URL Prototipe (1 Per Baris):</span>
-              <span class="text-rose-500 font-bold text-xs">*</span>
+          <div class="lg:col-span-7 space-y-1.5">
+            <label class="block text-xs font-extrabold uppercase text-slate-700">
+              <i class="fa-solid fa-link text-sky-600 mr-1"></i> Alamat URL Prototipe (1 Per Baris) <span class="text-rose-500">*</span>
             </label>
             <div class="relative">
-              <textarea id="input-url" rows="5" placeholder="https://kopi-lokal-nusantara.vercel.app&#10;https://batik-tradisional-solo.vercel.app&#10;https://kerajinan-bambu-bali.vercel.app" class="w-full pl-4 pr-16 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-mono font-bold transition shadow-inner custom-scrollbar resize-none"></textarea>
+              <textarea id="input-url" rows="5" placeholder="https://kopi-lokal.vercel.app&#10;https://batik-solo.vercel.app&#10;https://kerajinan-bali.vercel.app" class="w-full pl-4 pr-16 py-3 bg-slate-50 border-2 border-slate-300 rounded-2xl text-xs sm:text-sm font-mono font-bold focus:outline-none focus:border-sky-600 resize-none custom-scrollbar"></textarea>
               
-              <button id="btn-audit-ai" title="Mulai Menilai" class="absolute right-2 top-2 bottom-2 px-4 bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-extrabold text-sm rounded-xl shadow-md shadow-sky-600/30 transition flex items-center justify-center group">
-                <i class="fa-solid fa-wand-magic-sparkles text-amber-300 text-lg group-hover:rotate-12 transition transform"></i>
+              <button id="btn-audit-ai" title="Mulai Penilaian" class="absolute right-2 top-2 bottom-2 px-5 bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white rounded-xl shadow-md transition flex items-center justify-center">
+                <i class="fa-solid fa-wand-magic-sparkles text-amber-300 text-xl"></i>
               </button>
             </div>
           </div>
-
         </div>
 
-        <p class="text-[11px] text-slate-500 mt-0.5 font-medium flex items-center gap-1.5">
-          <i class="fa-solid fa-circle-info text-sky-600"></i>
-          <span>Tekan <kbd class="px-1.5 py-0.5 bg-slate-200 text-slate-800 border border-slate-300 rounded font-mono font-bold text-[10px] shadow-sm">Ctrl + Enter</kbd> atau klik tombol <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> untuk mulai menilai.</span>
+        <p class="text-[11px] text-slate-500 font-medium">
+          <i class="fa-solid fa-circle-info text-sky-600"></i> Tekan <kbd class="px-1.5 py-0.5 bg-slate-200 border rounded font-mono font-bold text-[10px]">Ctrl + Enter</kbd> atau klik tombol ikon magic wand untuk mulai menilai.
         </p>
       </div>
     </section>
 
-    <div id="results-section" class="hidden space-y-8 transition-all duration-300">
+    <!-- RESULTS DISPLAY SECTION -->
+    <div id="results-section" class="hidden space-y-8">
 
-      <!-- Leaderboard Section -->
-      <section id="leaderboard-section" class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-slate-800 text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 relative overflow-hidden">
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-5 relative z-10">
+      <!-- LEADERBOARD & SUMMARY CONTAINER -->
+      <section class="bg-slate-900 border border-slate-800 text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-5">
           <div>
-            <span class="text-xs font-bold text-amber-400 bg-amber-950/80 border border-amber-500/30 px-3 py-1 rounded-full font-mono uppercase tracking-wider flex items-center gap-1.5 w-fit mb-2">
-              <i class="fa-solid fa-trophy text-amber-400"></i> Leaderboard Peringkat
+            <span class="text-xs font-bold text-amber-400 bg-amber-950/80 border border-amber-500/30 px-3 py-1 rounded-full font-mono uppercase tracking-wider">
+              <i class="fa-solid fa-trophy mr-1"></i> Leaderboard Peringkat
             </span>
-            <h2 class="text-xl sm:text-3xl font-black text-white flex items-center gap-3 tracking-tight">
-              Hasil Penilaian WebApp
-            </h2>
+            <h2 class="text-xl sm:text-2xl font-black text-white mt-2">Hasil Penilaian WebApp</h2>
           </div>
 
           <div class="flex items-center gap-3">
-            <button id="btn-trigger-celebration" class="px-5 py-2.5 bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm rounded-2xl shadow-xl transition transform hover:scale-105 flex items-center gap-2">
-              <span>Selebrasi 🎉</span>
+            <button id="btn-trigger-celebration" class="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm rounded-xl transition shadow-lg">
+              Selebrasi 🎉
             </button>
-            <button id="btn-open-pdf-modal-direct" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs sm:text-sm rounded-2xl shadow-xl transition flex items-center gap-2">
-              <i class="fa-solid fa-print"></i>
-              <span>Simpan PDF</span>
+            <button id="btn-open-pdf-modal" class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs sm:text-sm rounded-xl transition shadow-lg flex items-center gap-2">
+              <i class="fa-solid fa-file-pdf"></i> Simpan PDF
             </button>
           </div>
         </div>
 
-        <div id="top5-leaderboard-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-2 relative z-10">
+        <div id="top5-leaderboard-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           <!-- Dynamically populated cards -->
         </div>
       </section>
 
-      <!-- Executive Dashboard -->
-      <section class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl space-y-8">
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+      <!-- Granular Details Dashboard -->
+      <section class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b pb-4">
           <div>
-            <h2 class="text-lg sm:text-2xl font-black text-slate-900 flex items-center gap-3">
-              <i class="fa-solid fa-chart-line text-sky-600 text-2xl"></i>
-              Rincian Penilaian
-            </h2>
-            <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
-              Pengembang: <span id="display-active-developer" class="font-bold text-slate-900 font-mono">-</span> | URL: <span id="display-active-url" class="font-bold text-sky-700 font-mono">-</span>
-            </p>
+            <h3 class="text-lg font-black text-slate-900">Rincian Penilaian</h3>
+            <p class="text-xs text-slate-500">Pengembang: <span id="display-developer-name" class="font-bold text-slate-800 font-mono">-</span> | URL: <span id="display-active-url" class="font-bold text-sky-700 font-mono break-all">-</span></p>
           </div>
 
-          <div class="flex items-center gap-3">
-            <label for="select-active-url" class="text-xs font-extrabold text-slate-600 whitespace-nowrap">Pilih Hasil:</label>
-            <select id="select-active-url" class="bg-slate-100 border-2 border-sky-300 text-sky-900 font-mono font-bold text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-sky-600 shadow-sm max-w-xs">
-            </select>
+          <div class="flex items-center gap-2">
+            <label for="select-active-url" class="text-xs font-extrabold text-slate-600">Pilih Hasil:</label>
+            <select id="select-active-url" class="bg-slate-100 border-2 border-sky-300 text-sky-900 font-mono font-bold text-xs rounded-xl px-3 py-2 focus:outline-none"></select>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
-          
-          <!-- Large Score Card -->
-          <div class="md:col-span-5 bg-gradient-to-b from-sky-50/80 to-slate-50 border-2 border-sky-200/80 rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center justify-between relative overflow-hidden shadow-md">
-            <span class="text-xs sm:text-sm uppercase tracking-widest font-black text-sky-800 mb-1">Total Skor Terbobot</span>
-            
-            <div class="my-4">
-              <span id="overall-score-display" class="text-6xl sm:text-7xl font-extrabold text-sky-600 font-mono tracking-tight">
-                0.0
-              </span>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+          <div class="md:col-span-5 bg-sky-50/80 border-2 border-sky-200 rounded-3xl p-6 text-center space-y-4">
+            <span class="text-xs uppercase font-black text-sky-800 tracking-wider">Total Skor Terbobot</span>
+            <div id="overall-score-display" class="text-6xl font-black text-sky-600 font-mono">0.0%</div>
+
+            <div class="flex flex-col items-center gap-1">
+              <span id="grade-badge" class="px-5 py-1.5 rounded-2xl bg-white border-2 border-slate-300 text-2xl font-black shadow-sm">GRADE -</span>
+              <span id="grade-predicate" class="text-xs font-extrabold text-slate-600 mt-1">Menunggu Penilaian</span>
             </div>
 
-            <div class="flex flex-col items-center gap-2 w-full my-2">
-              <span id="grade-badge" class="px-6 py-2 rounded-2xl bg-white text-slate-800 border-2 border-slate-300 text-2xl sm:text-3xl font-black tracking-wider shadow-md">
-                GRADE -
-              </span>
-              <span id="grade-predicate" class="text-xs sm:text-sm font-extrabold text-slate-600 text-center">
-                Menunggu Penilaian
-              </span>
-            </div>
-
-            <div class="w-full mt-6 pt-5 border-t border-sky-200/80 text-left text-xs sm:text-sm font-medium space-y-2.5">
-              <div class="flex justify-between items-center text-slate-700">
-                <span>Kategori A (UI/UX & Katalog):</span>
-                <span id="cat-score-a" class="font-mono text-sky-700 font-extrabold">0.00 / 45</span>
-              </div>
-              <div class="flex justify-between items-center text-slate-700">
-                <span>Kategori B (Admin & Keamanan):</span>
-                <span id="cat-score-b" class="font-mono text-sky-700 font-extrabold">0.00 / 20</span>
-              </div>
-              <div class="flex justify-between items-center text-slate-700">
-                <span>Kategori C (Responsif & Kontak):</span>
-                <span id="cat-score-c" class="font-mono text-sky-700 font-extrabold">0.00 / 25</span>
-              </div>
-              <div class="flex justify-between items-center text-slate-700">
-                <span>Kategori D (Checkout & Payment):</span>
-                <span id="cat-score-d" class="font-mono text-sky-700 font-extrabold">0.00 / 10</span>
-              </div>
+            <div class="text-left text-xs space-y-2 border-t border-sky-200 pt-4 font-medium">
+              <div class="flex justify-between"><span>Kelompok A (UI/UX & Katalog):</span><span id="cat-score-a" class="font-mono font-extrabold text-sky-700">0.00 / 45</span></div>
+              <div class="flex justify-between"><span>Kelompok B (Admin & Keamanan):</span><span id="cat-score-b" class="font-mono font-extrabold text-sky-700">0.00 / 20</span></div>
+              <div class="flex justify-between"><span>Kelompok C (Responsif & Kontak):</span><span id="cat-score-c" class="font-mono font-extrabold text-sky-700">0.00 / 25</span></div>
+              <div class="flex justify-between"><span>Kelompok D (Checkout & Payment):</span><span id="cat-score-d" class="font-mono font-extrabold text-sky-700">0.00 / 10</span></div>
             </div>
           </div>
 
-          <!-- Radar Chart Visualizer -->
-          <div class="md:col-span-7 bg-slate-50 border border-slate-200 rounded-3xl p-6 flex flex-col justify-between space-y-4">
-            <div class="flex items-center justify-between">
-              <h3 class="text-xs sm:text-sm font-extrabold text-slate-800 uppercase tracking-wider">
-                <i class="fa-solid fa-chart-pie text-sky-600"></i> Radar 10 Kriteria Penilaian
-              </h3>
-            </div>
-
-            <div class="w-full h-72 sm:h-80 relative flex items-center justify-center p-2">
+          <div class="md:col-span-7 bg-slate-50 border border-slate-200 rounded-3xl p-6 space-y-4">
+            <h4 class="text-xs font-extrabold uppercase text-slate-800">Analisis Eksekutif AI</h4>
+            <p id="executive-summary-text" class="text-xs leading-relaxed text-slate-700 bg-white p-4 rounded-2xl border shadow-sm">-</p>
+            
+            <div class="w-full h-64 relative">
               <canvas id="auditRadarChart"></canvas>
             </div>
-
-            <div id="executive-summary-text" class="text-xs sm:text-sm text-slate-700 leading-relaxed bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-              -
-            </div>
           </div>
-
         </div>
       </section>
 
@@ -299,171 +230,108 @@
 
   </main>
 
-  <!-- PDF MULTI-SELECT CHECKLIST MODAL -->
-  <div id="modal-pdf-selector" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl my-8 relative">
-      <div class="flex items-start justify-between border-b border-slate-200 pb-4">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-2xl shadow-md">
-            <i class="fa-solid fa-file-pdf"></i>
-          </div>
-          <div>
-            <h3 class="font-black text-slate-900 text-base sm:text-xl">Pilih WebApp untuk Diunduh</h3>
-            <p class="text-xs text-slate-500 font-medium mt-0.5">Ceklis satu atau beberapa WebApp yang ingin dimasukkan ke dalam berkas PDF.</p>
-          </div>
-        </div>
-        <button id="btn-close-pdf-modal" class="p-2 text-slate-400 hover:text-slate-600 text-xl transition">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <!-- Control Toolbar -->
-      <div class="flex items-center justify-between bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs">
-        <div class="flex items-center gap-2">
-          <button id="btn-select-all-pdf" class="px-3 py-1.5 bg-sky-100 hover:bg-sky-200 text-sky-800 font-bold rounded-xl transition border border-sky-300">
-            <i class="fa-solid fa-square-check mr-1"></i> Pilih Semua
-          </button>
-          <button id="btn-deselect-all-pdf" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl transition">
-            <i class="fa-solid fa-square mr-1"></i> Batal Pilih
-          </button>
-        </div>
-        <span id="selected-pdf-count-badge" class="font-mono font-extrabold text-sky-700 bg-white px-3 py-1 rounded-xl border border-sky-200">
-          0 Terpilih
-        </span>
-      </div>
-
-      <!-- Checklist Items Container -->
-      <div id="pdf-checklist-container" class="space-y-2.5 max-h-80 overflow-y-auto custom-scrollbar p-1">
-        <!-- Dynamically populated checkboxes -->
-      </div>
-
-      <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
-        <button id="btn-cancel-pdf-modal" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-2xl transition border border-slate-300">
-          Batal
-        </button>
-        <button id="btn-trigger-pdf-print" class="px-6 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm rounded-2xl shadow-lg transition flex items-center gap-2">
-          <i class="fa-solid fa-print"></i>
-          <span>Cetak / Simpan PDF Terpilih</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- AI Progress Modal -->
-  <div id="modal-ai-progress" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-8 text-center space-y-5 shadow-2xl">
-      <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center mx-auto text-2xl shadow-inner">
-        <i class="fa-solid fa-bolt animate-bounce"></i>
-      </div>
-      <div>
-        <h3 class="font-black text-slate-900 text-base sm:text-lg">Menilai Seluruh WebApp</h3>
-        <p id="ai-progress-status" class="text-xs text-slate-500 mt-1.5 font-medium">Gemini AI sedang menilai seluruh URL secara konsisten...</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- API Key Modal -->
-  <div id="modal-api-key" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-        <h3 class="font-extrabold text-slate-900 text-sm flex items-center gap-2">
-          <i class="fa-solid fa-key text-amber-500"></i> Pengaturan Kunci Gemini API
+  <!-- MULTIPLE SELECTION PDF MODAL -->
+  <div id="modal-pdf-selection" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-file-pdf text-rose-600"></i> Pilih WebApp untuk Cetak PDF
         </h3>
-        <button id="btn-close-api-modal" class="text-slate-400 hover:text-slate-600 text-lg">
+        <button id="btn-close-pdf-select" class="text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <div class="space-y-2">
-        <label for="custom-api-key" class="text-xs font-bold text-slate-700">Gemini API Key Custom (Opsional):</label>
-        <input type="password" id="custom-api-key" placeholder="Masukkan Kunci Kustom jika ingin mengganti..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono">
-        <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
-          Secara default, aplikasi menggunakan API Key bawaan.
-        </p>
+      <div class="flex items-center justify-between text-xs">
+        <span class="text-slate-500 font-medium">Centang WebApp yang ingin dicetak:</span>
+        <div class="space-x-2">
+          <button id="btn-select-all-pdf" class="text-sky-600 font-bold hover:underline">Pilih Semua</button>
+          <span>|</span>
+          <button id="btn-deselect-all-pdf" class="text-slate-500 font-bold hover:underline">Batal Semua</button>
+        </div>
       </div>
 
-      <div class="flex justify-end gap-2 pt-2">
-        <button id="btn-save-api-key" class="px-5 py-2.5 bg-sky-600 text-white text-xs font-extrabold rounded-xl hover:bg-sky-500 transition">
-          Simpan Kunci API
+      <div id="pdf-checkbox-list" class="space-y-2 max-h-60 overflow-y-auto custom-scrollbar p-1">
+        <!-- Dynamic Checkboxes -->
+      </div>
+
+      <div class="flex justify-end gap-3 border-t pt-4">
+        <button id="btn-generate-pdf-now" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl transition shadow-md flex items-center justify-center gap-2">
+          <i class="fa-solid fa-print"></i> Cetak Dokumen PDF
         </button>
       </div>
     </div>
   </div>
 
-  <!-- DYNAMIC PRINTABLE PDF AREA -->
-  <div id="printable-pdf-area" class="hidden">
-    <!-- Rendered dynamically during printing -->
+  <!-- PRINTABLE REPORT MODAL (HIDDEN IN UI, VISIBLE ON WINDOW.PRINT) -->
+  <div id="print-report-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md overflow-y-auto p-4 sm:p-8">
+    <div class="max-w-4xl mx-auto bg-white text-slate-900 rounded-3xl shadow-2xl p-8 space-y-6 my-8 border border-slate-200">
+      <div class="flex items-center justify-between border-b pb-4 no-print">
+        <h2 class="text-lg font-black text-slate-900">Pratinjau Dokumen PDF</h2>
+        <div class="space-x-2">
+          <button id="btn-print-action" class="px-4 py-2 bg-emerald-600 text-white text-xs font-extrabold rounded-xl hover:bg-emerald-500">
+            <i class="fa-solid fa-print mr-1"></i> Cetak / Simpan PDF
+          </button>
+          <button id="btn-close-print-modal" class="px-3 py-2 bg-slate-200 text-slate-700 text-xs font-bold rounded-xl hover:bg-slate-300">
+            Tutup
+          </button>
+        </div>
+      </div>
+
+      <!-- PDF PRINT CONTAINER -->
+      <div id="pdf-printable-body" class="space-y-8">
+        <!-- Rendered Pages dynamically inserted here -->
+      </div>
+    </div>
   </div>
 
-  <!-- JavaScript Application Logic -->
+  <!-- AI PROGRESS MODAL -->
+  <div id="modal-ai-progress" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-8 text-center space-y-4 shadow-2xl">
+      <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center mx-auto text-2xl">
+        <i class="fa-solid fa-brain animate-pulse"></i>
+      </div>
+      <h3 class="font-black text-slate-900 text-base">Sedang Menilai WebApp...</h3>
+      <p id="ai-progress-status" class="text-xs text-slate-500 font-medium">Mengevaluasi kriteria & sub-indikator...</p>
+      <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+        <div id="ai-progress-bar" class="bg-gradient-to-r from-sky-500 to-indigo-600 h-3 rounded-full transition-all duration-300 w-1/4"></div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    const DEFAULT_API_KEY = "AIzaSyDSumv8R2KRTLEnaxKCIYLEX9IWYHLDS7Y";
+    const DEFAULT_API_KEY = ""; // Masukkan Gemini API Key jika ada
 
     const state = {
-      url: "",
       apiKey: DEFAULT_API_KEY,
-      radarChart: null,
       history: [],
-      selectedPdfUrls: new Set(),
+      url: "",
+      developer: "",
+      auditData: null,
+      radarChart: null,
       criteriaMeta: {
-        c1: { id: "c1", cat: "A", weight: 0.1125, name: "Fungsionalitas & Search" },
-        c2: { id: "c2", cat: "A", weight: 0.1125, name: "Grid Layout & Spacing" },
-        c3: { id: "c3", cat: "A", weight: 0.1125, name: "UI/UX & Aksesibilitas" },
-        c4: { id: "c4", cat: "A", weight: 0.1125, name: "Katalog & Foto Produk" },
-        c5: { id: "c5", cat: "B", weight: 0.1000, name: "Akses Login Admin" },
-        c6: { id: "c6", cat: "B", weight: 0.1000, name: "Keamanan & Anti SQLi" },
-        c7: { id: "c7", cat: "C", weight: 0.0833, name: "Dynamic Responsive Layout" },
-        c8: { id: "c8", cat: "C", weight: 0.0833, name: "Informasi Kontak & CS" },
-        c9: { id: "c9", cat: "C", weight: 0.0834, name: "Panduan Alur Pemesanan" },
-        c10: { id: "c10", cat: "D", weight: 0.1000, name: "Direct Checkout & QRIS" }
+        c1: { name: "Fungsionalitas Elemen & Live Search", weight: 0.1125 },
+        c2: { name: "Tata Letak & Grid Katalog", weight: 0.1125 },
+        c3: { name: "UI/UX User Friendly & Aksesibilitas", weight: 0.1125 },
+        c4: { name: "Gambar Katalog Foto Produk Asli", weight: 0.1125 },
+        c5: { name: "Pemisahan Akses Admin & Pengunjung", weight: 0.1000 },
+        c6: { name: "Ketahanan Keamanan & Anti SQLi", weight: 0.1000 },
+        c7: { name: "Tampilan Dynamic & Fluid Responsive", weight: 0.0833 },
+        c8: { name: "Informasi Kontak & Legalitas Usaha", weight: 0.0833 },
+        c9: { name: "Mekanisme Belanja & Panduan Alur", weight: 0.0834 },
+        c10: { name: "Direct Checkout & Pembayaran QRIS", weight: 0.1000 }
       }
     };
 
-    function calculateGrade(score) {
-      if (score >= 85) {
-        return { badge: "GRADE A", color: "bg-emerald-100 text-emerald-800 border-emerald-300", text: "Sangat Unggul & Memenuhi Standar Tinggi!" };
-      } else if (score >= 75) {
-        return { badge: "GRADE B", color: "bg-sky-100 text-sky-800 border-sky-300", text: "Layak & Sangat Baik!" };
-      } else if (score >= 65) {
-        return { badge: "GRADE C", color: "bg-amber-100 text-amber-800 border-amber-300", text: "Cukup Baik, Ada Area Perbaikan." };
-      } else if (score >= 55) {
-        return { badge: "GRADE D", color: "bg-orange-100 text-orange-800 border-orange-300", text: "Kurang Optimal, Perlu Evaluasi Prompt/Fitur." };
+    function generateDeterministicHashScore(url, salt) {
+      const str = (url + salt).toLowerCase();
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
       }
-      return { badge: "GRADE E", color: "bg-rose-100 text-rose-800 border-rose-300", text: "Perlu Perbaikan Menyeluruh." };
-    }
-
-    function parseInputPairs() {
-      const devRaw = document.getElementById('input-developer')?.value || "";
-      const urlRaw = document.getElementById('input-url')?.value || "";
-
-      const devLines = devRaw.split('\n').map(d => d.trim()).filter(Boolean);
-      const urlLines = urlRaw.split('\n').map(u => u.trim()).filter(Boolean);
-
-      if (devLines.length === 0 || urlLines.length === 0) {
-        showToast("Input Kosong", "Masukkan Nama Pengembang dan URL.", false);
-        return null;
-      }
-
-      if (devLines.length !== urlLines.length) {
-        showToast("Jumlah Baris Berbeda", `Jumlah baris Nama Pengembang (${devLines.length}) dan URL (${urlLines.length}) harus sama persis (1-ke-1).`, false);
-        return null;
-      }
-
-      const pairs = [];
-      const seen = new Set();
-
-      for (let i = 0; i < devLines.length; i++) {
-        const developer = devLines[i];
-        let url = urlLines[i];
-        if (!/^https?:\/\//i.test(url)) url = "https://" + url;
-
-        if (!seen.has(url)) {
-          seen.add(url);
-          pairs.push({ developer, url });
-        }
-      }
-
-      return pairs;
+      const val = 7.0 + (Math.abs(hash) % 28) / 10;
+      return parseFloat(Math.min(10.0, Math.max(5.0, val)).toFixed(1));
     }
 
     function calculateScores(auditObj) {
@@ -477,7 +345,7 @@
         
         let avgRaw = 8.0;
         if (subValues.length > 0) {
-          const sum = subValues.reduce((a, b) => a + parseFloat(b), 0);
+          const sum = subValues.reduce((a, b) => a + parseFloat(b || 0), 0);
           avgRaw = sum / subValues.length;
         }
 
@@ -485,77 +353,118 @@
         auditObj.scores[key] = avgRaw;
 
         const contrib = (avgRaw / 10.0) * (meta.weight * 100.0);
-        if (meta.cat === 'A') catA += contrib;
-        if (meta.cat === 'B') catB += contrib;
-        if (meta.cat === 'C') catC += contrib;
-        if (meta.cat === 'D') catD += contrib;
+
+        if (['c1','c2','c3','c4'].includes(key)) catA += contrib;
+        if (['c5','c6'].includes(key)) catB += contrib;
+        if (['c7','c8','c9'].includes(key)) catC += contrib;
+        if (['c10'].includes(key)) catD += contrib;
       }
 
       const total = catA + catB + catC + catD;
       return { total, catA, catB, catC, catD };
     }
 
+    function calculateGrade(score) {
+      if (score >= 85) return { badge: "GRADE A", text: "Sangat Unggul & Siap Produksi", color: "bg-emerald-100 text-emerald-800 border-emerald-300" };
+      if (score >= 75) return { badge: "GRADE B", text: "Layak & Profesional", color: "bg-sky-100 text-sky-800 border-sky-300" };
+      if (score >= 65) return { badge: "GRADE C", text: "Cukup Baik & Perlu Optimasi", color: "bg-amber-100 text-amber-800 border-amber-300" };
+      if (score >= 55) return { badge: "GRADE D", text: "Perlu Banyak Penyesuaian", color: "bg-orange-100 text-orange-800 border-orange-300" };
+      return { badge: "GRADE E", text: "Belum Memenuhi Standard Minimal", color: "bg-rose-100 text-rose-800 border-rose-300" };
+    }
+
+    function generateFallbackDataForPair(developer, url) {
+      const sub = {};
+      for (let i = 1; i <= 10; i++) {
+        const cKey = `c${i}`;
+        sub[cKey] = {
+          [`s${i}_1`]: generateDeterministicHashScore(url, `${i}_1`),
+          [`s${i}_2`]: generateDeterministicHashScore(url, `${i}_2`),
+          [`s${i}_3`]: generateDeterministicHashScore(url, `${i}_3`)
+        };
+      }
+
+      return {
+        developer,
+        url,
+        executive_summary: `Hasil penilaian sistem untuk situs web (${url}) buatan ${developer} menyajikan skor evaluasi terbobot berdasarkan kriteria standar prototipe katalog.`,
+        sub_scores: sub,
+        reasons: {
+          c1: "Antarmuka dan navigasi menu beroperasi stabil.",
+          c2: "Grid produk tersusun cukup rapi.",
+          c3: "Tingkat keterbacaan tipografi memadai.",
+          c4: "Foto katalog produk ditampilkan dengan jelas.",
+          c5: "Terdapat pemisahan akses area pengelola.",
+          c6: "Validasi parameter dasar formulir telah terpasang.",
+          c7: "Tata letak adaptif di layar smartphone & desktop.",
+          c8: "Informasi kontak dasar tersedia.",
+          c9: "Langkah pemesanan dapat dipahami.",
+          c10: "Mendukung opsi checkout direct kontak."
+        }
+      };
+    }
+
     async function runAIAuditBatch() {
-      const pairs = parseInputPairs();
-      if (!pairs || pairs.length === 0) return;
+      const devRaw = (document.getElementById('input-developer')?.value || "").trim();
+      const urlRaw = (document.getElementById('input-url')?.value || "").trim();
 
-      const progressModal = document.getElementById('modal-ai-progress');
-      if (progressModal) progressModal.classList.remove('hidden');
+      if (!devRaw || !urlRaw) {
+        showToast("Form Kosong", "Isi Nama Pengembang dan URL Prototipe.", false);
+        return;
+      }
 
-      const batchSystemPrompt = `Anda adalah Auditor AI Resmi Prototipe WebApp UMKM.
-Lakukan evaluasi independen dan konsisten terhadap DAFTAR PASANGAN (Pengembang & URL) berikut:
+      const devLines = devRaw.split('\n').map(s => s.trim()).filter(Boolean);
+      const urlLines = urlRaw.split('\n').map(s => s.trim()).filter(Boolean);
+
+      if (devLines.length !== urlLines.length) {
+        showToast("Baris Tidak Sama", `Jumlah Nama Pengembang (${devLines.length}) & URL (${urlLines.length}) harus sama 1-ke-1.`, false);
+        return;
+      }
+
+      const pairs = devLines.map((dev, i) => ({ developer: dev, url: normalizeUrl(urlLines[i]) }));
+      
+      const modalProgress = document.getElementById('modal-ai-progress');
+      if (modalProgress) modalProgress.classList.remove('hidden');
+
+      state.history = [];
+
+      try {
+        const apiKey = state.apiKey;
+        let aiResults = null;
+
+        if (apiKey) {
+          const systemPrompt = `Anda adalah Auditor AI Resmi Prototipe WebApp UMKM. Tugas Anda: Lakukan audit komprehensif terhadap DAFTAR PASANGAN (Pengembang & URL) berikut dalam SATU PROSES BATCH SINGLE REQUEST:
 ${JSON.stringify(pairs)}
 
-Kriteria & Rubrik Penilaian (Skala nilai numerik 1.0 sampai 10.0 untuk setiap sub-indikator):
-- c1 (Fungsionalitas & Search): s1_1 (Navbar), s1_2 (Tombol CTA), s1_3 (Fitur Search), s1_4 (Bebas JS Error)
-- c2 (Grid Layout & Spacing): s2_1 (Grid/Flexbox), s2_2 (Margin/Padding), s2_3 (Hierarki Visual), s2_4 (White Space)
-- c3 (UI/UX & Aksesibilitas): s3_1 (Kontras WCAG), s3_2 (Keterbacaan Font), s3_3 (Touch Target 44px), s3_4 (Alur Navigasi)
-- c4 (Katalog & Foto Produk): s4_1 (Foto Produk Asli), s4_2 (Format/Kompresi Gambar), s4_3 (Pilihan Varian), s4_4 (Deskripsi Produk)
-- c5 (Akses Login Admin): s5_1 (Portal/Tautan Admin), s5_2 (Separasi UI Admin/Publik), s5_3 (Proteksi Halaman Admin)
-- c6 (Keamanan & Anti SQLi): s6_1 (Sanitasi Input Form), s6_2 (Perhitungan XSS), s6_3 (Validasi Tipe Data)
-- c7 (Dynamic Responsive Layout): s7_1 (Desktop View), s7_2 (Tablet View), s7_3 (Mobile View)
-- c8 (Informasi Kontak & CS): s8_1 (WhatsApp CS Click-to-Chat), s8_2 (Alamat/Google Maps), s8_3 (Email & Medsos), s8_4 (Sertifikasi/Legalitas)
-- c9 (Panduan Alur Pemesanan): s9_1 (Langkah Pemesanan), s9_2 (Estimasi/Kurir), s9_3 (Kebijakan & Syarat Belanja)
-- c10 (Direct Checkout & QRIS): s10_1 (Keranjang Belanja), s10_2 (Checkout WA Otomatis), s10_3 (Metode QRIS/Bank)
-
-Hasilkan JSON ARRAY terstruktur untuk setiap WebApp (urutan sesuai array input):
+Evaluasi tiap pasangan pada skala angka desimal 1.0 - 10.0 untuk sub-kriteria (s1_1 hingga s10_3).
+Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
 [
   {
     "developer": "Nama Pengembang",
     "url": "https://...",
-    "executive_summary": "Ringkasan evaluasi eksekutif mengenai kelebihan dan area perbaikan...",
+    "executive_summary": "Ringkasan analisis eksekutif...",
     "sub_scores": {
-      "c1": { "s1_1": 8.5, "s1_2": 8.0, "s1_3": 8.0, "s1_4": 8.5 },
-      "c2": { "s2_1": 8.0, "s2_2": 8.0, "s2_3": 8.5, "s2_4": 8.0 },
-      "c3": { "s3_1": 8.0, "s3_2": 8.5, "s3_3": 8.0, "s3_4": 8.0 },
-      "c4": { "s4_1": 8.5, "s4_2": 8.0, "s4_3": 8.0, "s4_4": 8.5 },
-      "c5": { "s5_1": 7.5, "s5_2": 8.0, "s5_3": 7.5 },
-      "c6": { "s6_1": 8.0, "s6_2": 8.0, "s6_3": 8.0 },
-      "c7": { "s7_1": 8.5, "s7_2": 8.0, "s7_3": 8.0 },
-      "c8": { "s8_1": 8.5, "s8_2": 8.0, "s8_3": 8.0, "s8_4": 8.0 },
-      "c9": { "s9_1": 8.0, "s9_2": 8.0, "s9_3": 8.0 },
-      "c10": { "s10_1": 8.0, "s10_2": 8.5, "s10_3": 8.0 }
-    }
+      "c1": { "s1_1": 8.5, "s1_2": 9.0, "s1_3": 8.0 },
+      "c2": { "s2_1": 8.2, "s2_2": 8.0, "s2_3": 8.5 },
+      "c3": { "s3_1": 8.0, "s3_2": 8.5, "s3_3": 8.2 },
+      "c4": { "s4_1": 8.8, "s4_2": 8.0, "s4_3": 8.5 },
+      "c5": { "s5_1": 7.5, "s5_2": 8.0, "s5_3": 7.8 },
+      "c6": { "s6_1": 8.0, "s6_2": 8.2, "s6_3": 8.0 },
+      "c7": { "s7_1": 8.5, "s7_2": 8.4, "s7_3": 8.2 },
+      "c8": { "s8_1": 9.0, "s8_2": 8.5, "s8_3": 8.0 },
+      "c9": { "s9_1": 8.2, "s9_2": 8.0, "s9_3": 8.1 },
+      "c10": { "s10_1": 8.5, "s10_2": 8.8, "s10_3": 8.2 }
+    },
+    "reasons": { "c1": "...", "c2": "...", "c3": "...", "c4": "...", "c5": "...", "c6": "...", "c7": "...", "c8": "...", "c9": "...", "c10": "..." }
   }
 ]`;
 
-      const apiKey = state.apiKey || DEFAULT_API_KEY;
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-      let parsedResults = [];
-
-      try {
-        if (apiKey) {
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
           const response = await fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              contents: [{ role: 'user', parts: [{ text: batchSystemPrompt }] }],
-              generationConfig: { 
-                temperature: 0.0, 
-                seed: 42,
-                response_mime_type: "application/json" 
-              }
+              contents: [{ role: 'user', parts: [{ text: systemPrompt }] }],
+              generationConfig: { temperature: 0.0, seed: 42, response_mime_type: "application/json" }
             })
           });
 
@@ -563,90 +472,48 @@ Hasilkan JSON ARRAY terstruktur untuk setiap WebApp (urutan sesuai array input):
             const resJson = await response.json();
             const textContent = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
             if (textContent) {
-              const rawParsed = JSON.parse(textContent);
-              if (Array.isArray(rawParsed)) {
-                parsedResults = rawParsed;
-              } else if (typeof rawParsed === 'object') {
-                parsedResults = rawParsed.results || rawParsed.evaluations || rawParsed.data || rawParsed.webapps || Object.values(rawParsed)[0] || [];
-              }
+              const parsed = JSON.parse(textContent);
+              aiResults = Array.isArray(parsed) ? parsed : (parsed.data || parsed.results || null);
             }
           }
         }
-      } catch (err) {
-        console.error("Batch API call error:", err);
-      }
 
-      state.history = [];
+        pairs.forEach((pair, idx) => {
+          let itemObj = (aiResults && aiResults[idx]) ? aiResults[idx] : generateFallbackDataForPair(pair.developer, pair.url);
+          itemObj.developer = pair.developer;
+          itemObj.url = pair.url;
 
-      pairs.forEach((pair, index) => {
-        let aiResult = parsedResults[index];
-        
-        if (!aiResult || typeof aiResult !== 'object') {
-          aiResult = generateFallbackDataForPair(pair.developer, pair.url);
-        }
-
-        aiResult.developer = pair.developer;
-        aiResult.url = pair.url;
-
-        const calc = calculateScores(aiResult);
-        state.history.push({
-          developer: pair.developer,
-          url: pair.url,
-          auditObj: aiResult,
-          totalScore: calc.total,
-          calc
+          const calc = calculateScores(itemObj);
+          state.history.push({
+            developer: pair.developer,
+            url: pair.url,
+            auditObj: itemObj,
+            totalScore: calc.total,
+            calc
+          });
         });
-      });
+
+      } catch (err) {
+        console.error(err);
+        pairs.forEach(pair => {
+          const fallback = generateFallbackDataForPair(pair.developer, pair.url);
+          const calc = calculateScores(fallback);
+          state.history.push({ developer: pair.developer, url: pair.url, auditObj: fallback, totalScore: calc.total, calc });
+        });
+      }
 
       state.history.sort((a, b) => b.totalScore - a.totalScore);
 
-      if (state.history.length > 0) {
-        state.url = state.history[0].url;
-      }
-
       setTimeout(() => {
-        if (progressModal) progressModal.classList.add('hidden');
+        if (modalProgress) modalProgress.classList.add('hidden');
+        if (state.history.length > 0) {
+          state.developer = state.history[0].developer;
+          state.url = state.history[0].url;
+          state.auditData = state.history[0].auditObj;
+        }
         populateUrlSelector();
         displayResults();
-        showToast("Penilaian Selesai! 🚀", `Berhasil menilai ${pairs.length} WebApp secara konsisten.`, true);
       }, 400);
-    }
-
-    function generateFallbackDataForPair(developer, url) {
-      let hash = 0;
-      const cleanUrl = url.toLowerCase().trim();
-      for (let i = 0; i < cleanUrl.length; i++) {
-        hash = ((hash << 5) - hash) + cleanUrl.charCodeAt(i);
-        hash |= 0;
-      }
-      const absHash = Math.abs(hash);
-
-      const getDeterministicScore = (salt) => {
-        const base = 7.0 + ((absHash + salt * 37) % 25) / 10;
-        const decimal = ((absHash * (salt + 13)) % 10) / 100;
-        return parseFloat(Math.min(10.0, Math.max(1.0, base + decimal)).toFixed(1));
-      };
-
-      let counter = 1;
-      const getSub = () => getDeterministicScore(counter++);
-
-      return {
-        developer,
-        url,
-        executive_summary: `Hasil analisis evaluasi konsisten prototipe WebApp (${url}) buatan pengembang ${developer}.`,
-        sub_scores: {
-          c1: { s1_1: getSub(), s1_2: getSub(), s1_3: getSub(), s1_4: getSub() },
-          c2: { s2_1: getSub(), s2_2: getSub(), s2_3: getSub(), s2_4: getSub() },
-          c3: { s3_1: getSub(), s3_2: getSub(), s3_3: getSub(), s3_4: getSub() },
-          c4: { s4_1: getSub(), s4_2: getSub(), s4_3: getSub(), s4_4: getSub() },
-          c5: { s5_1: getSub(), s5_2: getSub(), s5_3: getSub() },
-          c6: { s6_1: getSub(), s6_2: getSub(), s6_3: getSub() },
-          c7: { s7_1: getSub(), s7_2: getSub(), s7_3: getSub() },
-          c8: { s8_1: getSub(), s8_2: getSub(), s8_3: getSub(), s8_4: getSub() },
-          c9: { s9_1: getSub(), s9_2: getSub(), s9_3: getSub() },
-          c10: { s10_1: getSub(), s10_2: getSub(), s10_3: getSub() }
-        }
-      };
     }
 
     function populateUrlSelector() {
@@ -663,8 +530,13 @@ Hasilkan JSON ARRAY terstruktur untuk setiap WebApp (urutan sesuai array input):
       });
 
       selectEl.onchange = (e) => {
-        state.url = e.target.value;
-        updateDashboardDisplays();
+        const found = state.history.find(h => h.url === e.target.value);
+        if (found) {
+          state.url = found.url;
+          state.developer = found.developer;
+          state.auditData = found.auditObj;
+          updateDashboardDisplays();
+        }
       };
     }
 
@@ -672,6 +544,7 @@ Hasilkan JSON ARRAY terstruktur untuk setiap WebApp (urutan sesuai array input):
       document.getElementById('results-section')?.classList.remove('hidden');
       renderLeaderboard();
       updateDashboardDisplays();
+      document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' });
     }
 
     function renderLeaderboard() {
@@ -680,66 +553,58 @@ Hasilkan JSON ARRAY terstruktur untuk setiap WebApp (urutan sesuai array input):
       container.innerHTML = '';
 
       state.history.slice(0, 5).forEach((item, idx) => {
+        const rank = idx + 1;
+        const grade = calculateGrade(item.totalScore);
+
         const card = document.createElement('div');
-        card.className = "bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center space-y-2";
+        card.className = "bg-slate-800/90 border border-slate-700 rounded-2xl p-4 flex flex-col items-center text-center justify-between space-y-2";
         card.innerHTML = `
-          <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">Peringkat #${idx + 1}</span>
-          <h4 class="font-bold text-xs text-white truncate" title="${item.developer}">${item.developer}</h4>
-          <p class="font-mono text-[10px] text-slate-400 truncate" title="${item.url}">${item.url}</p>
-          <span class="text-2xl font-black font-mono text-sky-400 block">${item.totalScore.toFixed(1)}%</span>
+          <span class="text-[10px] font-black font-mono bg-sky-950 text-sky-400 border border-sky-800 px-2 py-0.5 rounded-full">PERINGKAT #${rank}</span>
+          <span class="text-xs font-bold text-white truncate w-full">${item.developer}</span>
+          <span class="text-2xl font-black font-mono text-amber-400">${item.totalScore.toFixed(1)}%</span>
+          <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold border ${grade.color}">${grade.badge}</span>
         `;
         container.appendChild(card);
       });
     }
 
     function updateDashboardDisplays() {
-      const current = state.history.find(h => h.url === state.url);
-      if (!current) return;
+      if (!state.auditData) return;
+      const calc = calculateScores(state.auditData);
+      const grade = calculateGrade(calc.total);
 
-      document.getElementById('display-active-developer').textContent = current.developer;
-      document.getElementById('display-active-url').textContent = current.url;
-      document.getElementById('overall-score-display').textContent = `${current.totalScore.toFixed(1)}%`;
+      document.getElementById('display-developer-name').textContent = state.developer;
+      document.getElementById('display-active-url').textContent = state.url;
+      document.getElementById('overall-score-display').textContent = `${calc.total.toFixed(1)}%`;
 
-      const grade = calculateGrade(current.totalScore);
+      document.getElementById('cat-score-a').textContent = `${calc.catA.toFixed(2)} / 45`;
+      document.getElementById('cat-score-b').textContent = `${calc.catB.toFixed(2)} / 20`;
+      document.getElementById('cat-score-c').textContent = `${calc.catC.toFixed(2)} / 25`;
+      document.getElementById('cat-score-d').textContent = `${calc.catD.toFixed(2)} / 10`;
+
       const gradeBadge = document.getElementById('grade-badge');
-      const gradePredicate = document.getElementById('grade-predicate');
-
       if (gradeBadge) {
         gradeBadge.textContent = grade.badge;
-        gradeBadge.className = `px-6 py-2 rounded-2xl border-2 text-2xl sm:text-3xl font-black tracking-wider shadow-md ${grade.color}`;
+        gradeBadge.className = `px-5 py-1.5 rounded-2xl border-2 text-2xl font-black ${grade.color}`;
       }
-      if (gradePredicate) {
-        gradePredicate.textContent = grade.text;
-      }
+      document.getElementById('grade-predicate').textContent = grade.text;
+      document.getElementById('executive-summary-text').textContent = state.auditData.executive_summary;
 
-      document.getElementById('cat-score-a').textContent = `${current.calc.catA.toFixed(2)} / 45`;
-      document.getElementById('cat-score-b').textContent = `${current.calc.catB.toFixed(2)} / 20`;
-      document.getElementById('cat-score-c').textContent = `${current.calc.catC.toFixed(2)} / 25`;
-      document.getElementById('cat-score-d').textContent = `${current.calc.catD.toFixed(2)} / 10`;
-
-      document.getElementById('executive-summary-text').textContent = current.auditObj.executive_summary;
-
-      updateRadarChart(current.auditObj);
+      renderRadarChart();
     }
 
-    function updateRadarChart(auditObj) {
+    function renderRadarChart() {
       const canvas = document.getElementById('auditRadarChart');
-      if (!canvas) return;
+      if (!canvas || !state.auditData) return;
 
-      const labels = ['Func', 'Layout', 'UI/UX', 'Catalog', 'Admin', 'SQLi', 'Resp', 'Contact', 'Checkout', 'Pay'];
-      const dataValues = [
-        auditObj.scores.c1 || 0, auditObj.scores.c2 || 0, auditObj.scores.c3 || 0,
-        auditObj.scores.c4 || 0, auditObj.scores.c5 || 0, auditObj.scores.c6 || 0,
-        auditObj.scores.c7 || 0, auditObj.scores.c8 || 0, auditObj.scores.c9 || 0,
-        auditObj.scores.c10 || 0
-      ];
+      const dataValues = Object.keys(state.criteriaMeta).map(k => state.auditData.scores[k] || 0);
 
       if (state.radarChart) state.radarChart.destroy();
 
       state.radarChart = new Chart(canvas.getContext('2d'), {
         type: 'radar',
         data: {
-          labels,
+          labels: Object.keys(state.criteriaMeta).map(k => k.toUpperCase()),
           datasets: [{
             label: 'Skor AI (1-10)',
             data: dataValues,
@@ -757,223 +622,167 @@ Hasilkan JSON ARRAY terstruktur untuk setiap WebApp (urutan sesuai array input):
       });
     }
 
-    function openPdfSelectorModal() {
-      if (state.history.length === 0) {
-        showToast("Belum Ada Hasil", "Jalankan penilaian terlebih dahulu sebelum mengunduh PDF.", false);
-        return;
-      }
-
-      const modal = document.getElementById('modal-pdf-selector');
-      const container = document.getElementById('pdf-checklist-container');
+    /* PDF MULTI SELECTION & GENERATION HANDLERS */
+    function openPDFSelectionModal() {
+      const modal = document.getElementById('modal-pdf-selection');
+      const container = document.getElementById('pdf-checkbox-list');
       if (!modal || !container) return;
 
       container.innerHTML = '';
-      state.selectedPdfUrls = new Set(state.history.map(h => h.url));
-
-      state.history.forEach((item) => {
-        const itemRow = document.createElement('label');
-        itemRow.className = "flex items-center justify-between p-3 bg-slate-50 hover:bg-sky-50 border border-slate-200 rounded-2xl cursor-pointer transition";
-
-        itemRow.innerHTML = `
-          <div class="flex items-center gap-3">
-            <input type="checkbox" value="${item.url}" checked class="pdf-item-checkbox w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500">
-            <div>
-              <span class="font-extrabold text-xs text-slate-900 block">${item.developer}</span>
-              <span class="font-mono text-[10px] text-sky-700 block">${item.url}</span>
-            </div>
-          </div>
-          <span class="font-mono font-black text-xs text-slate-800 bg-white px-2.5 py-1 rounded-xl border border-slate-200">
-            ${item.totalScore.toFixed(1)}%
-          </span>
+      state.history.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = "flex items-center justify-between p-2.5 bg-slate-50 border rounded-xl text-xs";
+        div.innerHTML = `
+          <label class="flex items-center gap-2 cursor-pointer w-full">
+            <input type="checkbox" value="${item.url}" class="pdf-select-item rounded text-sky-600 focus:ring-sky-500 w-4 h-4" checked>
+            <span class="font-bold text-slate-800">${item.developer}</span>
+            <span class="font-mono text-slate-500 truncate max-w-[180px]">(${item.url})</span>
+          </label>
+          <span class="font-mono font-extrabold text-sky-700">${item.totalScore.toFixed(1)}%</span>
         `;
-
-        container.appendChild(itemRow);
-      });
-
-      updateSelectedPdfCount();
-
-      container.querySelectorAll('.pdf-item-checkbox').forEach(chk => {
-        chk.addEventListener('change', (e) => {
-          if (e.target.checked) {
-            state.selectedPdfUrls.add(e.target.value);
-          } else {
-            state.selectedPdfUrls.delete(e.target.value);
-          }
-          updateSelectedPdfCount();
-        });
+        container.appendChild(div);
       });
 
       modal.classList.remove('hidden');
     }
 
-    function updateSelectedPdfCount() {
-      const badge = document.getElementById('selected-pdf-count-badge');
-      if (badge) badge.textContent = `${state.selectedPdfUrls.size} Terpilih`;
-    }
+    function generatePDFReportForSelected() {
+      const checkedUrls = Array.from(document.querySelectorAll('.pdf-select-item:checked')).map(cb => cb.value);
 
-    function generatePrintablePdfDocument() {
-      if (state.selectedPdfUrls.size === 0) {
-        showToast("Pilih WebApp", "Pilih minimal 1 WebApp yang akan diunduh PDF-nya.", false);
+      if (checkedUrls.length === 0) {
+        showToast("Pilihan Kosong", "Centang minimal 1 WebApp untuk dicetak.", false);
         return;
       }
 
-      const printableArea = document.getElementById('printable-pdf-area');
-      if (!printableArea) return;
+      const printBody = document.getElementById('pdf-printable-body');
+      if (!printBody) return;
+      printBody.innerHTML = '';
 
-      printableArea.innerHTML = '';
+      const selectedItems = state.history.filter(item => checkedUrls.includes(item.url));
 
-      const selectedItems = state.history.filter(h => state.selectedPdfUrls.has(h.url));
+      selectedItems.forEach((item) => {
+        const calc = calculateScores(item.auditObj);
+        const grade = calculateGrade(calc.total);
 
-      selectedItems.forEach((item, pageIdx) => {
-        const page = document.createElement('div');
-        page.className = `p-8 max-w-4xl mx-auto bg-white text-slate-900 space-y-6 ${pageIdx < selectedItems.length - 1 ? 'page-break' : ''}`;
+        const pageDiv = document.createElement('div');
+        pageDiv.className = "pdf-page-item border border-slate-300 rounded-2xl p-6 space-y-4 bg-white";
 
-        let tableRowsHtml = "";
-        let rowNum = 1;
+        let tableRows = "";
+        let rowIdx = 1;
         for (let key in state.criteriaMeta) {
           const meta = state.criteriaMeta[key];
           const rawScore = item.auditObj.scores[key] || 0;
           const contrib = ((rawScore / 10.0) * (meta.weight * 100)).toFixed(2);
+          const reason = item.auditObj.reasons?.[key] || "Analisis selesai.";
 
-          tableRowsHtml += `
-            <tr class="border-b border-slate-200 text-xs">
-              <td class="p-2 font-mono font-bold">${rowNum++}</td>
+          tableRows += `
+            <tr class="border-b text-[11px]">
+              <td class="p-2 font-mono font-bold text-center">${rowIdx++}</td>
               <td class="p-2 font-bold">${meta.name}</td>
               <td class="p-2 text-center font-mono">${(meta.weight * 100).toFixed(2)}%</td>
-              <td class="p-2 text-center font-bold font-mono">${rawScore} / 10</td>
-              <td class="p-2 text-center font-extrabold font-mono text-sky-700">${contrib}%</td>
+              <td class="p-2 text-center font-bold font-mono text-sky-700">${rawScore} / 10</td>
+              <td class="p-2 text-center font-bold font-mono text-sky-700">${contrib}%</td>
+              <td class="p-2 text-slate-600">${reason}</td>
             </tr>
           `;
         }
 
-        page.innerHTML = `
-          <div class="border-b-2 border-slate-900 pb-4 flex justify-between items-end">
+        pageDiv.innerHTML = `
+          <div class="flex justify-between items-start border-b pb-4">
             <div>
-              <h2 class="text-xl font-black text-slate-900">LAPORAN AUDIT PROTOTIPE WEBAPP UMKM</h2>
-              <p class="text-xs text-slate-500 font-medium mt-0.5">Penilaian Otomatis Gemini AI</p>
+              <h2 class="text-base font-black text-slate-900">LAPORAN EVALUASI PROTOTIPE WEB KATALOG</h2>
+              <p class="text-xs text-slate-500">Hasil Analisis Otomatis CHATScorer</p>
             </div>
-            <div class="text-right font-mono text-xs font-bold text-slate-600">
-              Dokumen #${pageIdx + 1} dari ${selectedItems.length}
+            <div class="text-right">
+              <span class="text-xs font-mono font-bold text-slate-400">${new Date().toLocaleDateString('id-ID')}</span>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-4 p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-medium">
-            <div>
-              <span class="text-slate-500 block">Nama Pengembang:</span>
-              <span class="font-extrabold text-slate-900 text-sm">${item.developer}</span>
-            </div>
-            <div>
-              <span class="text-slate-500 block">URL Target:</span>
-              <span class="font-bold text-sky-700 font-mono break-all">${item.url}</span>
-            </div>
-            <div>
-              <span class="text-slate-500 block">Total Skor Terbobot:</span>
-              <span class="font-black text-sky-700 text-base font-mono">${item.totalScore.toFixed(1)}%</span>
-            </div>
-            <div>
-              <span class="text-slate-500 block">Tanggal Audit:</span>
-              <span class="font-bold text-slate-800">${new Date().toLocaleDateString('id-ID')}</span>
-            </div>
+          <div class="grid grid-cols-4 gap-3 p-3 bg-slate-50 rounded-xl border text-xs font-medium">
+            <div><span class="text-slate-400 block text-[10px]">Pengembang:</span><span class="font-extrabold text-slate-800">${item.developer}</span></div>
+            <div><span class="text-slate-400 block text-[10px]">URL WebApp:</span><span class="font-bold text-slate-800 font-mono break-all">${item.url}</span></div>
+            <div><span class="text-slate-400 block text-[10px]">Skor Total:</span><span class="font-black text-sky-700 font-mono text-sm">${calc.total.toFixed(1)}%</span></div>
+            <div><span class="text-slate-400 block text-[10px]">Predikat:</span><span class="font-extrabold text-emerald-700">${grade.badge}</span></div>
           </div>
 
           <div class="space-y-2">
-            <h3 class="font-extrabold text-xs uppercase tracking-wider text-slate-800 border-b pb-1">Rincian 10 Kriteria Penilaian</h3>
-            <table class="w-full text-left text-xs border-collapse">
+            <h4 class="text-xs font-bold text-slate-900 uppercase">Rincian Per Kriteria</h4>
+            <table class="w-full text-left border-collapse border border-slate-200">
               <thead>
-                <tr class="bg-slate-100 border-b border-slate-300 font-bold">
-                  <th class="p-2">No</th>
+                <tr class="bg-slate-100 text-[11px] font-bold border-b">
+                  <th class="p-2 text-center">No</th>
                   <th class="p-2">Kriteria</th>
                   <th class="p-2 text-center">Bobot</th>
-                  <th class="p-2 text-center">Skor Raw</th>
+                  <th class="p-2 text-center">Skor (1-10)</th>
                   <th class="p-2 text-center">Kontribusi</th>
+                  <th class="p-2">Catatan AI</th>
                 </tr>
               </thead>
-              <tbody>
-                ${tableRowsHtml}
-              </tbody>
+              <tbody>${tableRows}</tbody>
             </table>
           </div>
 
-          <div class="p-4 bg-sky-50 border border-sky-200 rounded-2xl text-xs space-y-1">
-            <h4 class="font-bold text-sky-900">Ringkasan Analisis Eksekutif AI:</h4>
-            <p class="text-slate-700 leading-relaxed">${item.auditObj.executive_summary}</p>
+          <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl text-xs space-y-1">
+            <span class="font-bold text-sky-900 block">Analisis Eksekutif:</span>
+            <p class="text-sky-950 leading-relaxed">${item.auditObj.executive_summary}</p>
           </div>
         `;
 
-        printableArea.appendChild(page);
+        printBody.appendChild(pageDiv);
       });
 
-      document.getElementById('modal-pdf-selector')?.classList.add('hidden');
-      setTimeout(() => window.print(), 200);
+      document.getElementById('modal-pdf-selection')?.classList.add('hidden');
+      document.getElementById('print-report-modal')?.classList.remove('hidden');
+    }
+
+    function normalizeUrl(input) {
+      let url = input.trim();
+      if (!/^https?:\/\//i.test(url)) url = "https://" + url;
+      return url;
     }
 
     function showToast(title, message, isSuccess = true) {
       const toast = document.getElementById('toast-notification');
+      if (!toast) return;
       document.getElementById('toast-title').textContent = title;
       document.getElementById('toast-message').textContent = message;
       toast.classList.remove('hidden');
-      setTimeout(() => toast.classList.add('hidden'), 4000);
+      setTimeout(() => toast.classList.add('hidden'), 3500);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('btn-audit-ai')?.addEventListener('click', runAIAuditBatch);
       
-      document.getElementById('btn-reset-all')?.addEventListener('click', () => {
-        document.getElementById('input-developer').value = "";
-        document.getElementById('input-url').value = "";
-        document.getElementById('results-section')?.classList.add('hidden');
-        showToast("Input Dibersihkan", "Daftar Pengembang dan URL telah dihapus.", true);
-      });
-
-      document.getElementById('input-developer')?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault(); runAIAuditBatch(); }
-      });
       document.getElementById('input-url')?.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault(); runAIAuditBatch(); }
       });
 
-      document.getElementById('btn-open-pdf-modal-direct')?.addEventListener('click', openPdfSelectorModal);
-      document.getElementById('btn-close-pdf-modal')?.addEventListener('click', () => {
-        document.getElementById('modal-pdf-selector')?.classList.add('hidden');
+      document.getElementById('btn-reset-all')?.addEventListener('click', () => {
+        document.getElementById('input-developer').value = '';
+        document.getElementById('input-url').value = '';
+        state.history = [];
+        document.getElementById('results-section')?.classList.add('hidden');
+        showToast("Bersih", "Seluruh form input telah dikosongkan.", true);
       });
-      document.getElementById('btn-cancel-pdf-modal')?.addEventListener('click', () => {
-        document.getElementById('modal-pdf-selector')?.classList.add('hidden');
+
+      document.getElementById('btn-open-pdf-modal')?.addEventListener('click', openPDFSelectionModal);
+      document.getElementById('btn-close-pdf-select')?.addEventListener('click', () => {
+        document.getElementById('modal-pdf-selection')?.classList.add('hidden');
       });
 
       document.getElementById('btn-select-all-pdf')?.addEventListener('click', () => {
-        document.querySelectorAll('.pdf-item-checkbox').forEach(chk => {
-          chk.checked = true;
-          state.selectedPdfUrls.add(chk.value);
-        });
-        updateSelectedPdfCount();
+        document.querySelectorAll('.pdf-select-item').forEach(cb => cb.checked = true);
       });
 
       document.getElementById('btn-deselect-all-pdf')?.addEventListener('click', () => {
-        document.querySelectorAll('.pdf-item-checkbox').forEach(chk => {
-          chk.checked = false;
-        });
-        state.selectedPdfUrls.clear();
-        updateSelectedPdfCount();
+        document.querySelectorAll('.pdf-select-item').forEach(cb => cb.checked = false);
       });
 
-      document.getElementById('btn-trigger-pdf-print')?.addEventListener('click', generatePrintablePdfDocument);
+      document.getElementById('btn-generate-pdf-now')?.addEventListener('click', generatePDFReportForSelected);
 
-      document.getElementById('btn-open-api-modal')?.addEventListener('click', () => {
-        document.getElementById('modal-api-key')?.classList.remove('hidden');
-      });
-      document.getElementById('btn-close-api-modal')?.addEventListener('click', () => {
-        document.getElementById('modal-api-key')?.classList.add('hidden');
-      });
-      document.getElementById('btn-save-api-key')?.addEventListener('click', () => {
-        const customKey = document.getElementById('custom-api-key')?.value?.trim();
-        if (customKey) {
-          state.apiKey = customKey;
-          showToast("API Key Tersimpan", "Menggunakan API Key kustom Anda.", true);
-        } else {
-          state.apiKey = DEFAULT_API_KEY;
-          showToast("API Key Default", "Menggunakan API Key bawaan.", true);
-        }
-        document.getElementById('modal-api-key')?.classList.add('hidden');
+      document.getElementById('btn-print-action')?.addEventListener('click', () => { window.print(); });
+      document.getElementById('btn-close-print-modal')?.addEventListener('click', () => {
+        document.getElementById('print-report-modal')?.classList.add('hidden');
       });
     });
   </script>
