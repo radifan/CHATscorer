@@ -157,7 +157,7 @@
               <span><i class="fa-solid fa-id-card text-sky-600 mr-1.5"></i> Nama Pengembang (1 Per Baris):</span>
               <span class="text-rose-500 font-bold text-xs">*</span>
             </label>
-            <textarea id="input-developer" rows="4" placeholder="Budi Santoso&#10;Tim Alpha UMKM&#10;Siti Rahma" class="w-full px-4 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-bold transition shadow-inner custom-scrollbar resize-none"></textarea>
+            <textarea id="input-developer" rows="5" placeholder="Budi Santoso&#10;Tim Alpha UMKM&#10;Siti Rahma" class="w-full px-4 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-bold transition shadow-inner custom-scrollbar resize-none"></textarea>
           </div>
 
           <!-- URL Target per Line -->
@@ -167,7 +167,7 @@
               <span class="text-rose-500 font-bold text-xs">*</span>
             </label>
             <div class="relative">
-              <textarea id="input-url" rows="4" placeholder="https://kopi-lokal-nusantara.vercel.app&#10;https://batik-tradisional-solo.vercel.app&#10;https://kerajinan-bambu-bali.vercel.app" class="w-full pl-4 pr-16 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-mono font-bold transition shadow-inner custom-scrollbar resize-none"></textarea>
+              <textarea id="input-url" rows="5" placeholder="https://kopi-lokal-nusantara.vercel.app&#10;https://batik-tradisional-solo.vercel.app&#10;https://kerajinan-bambu-bali.vercel.app" class="w-full pl-4 pr-16 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-mono font-bold transition shadow-inner custom-scrollbar resize-none"></textarea>
               
               <button id="btn-audit-ai" title="Mulai Menilai" class="absolute right-2 top-2 bottom-2 px-4 bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-extrabold text-sm rounded-xl shadow-md shadow-sky-600/30 transition flex items-center justify-center group">
                 <i class="fa-solid fa-wand-magic-sparkles text-amber-300 text-lg group-hover:rotate-12 transition transform"></i>
@@ -420,16 +420,16 @@
     };
 
     function calculateGrade(score) {
-      if (score >= 90) {
-        return { badge: "GRADE A", color: "bg-emerald-100 text-emerald-800 border-emerald-300", text: "Memang kalian yang terbaik dari yang terbaik!" };
-      } else if (score >= 80) {
-        return { badge: "GRADE B", color: "bg-sky-100 text-sky-800 border-sky-300", text: "Kalian Hebat!" };
-      } else if (score >= 70) {
-        return { badge: "GRADE C", color: "bg-amber-100 text-amber-800 border-amber-300", text: "Mungkin ada yang perlu ditingkatkan lagi, tetap semangat ya!" };
+      if (score >= 85) {
+        return { badge: "GRADE A", color: "bg-emerald-100 text-emerald-800 border-emerald-300", text: "Sangat Unggul & Memenuhi Standar Tinggi!" };
+      } else if (score >= 75) {
+        return { badge: "GRADE B", color: "bg-sky-100 text-sky-800 border-sky-300", text: "Layak & Sangat Baik!" };
+      } else if (score >= 65) {
+        return { badge: "GRADE C", color: "bg-amber-100 text-amber-800 border-amber-300", text: "Cukup Baik, Ada Area Perbaikan." };
       } else if (score >= 55) {
-        return { badge: "GRADE D", color: "bg-orange-100 text-orange-800 border-orange-300", text: "Hidup kadang di atas kadang ngeprompt. Next pelajari kembali teknik prompting yang baik ya!" };
+        return { badge: "GRADE D", color: "bg-orange-100 text-orange-800 border-orange-300", text: "Kurang Optimal, Perlu Evaluasi Prompt/Fitur." };
       }
-      return { badge: "GRADE E", color: "bg-rose-100 text-rose-800 border-rose-300", text: "Ini bukan akhir dari segalanya, ini wajar dan memang bagian dari pembelajaran." };
+      return { badge: "GRADE E", color: "bg-rose-100 text-rose-800 border-rose-300", text: "Perlu Perbaikan Menyeluruh." };
     }
 
     function parseInputPairs() {
@@ -525,16 +525,16 @@ Hasilkan JSON ARRAY terstruktur untuk setiap WebApp (urutan sesuai array input):
     "url": "https://...",
     "executive_summary": "Ringkasan evaluasi eksekutif mengenai kelebihan dan area perbaikan...",
     "sub_scores": {
-      "c1": { "s1_1": <number 1.0-10.0>, "s1_2": <number>, "s1_3": <number>, "s1_4": <number> },
-      "c2": { "s2_1": <number>, "s2_2": <number>, "s2_3": <number>, "s2_4": <number> },
-      "c3": { "s3_1": <number>, "s3_2": <number>, "s3_3": <number>, "s3_4": <number> },
-      "c4": { "s4_1": <number>, "s4_2": <number>, "s4_3": <number>, "s4_4": <number> },
-      "c5": { "s5_1": <number>, "s5_2": <number>, "s5_3": <number> },
-      "c6": { "s6_1": <number>, "s6_2": <number>, "s6_3": <number> },
-      "c7": { "s7_1": <number>, "s7_2": <number>, "s7_3": <number> },
-      "c8": { "s8_1": <number>, "s8_2": <number>, "s8_3": <number>, "s8_4": <number> },
-      "c9": { "s9_1": <number>, "s9_2": <number>, "s9_3": <number> },
-      "c10": { "s10_1": <number>, "s10_2": <number>, "s10_3": <number> }
+      "c1": { "s1_1": 8.5, "s1_2": 8.0, "s1_3": 8.0, "s1_4": 8.5 },
+      "c2": { "s2_1": 8.0, "s2_2": 8.0, "s2_3": 8.5, "s2_4": 8.0 },
+      "c3": { "s3_1": 8.0, "s3_2": 8.5, "s3_3": 8.0, "s3_4": 8.0 },
+      "c4": { "s4_1": 8.5, "s4_2": 8.0, "s4_3": 8.0, "s4_4": 8.5 },
+      "c5": { "s5_1": 7.5, "s5_2": 8.0, "s5_3": 7.5 },
+      "c6": { "s6_1": 8.0, "s6_2": 8.0, "s6_3": 8.0 },
+      "c7": { "s7_1": 8.5, "s7_2": 8.0, "s7_3": 8.0 },
+      "c8": { "s8_1": 8.5, "s8_2": 8.0, "s8_3": 8.0, "s8_4": 8.0 },
+      "c9": { "s9_1": 8.0, "s9_2": 8.0, "s9_3": 8.0 },
+      "c10": { "s10_1": 8.0, "s10_2": 8.5, "s10_3": 8.0 }
     }
   }
 ]`;
@@ -542,7 +542,7 @@ Hasilkan JSON ARRAY terstruktur untuk setiap WebApp (urutan sesuai array input):
       const apiKey = state.apiKey || DEFAULT_API_KEY;
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
-      let resultsArray = [];
+      let parsedResults = [];
 
       try {
         if (apiKey) {
@@ -563,7 +563,12 @@ Hasilkan JSON ARRAY terstruktur untuk setiap WebApp (urutan sesuai array input):
             const resJson = await response.json();
             const textContent = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
             if (textContent) {
-              resultsArray = JSON.parse(textContent);
+              const rawParsed = JSON.parse(textContent);
+              if (Array.isArray(rawParsed)) {
+                parsedResults = rawParsed;
+              } else if (typeof rawParsed === 'object') {
+                parsedResults = rawParsed.results || rawParsed.evaluations || rawParsed.data || rawParsed.webapps || Object.values(rawParsed)[0] || [];
+              }
             }
           }
         }
@@ -571,17 +576,23 @@ Hasilkan JSON ARRAY terstruktur untuk setiap WebApp (urutan sesuai array input):
         console.error("Batch API call error:", err);
       }
 
-      if (!Array.isArray(resultsArray) || resultsArray.length === 0) {
-        resultsArray = pairs.map(p => generateFallbackDataForPair(p.developer, p.url));
-      }
-
       state.history = [];
-      resultsArray.forEach(item => {
-        const calc = calculateScores(item);
+
+      pairs.forEach((pair, index) => {
+        let aiResult = parsedResults[index];
+        
+        if (!aiResult || typeof aiResult !== 'object') {
+          aiResult = generateFallbackDataForPair(pair.developer, pair.url);
+        }
+
+        aiResult.developer = pair.developer;
+        aiResult.url = pair.url;
+
+        const calc = calculateScores(aiResult);
         state.history.push({
-          developer: item.developer || "Pengembang",
-          url: item.url,
-          auditObj: item,
+          developer: pair.developer,
+          url: pair.url,
+          auditObj: aiResult,
           totalScore: calc.total,
           calc
         });
@@ -601,7 +612,6 @@ Hasilkan JSON ARRAY terstruktur untuk setiap WebApp (urutan sesuai array input):
       }, 400);
     }
 
-    // Fungsi Fallback Determinis berbasis Hash String URL
     function generateFallbackDataForPair(developer, url) {
       let hash = 0;
       const cleanUrl = url.toLowerCase().trim();
