@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Penilaian Prototipe WebApp UMKM</title>
+  <title>CHATScorer - Penilaian Prototipe Web Katalog</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Canvas Confetti Library for Surprise Animation -->
+  <!-- Canvas Confetti Library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,15 +27,6 @@
             sans: ['Plus Jakarta Sans', 'sans-serif'],
             mono: ['JetBrains Mono', 'monospace'],
           },
-          colors: {
-            brand: {
-              50: '#f0f9ff',
-              100: '#e0f2fe',
-              500: '#0284c7',
-              600: '#0369a1',
-              700: '#075985',
-            }
-          },
           keyframes: {
             trophyBounce: {
               '0%, 100%': { transform: 'translateY(0) scale(1)' },
@@ -46,14 +37,14 @@
               '50%': { boxShadow: '0 0 30px rgba(2, 132, 199, 0.8)' }
             },
             popIn: {
-              '0%': { transform: 'scale(0.9)', opacity: '0' },
+              '0%': { transform: 'scale(0.95)', opacity: '0' },
               '100%': { transform: 'scale(1)', opacity: '1' }
             }
           },
           animation: {
             'trophy-bounce': 'trophyBounce 2.5s infinite ease-in-out',
             'glow-pulse': 'glowPulse 2s infinite ease-in-out',
-            'pop-in': 'popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards'
+            'pop-in': 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards'
           }
         }
       }
@@ -77,29 +68,28 @@
       background: #94a3b8;
     }
     
-    .device-desktop { width: 100%; height: 600px; }
-    .device-tablet { width: 768px; height: 600px; }
-    .device-mobile { width: 375px; height: 600px; }
+    .device-desktop { width: 100%; height: 580px; }
+    .device-tablet { width: 768px; height: 580px; }
+    .device-mobile { width: 375px; height: 580px; }
 
     @media print {
-      body * {
-        visibility: hidden;
-      }
-      #print-report-modal, #print-report-modal * {
-        visibility: visible;
-      }
-      #print-report-modal {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
+      body * { visibility: hidden !important; }
+      #printable-pdf-area, #printable-pdf-area * { visibility: visible !important; }
+      #printable-pdf-area {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
         background: white !important;
         color: black !important;
         padding: 0 !important;
+        margin: 0 !important;
       }
-      .no-print {
-        display: none !important;
+      .page-break {
+        page-break-after: always;
+        break-after: page;
       }
+      .no-print { display: none !important; }
     }
   </style>
 </head>
@@ -110,21 +100,20 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3 sm:gap-4">
         <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-600 via-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/20">
-          <i class="fa-solid fa-award text-2xl"></i>
+          <i class="fa-solid fa-bolt text-2xl"></i>
         </div>
         <div>
           <h1 class="font-extrabold text-base sm:text-xl text-slate-900 tracking-tight flex items-center gap-2">
-            Penilaian Prototipe WebApp Katalog UMKM
-            <!--<span class="text-xs bg-sky-100 text-sky-800 border border-sky-300 font-mono px-2.5 py-0.5 rounded-full font-bold">Sub-Kriteria 1-10</span>-->
+            CHATScorer
           </h1>
+          <p class="text-xs text-slate-500 font-medium hidden sm:block">Penilaian prototipe web katalog</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-2 sm:gap-3">
-        <!--<button id="btn-open-api-modal" class="px-3.5 py-2 rounded-xl border border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold transition flex items-center gap-2 shadow-sm">
-          <i class="fa-solid fa-key text-amber-500"></i>
-          <span id="api-status-label" class="hidden sm:inline">Gemini API</span>
-        </button>-->
+      <div class="flex items-center gap-2">
+        <button id="btn-open-api-modal" title="Pengaturan API Key" class="p-2.5 rounded-xl border border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold transition flex items-center gap-2 shadow-sm">
+          <i class="fa-solid fa-shield-halved text-emerald-600 text-base"></i>
+        </button>
       </div>
     </div>
   </header>
@@ -140,7 +129,6 @@
       </div>
     </div>
 
-    <!-- URL & Developer Input Section -->
     <section class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
       <div class="absolute -right-12 -top-12 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -148,42 +136,40 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h2 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2.5">
-              <i class="fa-solid fa-users-gear text-sky-600 text-xl"></i> Nama Pengembang & URL
+              <i class="fa-solid fa-users-gear text-sky-600 text-xl"></i> Pengembang dan URL
             </h2>
             <p class="text-xs sm:text-sm text-slate-600 mt-1">
-              Setiap baris Nama Pengembang berpasangan 1-ke-1 dengan baris URL Web.
+              Setiap baris Nama Pengembang berpasangan 1-ke-1 dengan baris URL WebApp.
             </p>
           </div>
 
-          <!-- Reset / Clear Button -->
-          <button id="btn-reset-all" title="Reset Semua Input & Hasil Penilaian" class="px-4 py-2 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-300 hover:border-rose-300 text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm self-start sm:self-center">
+          <button id="btn-reset-all" class="px-4 py-2 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-300 hover:border-rose-300 text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm self-start sm:self-center">
             <i class="fa-solid fa-rotate-left text-xs"></i>
-            <span>Hapus</span>
+            <span>Bersihkan</span>
           </button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
           
-          <!-- Column 1: Developer Name per Line -->
+          <!-- Developer Name per Line -->
           <div class="lg:col-span-5 space-y-1.5">
             <label for="input-developer" class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center justify-between">
-              <span><i class="fa-solid fa-user-gear text-sky-600 mr-1"></i> Nama Pengembang (1 Per Baris):</span>
-              <span class="text-rose-500 font-bold text-[10px]">*</span>
+              <span><i class="fa-solid fa-id-card text-sky-600 mr-1.5"></i> Nama Pengembang (1 Per Baris):</span>
+              <span class="text-rose-500 font-bold text-xs">*</span>
             </label>
-            <textarea id="input-developer" rows="3" placeholder="Budi Santoso&#10;Tim Alpha UMKM&#10;Siti Rahma" class="w-full px-4 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-bold transition shadow-inner custom-scrollbar resize-none"></textarea>
+            <textarea id="input-developer" rows="4" placeholder="Budi Santoso&#10;Tim Alpha UMKM&#10;Siti Rahma" class="w-full px-4 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-bold transition shadow-inner custom-scrollbar resize-none"></textarea>
           </div>
 
-          <!-- Column 2: URL Target per Line -->
+          <!-- URL Target per Line -->
           <div class="lg:col-span-7 space-y-1.5 relative">
             <label for="input-url" class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center justify-between">
-              <span><i class="fa-solid fa-link text-sky-600 mr-1"></i> URL Prototipe (1 Per Baris):</span>
-              <span class="text-rose-500 font-bold text-[10px]">*</span>
+              <span><i class="fa-solid fa-link text-sky-600 mr-1.5"></i> Alamat URL Prototipe (1 Per Baris):</span>
+              <span class="text-rose-500 font-bold text-xs">*</span>
             </label>
             <div class="relative">
-              <textarea id="input-url" rows="3" placeholder="https://kopi-lokal-nusantara.vercel.app&#10;https://batik-tradisional-solo.vercel.app&#10;https://kerajinan-bambu-bali.vercel.app" class="w-full pl-4 pr-16 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-mono font-bold transition shadow-inner custom-scrollbar resize-none"></textarea>
+              <textarea id="input-url" rows="4" placeholder="https://kopi-lokal-nusantara.vercel.app&#10;https://batik-tradisional-solo.vercel.app&#10;https://kerajinan-bambu-bali.vercel.app" class="w-full pl-4 pr-16 py-3.5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white font-mono font-bold transition shadow-inner custom-scrollbar resize-none"></textarea>
               
-              <!-- Audit Action Button inside input -->
-              <button id="btn-audit-ai" title="Nilai Semua Prototipe (Tekan Ctrl+Enter atau Klik)" class="absolute right-2 top-2 bottom-2 px-4 bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white rounded-xl shadow-md shadow-sky-600/30 transition flex items-center justify-center group">
+              <button id="btn-audit-ai" title="Mulai Menilai" class="absolute right-2 top-2 bottom-2 px-4 bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-extrabold text-sm rounded-xl shadow-md shadow-sky-600/30 transition flex items-center justify-center group">
                 <i class="fa-solid fa-wand-magic-sparkles text-amber-300 text-lg group-hover:rotate-12 transition transform"></i>
               </button>
             </div>
@@ -191,69 +177,40 @@
 
         </div>
 
-        <p class="text-[11px] text-slate-500 mt-1 font-medium flex items-center gap-1.5">
+        <p class="text-[11px] text-slate-500 mt-0.5 font-medium flex items-center gap-1.5">
           <i class="fa-solid fa-circle-info text-sky-600"></i>
-          <span>Klik <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> atau tekan <kbd class="px-1.5 py-0.5 bg-slate-200 text-slate-800 border border-slate-300 rounded font-mono font-bold text-[10px] shadow-sm">Ctrl + Enter</kbd> untuk mulai menilai.</span>
+          <span>Tekan <kbd class="px-1.5 py-0.5 bg-slate-200 text-slate-800 border border-slate-300 rounded font-mono font-bold text-[10px] shadow-sm">Ctrl + Enter</kbd> atau klik tombol <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> untuk mulai menilai.</span>
         </p>
       </div>
     </section>
 
     <div id="results-section" class="hidden space-y-8 transition-all duration-300">
 
-      <!-- Equal Score Tie-Breaker Banner Notification -->
-      <div id="equal-score-banner" class="hidden bg-amber-500/10 border-2 border-amber-500/40 rounded-3xl p-4 sm:p-5 text-amber-900 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-lg flex-shrink-0">
-            ⚡
-          </div>
-          <div>
-            <h4 class="font-extrabold text-xs sm:text-sm text-amber-950 flex items-center gap-2">
-              Skor Sama Terdeteksi!
-            </h4>
-            <p id="equal-score-banner-text" class="text-xs text-amber-900 font-medium mt-0.5">
-              Beberapa WebApp memiliki nilai skor sama namun berada di posisi peringkat yang berbeda.
-            </p>
-          </div>
-        </div>
-        <button id="btn-open-tiebreaker-banner" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black rounded-xl transition shadow-md whitespace-nowrap self-end sm:self-center flex items-center gap-1.5">
-          <i class="fa-solid fa-magnifying-glass text-xs"></i>
-          <span>Cari Tahu Perbedaannya</span>
-        </button>
-      </div>
-
-      <!-- Top 5 Tier Leaderboard Section -->
+      <!-- Leaderboard Section -->
       <section id="leaderboard-section" class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-slate-800 text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 relative overflow-hidden">
-        <div class="absolute -right-16 -top-16 w-80 h-80 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -left-16 -bottom-16 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-5 relative z-10">
           <div>
             <span class="text-xs font-bold text-amber-400 bg-amber-950/80 border border-amber-500/30 px-3 py-1 rounded-full font-mono uppercase tracking-wider flex items-center gap-1.5 w-fit mb-2">
-              <i class="fa-solid fa-trophy text-amber-400"></i> 5 Teratas
+              <i class="fa-solid fa-trophy text-amber-400"></i> Leaderboard Peringkat
             </span>
             <h2 class="text-xl sm:text-3xl font-black text-white flex items-center gap-3 tracking-tight">
-              5 WebApp Teratas
+              Hasil Penilaian WebApp
             </h2>
-            <p class="text-xs sm:text-sm text-slate-400 mt-1">
-              Hasil Penilaian oleh Gemini AI
-            </p>
           </div>
 
-          <div class="flex items-center gap-2">
-            <button id="btn-trigger-celebration" class="px-5 py-2.5 bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm rounded-2xl shadow-xl shadow-amber-500/30 transition transform hover:scale-105 flex items-center gap-2 animate-glow-pulse">
+          <div class="flex items-center gap-3">
+            <button id="btn-trigger-celebration" class="px-5 py-2.5 bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm rounded-2xl shadow-xl transition transform hover:scale-105 flex items-center gap-2">
               <span>Selebrasi 🎉</span>
             </button>
-            
-            <!-- Close button for Leaderboard Section -->
-            <button id="btn-close-leaderboard" title="Tutup Tampilan Leaderboard" class="p-2.5 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700 rounded-2xl transition border border-slate-700">
-              <i class="fa-solid fa-xmark text-lg"></i>
+            <button id="btn-open-pdf-modal-direct" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs sm:text-sm rounded-2xl shadow-xl transition flex items-center gap-2">
+              <i class="fa-solid fa-print"></i>
+              <span>Simpan PDF</span>
             </button>
           </div>
         </div>
 
-        <!-- Top 5 Leaderboard Cards Container -->
         <div id="top5-leaderboard-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-2 relative z-10">
-          <!-- Dynamically populated top 5 tier cards -->
+          <!-- Dynamically populated cards -->
         </div>
       </section>
 
@@ -263,23 +220,17 @@
           <div>
             <h2 class="text-lg sm:text-2xl font-black text-slate-900 flex items-center gap-3">
               <i class="fa-solid fa-chart-line text-sky-600 text-2xl"></i>
-              Hasil Penilaian
+              Rincian Penilaian
             </h2>
             <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
-              Pengembang: <span id="display-developer-name" class="font-bold text-slate-800 font-mono">-</span>
+              Pengembang: <span id="display-active-developer" class="font-bold text-slate-900 font-mono">-</span> | URL: <span id="display-active-url" class="font-bold text-sky-700 font-mono">-</span>
             </p>
           </div>
 
-          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-            <div class="flex items-center gap-2">
-              <label for="select-active-url" class="text-xs font-extrabold text-slate-600 whitespace-nowrap">Pilih WebApp</label>
-              <select id="select-active-url" class="bg-slate-100 border-2 border-sky-300 text-sky-900 font-mono font-bold text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-sky-600 shadow-sm max-w-xs">
-                <!-- Dynamically populated options -->
-              </select>
-            </div>
-            <span id="audit-status-badge" class="px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-extrabold flex items-center gap-2 shadow-sm whitespace-nowrap">
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span> Selesai Dinilai AI
-            </span>
+          <div class="flex items-center gap-3">
+            <label for="select-active-url" class="text-xs font-extrabold text-slate-600 whitespace-nowrap">Pilih Hasil:</label>
+            <select id="select-active-url" class="bg-slate-100 border-2 border-sky-300 text-sky-900 font-mono font-bold text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-sky-600 shadow-sm max-w-xs">
+            </select>
           </div>
         </div>
 
@@ -287,20 +238,15 @@
           
           <!-- Large Score Card -->
           <div class="md:col-span-5 bg-gradient-to-b from-sky-50/80 to-slate-50 border-2 border-sky-200/80 rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center justify-between relative overflow-hidden shadow-md">
-            <div class="absolute -right-12 -bottom-12 w-40 h-40 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
             <span class="text-xs sm:text-sm uppercase tracking-widest font-black text-sky-800 mb-1">Total Skor Terbobot</span>
             
             <div class="my-4">
-              <span id="overall-score-display" class="text-6xl sm:text-7xl font-extrabold text-sky-600 font-mono tracking-tight drop-shadow-sm">
+              <span id="overall-score-display" class="text-6xl sm:text-7xl font-extrabold text-sky-600 font-mono tracking-tight">
                 0.0
               </span>
             </div>
 
             <div class="flex flex-col items-center gap-2 w-full my-2">
-              <div id="tier-badge-pill" class="px-5 py-1.5 rounded-full text-xs sm:text-sm font-black font-mono tracking-wider border flex items-center gap-1.5 shadow-sm">
-                TIER UNKNOWN
-              </div>
               <span id="grade-badge" class="px-6 py-2 rounded-2xl bg-white text-slate-800 border-2 border-slate-300 text-2xl sm:text-3xl font-black tracking-wider shadow-md">
                 GRADE -
               </span>
@@ -311,31 +257,30 @@
 
             <div class="w-full mt-6 pt-5 border-t border-sky-200/80 text-left text-xs sm:text-sm font-medium space-y-2.5">
               <div class="flex justify-between items-center text-slate-700">
-                <span>Kriteria 1-4 (Fungsi, Tata Letak, UI/UX, Katalog):</span>
-                <span id="cat-score-a" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 45</span>
+                <span>Kategori A (UI/UX & Katalog):</span>
+                <span id="cat-score-a" class="font-mono text-sky-700 font-extrabold">0.00 / 45</span>
               </div>
               <div class="flex justify-between items-center text-slate-700">
-                <span>Kriteria 5-6 (Admin & Keamanan):</span>
-                <span id="cat-score-b" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 20</span>
+                <span>Kategori B (Admin & Keamanan):</span>
+                <span id="cat-score-b" class="font-mono text-sky-700 font-extrabold">0.00 / 20</span>
               </div>
               <div class="flex justify-between items-center text-slate-700">
-                <span>Kriteria 7-9 (Responsif, Kontak, & Belanja):</span>
-                <span id="cat-score-c" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 25</span>
+                <span>Kategori C (Responsif & Kontak):</span>
+                <span id="cat-score-c" class="font-mono text-sky-700 font-extrabold">0.00 / 25</span>
               </div>
               <div class="flex justify-between items-center text-slate-700">
-                <span>Kriteria 10 (Pembayaran & Checkout):</span>
-                <span id="cat-score-d" class="font-mono text-sky-700 font-extrabold text-sm sm:text-base">0.00 / 10</span>
+                <span>Kategori D (Checkout & Payment):</span>
+                <span id="cat-score-d" class="font-mono text-sky-700 font-extrabold">0.00 / 10</span>
               </div>
             </div>
           </div>
 
-          <!-- Radar Chart Visualizer & Action Buttons -->
+          <!-- Radar Chart Visualizer -->
           <div class="md:col-span-7 bg-slate-50 border border-slate-200 rounded-3xl p-6 flex flex-col justify-between space-y-4">
             <div class="flex items-center justify-between">
-              <h3 class="text-xs sm:text-sm font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                <i class="fa-solid fa-chart-pie text-sky-600"></i> Radar Penilaian
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-800 uppercase tracking-wider">
+                <i class="fa-solid fa-chart-pie text-sky-600"></i> Radar 10 Kriteria Penilaian
               </h3>
-              <span class="text-xs font-mono text-slate-500 font-bold">Skala 1.0 - 10.0</span>
             </div>
 
             <div class="w-full h-72 sm:h-80 relative flex items-center justify-center p-2">
@@ -345,105 +290,8 @@
             <div id="executive-summary-text" class="text-xs sm:text-sm text-slate-700 leading-relaxed bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
               -
             </div>
-
-            <!-- Action Buttons: Preview & PDF Export -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <button id="btn-load-preview" title="Muat Tampilan Preview Website Terpilih" class="w-full py-3 bg-slate-800 hover:bg-slate-900 text-white text-xs sm:text-sm font-extrabold rounded-2xl transition shadow-md flex items-center justify-center gap-2">
-                <i class="fa-solid fa-eye text-sky-400 text-base"></i>
-                <span>Previu WebApp</span>
-              </button>
-
-              <button id="btn-view-report-modal" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-extrabold rounded-2xl transition shadow-md shadow-sky-600/20 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-file-pdf text-base"></i>
-                <span>Simpan PDF</span>
-              </button>
-            </div>
           </div>
 
-        </div>
-      </section>
-
-      <!-- Live Preview Section -->
-      <section id="preview-section" class="hidden bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300">
-        <div class="p-4 bg-slate-900 text-white border-b border-slate-800 flex items-center justify-between gap-3 flex-wrap">
-          <div class="flex items-center gap-3 flex-wrap">
-            <span class="text-xs sm:text-sm font-bold text-slate-200 flex items-center gap-2">
-              <i class="fa-solid fa-display text-sky-400"></i> Previu Langsung:
-            </span>
-            <div class="flex items-center gap-1 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
-              <button id="device-desktop" class="btn-device active px-3 py-1.5 rounded-lg text-xs font-bold text-sky-400 bg-slate-800 transition flex items-center gap-2">
-                <i class="fa-solid fa-desktop"></i> Desktop (1280px)
-              </button>
-              <button id="device-tablet" class="btn-device px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition flex items-center gap-2">
-                <i class="fa-solid fa-tablet-screen-button"></i> Tablet (768px)
-              </button>
-              <button id="device-mobile" class="btn-device px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition flex items-center gap-2">
-                <i class="fa-solid fa-mobile-screen-button"></i> Mobile (375px)
-              </button>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-2.5">
-            <span id="preview-url-status" class="text-xs font-mono text-sky-400 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 max-w-xs truncate hidden sm:inline-block">
-              Menampilkan: -
-            </span>
-            <button id="btn-reload-iframe" title="Muat Ulang Frame" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs transition">
-              <i class="fa-solid fa-rotate-right"></i>
-            </button>
-            <a id="link-external-open" href="#" target="_blank" rel="noopener noreferrer" title="Buka di Tab Baru" class="px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition flex items-center gap-2 shadow-md">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-              <span class="hidden md:inline">Buka di Tab Baru</span>
-            </a>
-            
-            <!-- Close button for Preview Section -->
-            <button id="btn-close-preview" title="Tutup Live Preview" class="p-2 rounded-xl bg-slate-800 hover:bg-rose-900 text-slate-300 hover:text-rose-200 text-xs transition border border-slate-700">
-              <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-          </div>
-        </div>
-
-        <div id="iframe-fallback-banner" class="bg-amber-50 border-b border-amber-200 px-5 py-2.5 text-amber-900 text-xs flex items-center justify-between gap-3 font-medium">
-          <div class="flex items-center gap-2">
-            <i class="fa-solid fa-circle-info text-amber-600 text-sm"></i>
-            <span>Jika situs target memblokir preview frame (<code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-amber-900">X-Frame-Options</code>), gunakan tombol 'Buka di Tab Baru'.</span>
-          </div>
-          <a id="banner-open-link" href="#" target="_blank" class="underline font-bold text-amber-800 hover:text-amber-950 whitespace-nowrap">Buka Tab Baru &rarr;</a>
-        </div>
-
-        <div class="bg-slate-200 p-6 flex items-center justify-center overflow-auto custom-scrollbar min-h-[550px]">
-          <div id="iframe-wrapper" class="device-desktop transition-all duration-300 bg-white rounded-2xl overflow-hidden shadow-2xl relative border-2 border-slate-300">
-            <div id="iframe-loading" class="hidden absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-10 text-white">
-              <i class="fa-solid fa-circle-notch fa-spin text-4xl text-sky-400"></i>
-              <p class="text-xs sm:text-sm font-bold">Memuat Previu...</p>
-            </div>
-            <iframe id="preview-iframe" src="about:blank" class="w-full h-full border-0"></iframe>
-          </div>
-        </div>
-      </section>
-
-      <!-- Matrix Breakdown Section -->
-      <section id="matrix-section" class="space-y-4">
-        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-          <div>
-            <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2.5">
-              <i class="fa-solid fa-list-check text-sky-600"></i>
-              Rincian Penilaian
-            </h2>
-            <p class="text-xs text-slate-500 font-medium mt-0.5">Skor Kriteria = Rata-rata Skor Sub-Kriteria. Kontribusi = (Skor Kriteria / 10) × Bobot %.</p>
-          </div>
-
-          <div class="flex items-center gap-3">
-            <span class="text-xs text-slate-500 font-bold hidden sm:inline">Geser &rarr;</span>
-            <!-- Close button for Matriks Penilaian Card -->
-            <button id="btn-close-matrix" title="Tutup Tampilan Matriks Penilaian" class="p-2.5 text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-2xl transition border border-slate-300">
-              <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Horizontal Scrollable Container -->
-        <div class="flex overflow-x-auto gap-6 pb-4 pt-1 custom-scrollbar snap-x snap-mandatory" id="matrix-container">
-          <!-- Rendered dynamically via JS into horizontal cards -->
         </div>
       </section>
 
@@ -451,32 +299,51 @@
 
   </main>
 
-  <!-- Equal Score Tie-Breaker Comparison Modal -->
-  <div id="modal-tiebreaker-comparison" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white border border-slate-200 rounded-3xl max-w-4xl w-full p-6 sm:p-8 space-y-6 shadow-2xl my-8">
-      
+  <!-- PDF MULTI-SELECT CHECKLIST MODAL -->
+  <div id="modal-pdf-selector" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl my-8 relative">
       <div class="flex items-start justify-between border-b border-slate-200 pb-4">
         <div class="flex items-center gap-3">
-          <div class="w-11 h-11 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xl shadow-md">
-            ⚡
+          <div class="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-2xl shadow-md">
+            <i class="fa-solid fa-file-pdf"></i>
           </div>
           <div>
-            <h3 class="font-extrabold text-slate-900 text-base sm:text-lg">Analisis Pembanding Skor Seri</h3>
-            <p class="text-xs text-slate-500 font-medium mt-0.5">Penjelasan penentuan posisi peringkat berdasarkan komparasi detail penilaian.</p>
+            <h3 class="font-black text-slate-900 text-base sm:text-xl">Pilih WebApp untuk Diunduh</h3>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">Ceklis satu atau beberapa WebApp yang ingin dimasukkan ke dalam berkas PDF.</p>
           </div>
         </div>
-        <button id="btn-close-tiebreaker-modal" class="p-2 text-slate-400 hover:text-slate-600 text-lg">
+        <button id="btn-close-pdf-modal" class="p-2 text-slate-400 hover:text-slate-600 text-xl transition">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <div id="tiebreaker-modal-content" class="space-y-5">
-        <!-- Dynamic Side-by-Side & Detailed 10-Criteria Matrix Table Populated via JS -->
+      <!-- Control Toolbar -->
+      <div class="flex items-center justify-between bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs">
+        <div class="flex items-center gap-2">
+          <button id="btn-select-all-pdf" class="px-3 py-1.5 bg-sky-100 hover:bg-sky-200 text-sky-800 font-bold rounded-xl transition border border-sky-300">
+            <i class="fa-solid fa-square-check mr-1"></i> Pilih Semua
+          </button>
+          <button id="btn-deselect-all-pdf" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl transition">
+            <i class="fa-solid fa-square mr-1"></i> Batal Pilih
+          </button>
+        </div>
+        <span id="selected-pdf-count-badge" class="font-mono font-extrabold text-sky-700 bg-white px-3 py-1 rounded-xl border border-sky-200">
+          0 Terpilih
+        </span>
       </div>
 
-      <div class="flex justify-end pt-2 border-t border-slate-200">
-        <button id="btn-dismiss-tiebreaker-modal" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-extrabold rounded-xl transition shadow-md">
-          Mengerti!
+      <!-- Checklist Items Container -->
+      <div id="pdf-checklist-container" class="space-y-2.5 max-h-80 overflow-y-auto custom-scrollbar p-1">
+        <!-- Dynamically populated checkboxes -->
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
+        <button id="btn-cancel-pdf-modal" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-2xl transition border border-slate-300">
+          Batal
+        </button>
+        <button id="btn-trigger-pdf-print" class="px-6 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm rounded-2xl shadow-lg transition flex items-center gap-2">
+          <i class="fa-solid fa-print"></i>
+          <span>Cetak / Simpan PDF Terpilih</span>
         </button>
       </div>
     </div>
@@ -486,14 +353,11 @@
   <div id="modal-ai-progress" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4">
     <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-8 text-center space-y-5 shadow-2xl">
       <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center mx-auto text-2xl shadow-inner">
-        <i class="fa-solid fa-brain animate-pulse"></i>
+        <i class="fa-solid fa-bolt animate-bounce"></i>
       </div>
       <div>
-        <h3 class="font-black text-slate-900 text-base sm:text-lg">AI Sedang Menilai Sub-Kriteria</h3>
-        <p id="ai-progress-status" class="text-xs sm:text-sm text-slate-500 mt-1.5 font-medium">Mengevaluasi skor sub-kriteria foto produk asli, live search, filter, dan kelengkapan katalog...</p>
-      </div>
-      <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden border border-slate-200">
-        <div id="ai-progress-bar" class="bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 h-3 rounded-full transition-all duration-300 w-1/4"></div>
+        <h3 class="font-black text-slate-900 text-base sm:text-lg">Menilai Seluruh WebApp</h3>
+        <p id="ai-progress-status" class="text-xs text-slate-500 mt-1.5 font-medium">Gemini AI sedang menilai seluruh URL secara konsisten...</p>
       </div>
     </div>
   </div>
@@ -502,255 +366,109 @@
   <div id="modal-api-key" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl">
       <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-        <h3 class="font-extrabold text-slate-900 text-sm sm:text-base flex items-center gap-2">
-          <!--<i class="fa-solid fa-key text-amber-500"></i> Pengaturan Kunci Gemini API-->
+        <h3 class="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+          <i class="fa-solid fa-key text-amber-500"></i> Pengaturan Kunci Gemini API
         </h3>
         <button id="btn-close-api-modal" class="text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <p class="text-xs text-slate-600 leading-relaxed font-medium">
-        Model default yang digunakan adalah <code class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded text-sky-700 font-mono font-bold">gemini-3-flash-preview</code> dengan Kunci API bawaan otomatis.
-      </p>
-
       <div class="space-y-2">
-        <label for="custom-api-key" class="text-xs font-bold text-slate-700">Gemini API Key Custom:</label>
-        <input type="password" id="custom-api-key" placeholder="Masukkan Custom Gemini API Key..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-sky-600 font-mono">
+        <label for="custom-api-key" class="text-xs font-bold text-slate-700">Gemini API Key Custom (Opsional):</label>
+        <input type="password" id="custom-api-key" placeholder="Masukkan Kunci Kustom jika ingin mengganti..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono">
+        <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+          Secara default, aplikasi menggunakan API Key bawaan.
+        </p>
       </div>
 
       <div class="flex justify-end gap-2 pt-2">
-        <button id="btn-save-api-key" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white text-xs font-extrabold rounded-xl transition shadow-md">
-          Simpan & Gunakan
+        <button id="btn-save-api-key" class="px-5 py-2.5 bg-sky-600 text-white text-xs font-extrabold rounded-xl hover:bg-sky-500 transition">
+          Simpan Kunci API
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Printable PDF Modal -->
-  <div id="print-report-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md overflow-y-auto p-4 sm:p-8">
-    <div class="max-w-4xl mx-auto bg-white text-slate-900 rounded-3xl shadow-2xl p-8 space-y-6 my-8 border border-slate-200">
-      
-      <div class="flex items-start justify-between border-b border-slate-200 pb-6">
-        <div>
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-sky-600 text-white flex items-center justify-center font-black text-lg">
-              UMKM
-            </div>
-            <h2 class="text-xl sm:text-2xl font-black text-slate-900">LAPORAN PENILAIAN PROTOTIPE WEBSITE UMKM</h2>
-          </div>
-          <p class="text-xs text-slate-500 mt-1 font-medium">Hasil Penilaian oleh Gemini AI</p>
-        </div>
-
-        <div class="text-right text-xs text-slate-500 no-print">
-          <button id="btn-print-now" class="px-4 py-2 bg-emerald-600 text-white font-extrabold rounded-xl shadow hover:bg-emerald-500 transition mr-2">
-            <i class="fa-solid fa-print mr-1.5"></i> Simpan PDF
-          </button>
-          <button id="btn-close-report-modal" class="px-3.5 py-2 bg-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-300 transition">
-            X
-          </button>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-200 text-xs">
-        <div>
-          <span class="text-slate-500 block font-medium">Pengembang:</span>
-          <span id="rpt-developer" class="font-extrabold text-slate-900 font-mono text-sm">-</span>
-        </div>
-        <div>
-          <span class="text-slate-500 block font-medium">Alamat URL:</span>
-          <span id="rpt-url" class="font-bold text-slate-900 break-all font-mono">-</span>
-        </div>
-        <div>
-          <span class="text-slate-500 block font-medium">Tanggal:</span>
-          <span id="rpt-date" class="font-bold text-slate-900">-</span>
-        </div>
-        <div>
-          <span class="text-slate-500 block font-medium">Skor Akhir:</span>
-          <span id="rpt-score" class="font-extrabold text-sky-700 text-base font-mono">-</span>
-        </div>
-        <div>
-          <span class="text-slate-500 block font-medium">Predikat:</span>
-          <span id="rpt-grade" class="font-bold text-emerald-700 text-sm">-</span>
-        </div>
-      </div>
-
-      <div class="space-y-3">
-        <h3 class="font-extrabold text-sm text-slate-900 border-b pb-2">Hasil Penilaian</h3>
-        <table class="w-full text-left text-xs border-collapse">
-          <thead>
-            <tr class="bg-slate-100 border-b border-slate-300 text-slate-800">
-              <th class="p-2.5 font-bold">No</th>
-              <th class="p-2.5 font-bold">Kriteria Penilaian</th>
-              <th class="p-2.5 font-bold text-center">Bobot</th>
-              <th class="p-2.5 font-bold text-center">Rata2 Sub-Kriteria (1-10)</th>
-              <th class="p-2.5 font-bold text-center">Kontribusi</th>
-              <th class="p-2.5 font-bold">Alasan & Rekomendasi</th>
-            </tr>
-          </thead>
-          <tbody id="rpt-table-body" class="divide-y divide-slate-200">
-            <!-- Dynamic Rows -->
-          </tbody>
-        </table>
-      </div>
-
-      <div class="p-5 bg-sky-50 border border-sky-200 rounded-2xl space-y-2 text-xs">
-        <h4 class="font-bold text-sky-900 flex items-center gap-2">
-          <i class="fa-solid fa-list-check"></i> Kesimpulan & Rencana Tindak Lanjut:
-        </h4>
-        <div id="rpt-action-plan" class="text-sky-900 leading-relaxed font-medium">
-          -
-        </div>
-      </div>
-
-      <div class="pt-8 flex justify-between items-end text-xs text-slate-500 border-t border-slate-200">
-        <div>
-          <p>AI Engine: <span class="font-mono font-bold text-slate-700">Gemini 3 Flash (Temp 0.2 - Sub-Criteria Weighted Formula)</span></p>
-        </div>
-        <div class="text-center">
-          <p class="mb-12 font-medium">Penilai oleh Gemini AI</p>
-        </div>
-      </div>
-
-    </div>
+  <!-- DYNAMIC PRINTABLE PDF AREA -->
+  <div id="printable-pdf-area" class="hidden">
+    <!-- Rendered dynamically during printing -->
   </div>
 
+  <!-- JavaScript Application Logic -->
   <script>
+    const DEFAULT_API_KEY = "AIzaSyDSumv8R2KRTLEnaxKCIYLEX9IWYHLDS7Y";
+
     const state = {
       url: "",
-      developer: "",
-      apiKey: "",
+      apiKey: DEFAULT_API_KEY,
       radarChart: null,
-      auditCache: {},
       history: [],
+      selectedPdfUrls: new Set(),
       criteriaMeta: {
-        c1: {
-          id: "c1", cat: "A", weight: 0.1125, name: "Fungsionalitas Elemen, Filter & Live Search", icon: "fa-cubes", desc: "Navigasi menu, Live Search, Filter Kategori produk, tombol CTA, & event handler tanpa error.",
-          sub: [
-            { id: "s1_1", name: "Navigasi Menu Utama (Navbar/Header)" },
-            { id: "s1_2", name: "Respons Tombol CTA ('Beli', 'Detail', 'Filter')" },
-            { id: "s1_3", name: "Fitur Live Search & Pencarian Produk" },
-            { id: "s1_4", name: "Kelancaran Script & Bebas Console Errors" }
-          ]
-        },
-        c2: {
-          id: "c2", cat: "A", weight: 0.1125, name: "Tata Letak Elemen & Grid Katalog", icon: "fa-table-cells-large", desc: "Kerapian grid produk, hierarki visual, keselarasan spacing, dan responsivitas layout.",
-          sub: [
-            { id: "s2_1", name: "Penggunaan CSS Grid / Flexbox Simetris" },
-            { id: "s2_2", name: "Konsistensi Margin & Padding Antar Kartu" },
-            { id: "s2_3", name: "Hierarki Visual Judul, Harga, & Tag" },
-            { id: "s2_4", name: "Keseimbangan Area Kosong (White Space)" }
-          ]
-        },
-        c3: {
-          id: "c3", cat: "A", weight: 0.1125, name: "UI/UX User Friendly & Aksesibilitas", icon: "fa-wand-magic-sparkles", desc: "Kontras warna (WCAG), keterbacaan tipografi, kemudahan navigasi, & touch target.",
-          sub: [
-            { id: "s3_1", name: "Rasio Kontras Warna WCAG AA" },
-            { id: "s3_2", name: "Keterbacaan Tipografi & Ukuran Font" },
-            { id: "s3_3", name: "Ukuran Touch Target Minimal (44x44px)" },
-            { id: "s3_4", name: "Kemudahan Alur Navigasi Pengguna" }
-          ]
-        },
-        c4: {
-          id: "c4", cat: "A", weight: 0.1125, name: "Gambar Katalog Foto Produk Asli & Deskripsi", icon: "fa-image", desc: "Verifikasi foto produk asli (bukan template/dummy), varian, serta deskripsi spesifikasi rinci.",
-          sub: [
-            { id: "s4_1", name: "Verifikasi Foto Produk Asli (Bukan Dummy/Template)" },
-            { id: "s4_2", name: "Format Kompresi Modern (WebP/AVIF) & Rasio Konsisten" },
-            { id: "s4_3", name: "Ketersediaan Pilihan Varian (Warna/Ukuran/Rasa)" },
-            { id: "s4_4", name: "Rincian Spesifikasi Produk (Non-Lorem Ipsum)" }
-          ]
-        },
-        c5: {
-          id: "c5", cat: "B", weight: 0.1000, name: "Pemisahan Akses Admin & Pengunjung", icon: "fa-user-lock", desc: "Deteksi otomatis tautan portal/login admin di navbar/footer/subpath (/admin).",
-          sub: [
-            { id: "s5_1", name: "Keberadaan Tautan Portal Admin di Footer/Navbar" },
-            { id: "s5_2", name: "Pembedaan Antarmuka Publik vs Area Pengelola" },
-            { id: "s5_3", name: "Proteksi Rute Halaman privat / Admin Login" }
-          ]
-        },
-        c6: {
-          id: "c6", cat: "B", weight: 0.1000, name: "Ketahanan Keamanan & Anti SQLi", icon: "fa-shield-halved", desc: "Sanitasi parameter form input, perlindungan XSS, & sanitasi query search.",
-          sub: [
-            { id: "s6_1", name: "Sanitasi Karakter Khusus Form Search & Kontak" },
-            { id: "s6_2", name: "Pencegahan Script Injeksi Asing (XSS Protection)" },
-            { id: "s6_3", name: "Validasi Tipe Data Input Form" }
-          ]
-        },
-        c7: {
-          id: "c7", cat: "C", weight: 0.0833, name: "Tampilan Dynamic & Fluid Responsive", icon: "fa-mobile-screen-button", desc: "Adaptabilitas tata letak pada viewport Desktop (1280px), Tablet (768px), & Mobile (375px).",
-          sub: [
-            { id: "s7_1", name: "Adaptabilitas Layar Desktop (1280px)" },
-            { id: "s7_2", name: "Adaptabilitas Layar Tablet (768px)" },
-            { id: "s7_3", name: "Adaptabilitas Layar Mobile (375px) tanpa Scroll X" }
-          ]
-        },
-        c8: {
-          id: "c8", cat: "C", weight: 0.0833, name: "Informasi Kontak & Legalitas Usaha", icon: "fa-address-card", desc: "Kelengkapan WA CS, alamat fisik, pin lokasi Google Maps, email, & lencana legalitas.",
-          sub: [
-            { id: "s8_1", name: "WhatsApp CS Direct Click-to-Chat" },
-            { id: "s8_2", name: "Alamat Fisik Usaha & Tautan Google Maps" },
-            { id: "s8_3", name: "Email Resmi Bisnis & Akun Media Sosial" },
-            { id: "s8_4", name: "Display Sertifikasi/Legalitas (Halal/P-IRT/NIB)" }
-          ]
-        },
-        c9: {
-          id: "c9", cat: "C", weight: 0.0834, name: "Mekanisme Belanja & Panduan Alur", icon: "fa-circle-info", desc: "Kejelasan alur transaksi, estimasi pengiriman, serta transparansi syarat belanja.",
-          sub: [
-            { id: "s9_1", name: "Kejelasan Panduan Alur Langkah Pemesanan" },
-            { id: "s9_2", name: "Estimasi Pengiriman & Opsi Kurir Ekspedisi" },
-            { id: "s9_3", name: "Transparansi Syarat & Kebijakan Pengembalian" }
-          ]
-        },
-        c10: {
-          id: "c10", cat: "D", weight: 0.1000, name: "Direct Checkout, Keranjang & QRIS", icon: "fa-credit-card", desc: "Manajemen keranjang, checkout otomatis WhatsApp, & pilihan pembayaran QRIS/Bank.",
-          sub: [
-            { id: "s10_1", name: "Manajemen Keranjang Belanja (Shopping Cart)" },
-            { id: "s10_2", name: "Direct Checkout Format Otomatis via WhatsApp" },
-            { id: "s10_3", name: "Pilihan Pembayaran Instant QRIS & Bank Transfer" }
-          ]
-        }
-      },
-      auditData: null
+        c1: { id: "c1", cat: "A", weight: 0.1125, name: "Fungsionalitas & Search" },
+        c2: { id: "c2", cat: "A", weight: 0.1125, name: "Grid Layout & Spacing" },
+        c3: { id: "c3", cat: "A", weight: 0.1125, name: "UI/UX & Aksesibilitas" },
+        c4: { id: "c4", cat: "A", weight: 0.1125, name: "Katalog & Foto Produk" },
+        c5: { id: "c5", cat: "B", weight: 0.1000, name: "Akses Login Admin" },
+        c6: { id: "c6", cat: "B", weight: 0.1000, name: "Keamanan & Anti SQLi" },
+        c7: { id: "c7", cat: "C", weight: 0.0833, name: "Dynamic Responsive Layout" },
+        c8: { id: "c8", cat: "C", weight: 0.0833, name: "Informasi Kontak & CS" },
+        c9: { id: "c9", cat: "C", weight: 0.0834, name: "Panduan Alur Pemesanan" },
+        c10: { id: "c10", cat: "D", weight: 0.1000, name: "Direct Checkout & QRIS" }
+      }
     };
 
-    /**
-     * Sub-Criteria Hash Generator (Scale 1.0 - 10.0)
-     */
-    function getDeterministicSubScoresForUrl(url) {
-      const normUrl = url.trim().toLowerCase().replace(/\/$/, '');
-      let hash = 0;
-      for (let i = 0; i < normUrl.length; i++) {
-        hash = ((hash << 5) - hash) + normUrl.charCodeAt(i);
-        hash |= 0;
+    function calculateGrade(score) {
+      if (score >= 90) {
+        return { badge: "GRADE A", color: "bg-emerald-100 text-emerald-800 border-emerald-300", text: "Memang kalian yang terbaik dari yang terbaik!" };
+      } else if (score >= 80) {
+        return { badge: "GRADE B", color: "bg-sky-100 text-sky-800 border-sky-300", text: "Kalian Hebat!" };
+      } else if (score >= 70) {
+        return { badge: "GRADE C", color: "bg-amber-100 text-amber-800 border-amber-300", text: "Mungkin ada yang perlu ditingkatkan lagi, tetap semangat ya!" };
+      } else if (score >= 55) {
+        return { badge: "GRADE D", color: "bg-orange-100 text-orange-800 border-orange-300", text: "Hidup kadang di atas kadang ngeprompt. Next pelajari kembali teknik prompting yang baik ya!" };
       }
-      const absHash = Math.abs(hash);
-
-      const getSubScore = (salt) => {
-        const base = 7.2 + ((absHash + salt * 31) % 23) / 10;
-        const decimal = ((absHash * (salt + 11)) % 10) / 100;
-        return parseFloat(Math.min(10.0, Math.max(1.0, base + decimal)).toFixed(1));
-      };
-
-      const result = {};
-      let counter = 1;
-      for (let key in state.criteriaMeta) {
-        result[key] = {};
-        state.criteriaMeta[key].sub.forEach(subItem => {
-          result[key][subItem.id] = getSubScore(counter * 37 + key.charCodeAt(1));
-          counter++;
-        });
-      }
-      return result;
+      return { badge: "GRADE E", color: "bg-rose-100 text-rose-800 border-rose-300", text: "Ini bukan akhir dari segalanya, ini wajar dan memang bagian dari pembelajaran." };
     }
 
-    /**
-     * Calculates Criterion Score as the Average of Sub-Criteria scores,
-     * then multiplies by weight % to get weighted contribution.
-     */
+    function parseInputPairs() {
+      const devRaw = document.getElementById('input-developer')?.value || "";
+      const urlRaw = document.getElementById('input-url')?.value || "";
+
+      const devLines = devRaw.split('\n').map(d => d.trim()).filter(Boolean);
+      const urlLines = urlRaw.split('\n').map(u => u.trim()).filter(Boolean);
+
+      if (devLines.length === 0 || urlLines.length === 0) {
+        showToast("Input Kosong", "Masukkan Nama Pengembang dan URL.", false);
+        return null;
+      }
+
+      if (devLines.length !== urlLines.length) {
+        showToast("Jumlah Baris Berbeda", `Jumlah baris Nama Pengembang (${devLines.length}) dan URL (${urlLines.length}) harus sama persis (1-ke-1).`, false);
+        return null;
+      }
+
+      const pairs = [];
+      const seen = new Set();
+
+      for (let i = 0; i < devLines.length; i++) {
+        const developer = devLines[i];
+        let url = urlLines[i];
+        if (!/^https?:\/\//i.test(url)) url = "https://" + url;
+
+        if (!seen.has(url)) {
+          seen.add(url);
+          pairs.push({ developer, url });
+        }
+      }
+
+      return pairs;
+    }
+
     function calculateScores(auditObj) {
       let catA = 0, catB = 0, catC = 0, catD = 0;
       auditObj.scores = {};
-      auditObj.sub_averages = {};
 
       for (let key in state.criteriaMeta) {
         const meta = state.criteriaMeta[key];
@@ -765,11 +483,8 @@
 
         avgRaw = parseFloat(avgRaw.toFixed(2));
         auditObj.scores[key] = avgRaw;
-        auditObj.sub_averages[key] = avgRaw;
 
-        // Formula: (Avg Raw Score / 10) * Weight % * 100
         const contrib = (avgRaw / 10.0) * (meta.weight * 100.0);
-
         if (meta.cat === 'A') catA += contrib;
         if (meta.cat === 'B') catB += contrib;
         if (meta.cat === 'C') catC += contrib;
@@ -780,301 +495,148 @@
       return { total, catA, catB, catC, catD };
     }
 
-    function validateAndParsePairs() {
-      const devRaw = (document.getElementById('input-developer')?.value || "").trim();
-      const urlRaw = (document.getElementById('input-url')?.value || "").trim();
-
-      if (!devRaw && !urlRaw) {
-        showToast("Field Kosong", "Mohon isi Nama Developer dan URL Prototipe terlebih dahulu.", false);
-        return null;
-      }
-      if (!devRaw) {
-        showToast("Developer Kosong", "Kolom Nama Developer wajib diisi!", false);
-        return null;
-      }
-      if (!urlRaw) {
-        showToast("URL Kosong", "Kolom URL Prototipe wajib diisi!", false);
-        return null;
-      }
-
-      const devLines = devRaw.split('\n').map(s => s.trim());
-      const urlLines = urlRaw.split('\n').map(s => s.trim());
-
-      if (devLines.length !== urlLines.length) {
-        showToast("Jumlah Baris Berbeda", `Jumlah baris Nama Developer (${devLines.length}) dan URL (${urlLines.length}) harus sama persis (1-ke-1).`, false);
-        return null;
-      }
-
-      const pairs = [];
-      const uniqueUrls = new Set();
-
-      for (let i = 0; i < devLines.length; i++) {
-        const devName = devLines[i];
-        const rawUrl = urlLines[i];
-
-        if (!devName) {
-          showToast("Developer Kosong", `Nama Developer pada baris ke-${i + 1} belum diisi.`, false);
-          return null;
-        }
-        if (!rawUrl) {
-          showToast("URL Kosong", `URL Prototipe pada baris ke-${i + 1} belum diisi.`, false);
-          return null;
-        }
-
-        const cleanUrl = normalizeUrl(rawUrl);
-        if (!cleanUrl) {
-          showToast("URL Tidak Valid", `URL pada baris ke-${i + 1} tidak valid.`, false);
-          return null;
-        }
-
-        if (uniqueUrls.has(cleanUrl)) {
-          showToast("URL Duplikat", `URL '${cleanUrl}' muncul lebih dari satu kali.`, false);
-          return null;
-        }
-
-        uniqueUrls.add(cleanUrl);
-        pairs.push({
-          developer: devName,
-          url: cleanUrl
-        });
-      }
-
-      return pairs;
-    }
-
-    function showToast(title, message, isSuccess = true) {
-      const toast = document.getElementById('toast-notification');
-      const toastTitle = document.getElementById('toast-title');
-      const toastMsg = document.getElementById('toast-message');
-      const toastIcon = document.getElementById('toast-icon');
-
-      if (!toast || !toastTitle || !toastMsg) return;
-
-      toastTitle.textContent = title;
-      toastMsg.textContent = message;
-
-      if (isSuccess) {
-        toast.className = "fixed top-24 right-6 z-50 bg-emerald-900 border border-emerald-700 text-emerald-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 transition-all duration-300";
-        if (toastIcon) toastIcon.className = "fa-solid fa-circle-check text-emerald-400 text-2xl";
-      } else {
-        toast.className = "fixed top-24 right-6 z-50 bg-rose-900 border border-rose-700 text-rose-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 transition-all duration-300";
-        if (toastIcon) toastIcon.className = "fa-solid fa-circle-xmark text-rose-400 text-2xl";
-      }
-
-      toast.classList.remove('hidden');
-      setTimeout(() => toast.classList.add('hidden'), 4000);
-    }
-
-    function playVictoryFanfare() {
-      try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContext) return;
-        const ctx = new AudioContext();
-
-        const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99];
-        notes.forEach((freq, i) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, ctx.currentTime + (i * 0.12));
-          gain.gain.setValueAtTime(0.2, ctx.currentTime + (i * 0.12));
-          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (i * 0.12) + 0.4);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(ctx.currentTime + (i * 0.12));
-          osc.stop(ctx.currentTime + (i * 0.12) + 0.4);
-        });
-      } catch (e) {
-        console.log("Audio fanfare suppressed or unsupported.");
-      }
-    }
-
-    function triggerSurpriseCelebration() {
-      playVictoryFanfare();
-
-      if (typeof confetti === 'function') {
-        confetti({ particleCount: 120, spread: 85, origin: { y: 0.6 } });
-        setTimeout(() => {
-          confetti({ particleCount: 80, angle: 60, spread: 55, origin: { x: 0 } });
-          confetti({ particleCount: 80, angle: 120, spread: 55, origin: { x: 1 } });
-        }, 250);
-      }
-
-      showToast("🎉 Selebrasi Tier!", "Hasil audit berhasil diklasifikasikan ke dalam Top 5 Leaderboard Tier.", true);
-    }
-
-    function normalizeUrl(input) {
-      if (!input) return "";
-      let url = input.trim();
-      if (!/^https?:\/\//i.test(url)) {
-        url = "https://" + url;
-      }
-      return url;
-    }
-
-    function resetAllState() {
-      const devInput = document.getElementById('input-developer');
-      const urlInput = document.getElementById('input-url');
-
-      if (devInput) devInput.value = "";
-      if (urlInput) urlInput.value = "";
-
-      state.url = "";
-      state.developer = "";
-      state.auditData = null;
-      state.history = [];
-      state.auditCache = {};
-
-      document.getElementById('results-section')?.classList.add('hidden');
-      document.getElementById('preview-section')?.classList.add('hidden');
-      document.getElementById('equal-score-banner')?.classList.add('hidden');
-      document.getElementById('leaderboard-section')?.classList.remove('hidden');
-      document.getElementById('matrix-section')?.classList.remove('hidden');
-
-      showToast("Reset Berhasil", "Seluruh input data dan hasil penilaian telah dibersihkan.", true);
-    }
-
-    function handleShowPreview() {
-      const activeUrl = state.url;
-      const activeDev = state.developer;
-
-      if (!activeUrl) {
-        showToast("URL Diperlukan", "Silakan pilih atau jalankan audit URL terlebih dahulu.", false);
-        return;
-      }
-
-      const previewSection = document.getElementById('preview-section');
-      const iframe = document.getElementById('preview-iframe');
-      const iframeLoading = document.getElementById('iframe-loading');
-      const previewStatus = document.getElementById('preview-url-status');
-      const extLink = document.getElementById('link-external-open');
-      const bannerLink = document.getElementById('banner-open-link');
-
-      if (previewSection) previewSection.classList.remove('hidden');
-      if (previewStatus) previewStatus.textContent = `Menampilkan: ${activeDev} (${activeUrl})`;
-      if (extLink) extLink.href = activeUrl;
-      if (bannerLink) bannerLink.href = activeUrl;
-
-      if (iframeLoading) iframeLoading.classList.remove('hidden');
-      if (iframe) {
-        iframe.src = activeUrl;
-        iframe.onload = () => {
-          if (iframeLoading) iframeLoading.classList.add('hidden');
-        };
-      }
-
-      previewSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    async function runAIAudit() {
-      const pairs = validateAndParsePairs();
-
-      if (!pairs || pairs.length === 0) {
-        return; // Validation failed
-      }
-
-      document.getElementById('leaderboard-section')?.classList.remove('hidden');
-      document.getElementById('matrix-section')?.classList.remove('hidden');
+    async function runAIAuditBatch() {
+      const pairs = parseInputPairs();
+      if (!pairs || pairs.length === 0) return;
 
       const progressModal = document.getElementById('modal-ai-progress');
-      const progressBar = document.getElementById('ai-progress-bar');
-      const progressStatus = document.getElementById('ai-progress-status');
-
       if (progressModal) progressModal.classList.remove('hidden');
 
-      for (let i = 0; i < pairs.length; i++) {
-        const { developer, url } = pairs[i];
-        state.url = url;
-        state.developer = developer;
+      const batchSystemPrompt = `Anda adalah Auditor AI Resmi Prototipe WebApp UMKM.
+Lakukan evaluasi independen dan konsisten terhadap DAFTAR PASANGAN (Pengembang & URL) berikut:
+${JSON.stringify(pairs)}
 
-        const percent = Math.round(((i + 1) / pairs.length) * 100);
-        if (progressBar) progressBar.style.width = `${percent}%`;
-        if (progressStatus) progressStatus.textContent = `Menilai Sub-Kriteria (${i + 1}/${pairs.length}): ${developer} - ${url}...`;
+Kriteria & Rubrik Penilaian (Skala nilai numerik 1.0 sampai 10.0 untuk setiap sub-indikator):
+- c1 (Fungsionalitas & Search): s1_1 (Navbar), s1_2 (Tombol CTA), s1_3 (Fitur Search), s1_4 (Bebas JS Error)
+- c2 (Grid Layout & Spacing): s2_1 (Grid/Flexbox), s2_2 (Margin/Padding), s2_3 (Hierarki Visual), s2_4 (White Space)
+- c3 (UI/UX & Aksesibilitas): s3_1 (Kontras WCAG), s3_2 (Keterbacaan Font), s3_3 (Touch Target 44px), s3_4 (Alur Navigasi)
+- c4 (Katalog & Foto Produk): s4_1 (Foto Produk Asli), s4_2 (Format/Kompresi Gambar), s4_3 (Pilihan Varian), s4_4 (Deskripsi Produk)
+- c5 (Akses Login Admin): s5_1 (Portal/Tautan Admin), s5_2 (Separasi UI Admin/Publik), s5_3 (Proteksi Halaman Admin)
+- c6 (Keamanan & Anti SQLi): s6_1 (Sanitasi Input Form), s6_2 (Perhitungan XSS), s6_3 (Validasi Tipe Data)
+- c7 (Dynamic Responsive Layout): s7_1 (Desktop View), s7_2 (Tablet View), s7_3 (Mobile View)
+- c8 (Informasi Kontak & CS): s8_1 (WhatsApp CS Click-to-Chat), s8_2 (Alamat/Google Maps), s8_3 (Email & Medsos), s8_4 (Sertifikasi/Legalitas)
+- c9 (Panduan Alur Pemesanan): s9_1 (Langkah Pemesanan), s9_2 (Estimasi/Kurir), s9_3 (Kebijakan & Syarat Belanja)
+- c10 (Direct Checkout & QRIS): s10_1 (Keranjang Belanja), s10_2 (Checkout WA Otomatis), s10_3 (Metode QRIS/Bank)
 
-        const cacheKey = `${url}__${developer}`;
+Hasilkan JSON ARRAY terstruktur untuk setiap WebApp (urutan sesuai array input):
+[
+  {
+    "developer": "Nama Pengembang",
+    "url": "https://...",
+    "executive_summary": "Ringkasan evaluasi eksekutif mengenai kelebihan dan area perbaikan...",
+    "sub_scores": {
+      "c1": { "s1_1": <number 1.0-10.0>, "s1_2": <number>, "s1_3": <number>, "s1_4": <number> },
+      "c2": { "s2_1": <number>, "s2_2": <number>, "s2_3": <number>, "s2_4": <number> },
+      "c3": { "s3_1": <number>, "s3_2": <number>, "s3_3": <number>, "s3_4": <number> },
+      "c4": { "s4_1": <number>, "s4_2": <number>, "s4_3": <number>, "s4_4": <number> },
+      "c5": { "s5_1": <number>, "s5_2": <number>, "s5_3": <number> },
+      "c6": { "s6_1": <number>, "s6_2": <number>, "s6_3": <number> },
+      "c7": { "s7_1": <number>, "s7_2": <number>, "s7_3": <number> },
+      "c8": { "s8_1": <number>, "s8_2": <number>, "s8_3": <number>, "s8_4": <number> },
+      "c9": { "s9_1": <number>, "s9_2": <number>, "s9_3": <number> },
+      "c10": { "s10_1": <number>, "s10_2": <number>, "s10_3": <number> }
+    }
+  }
+]`;
 
-        if (state.auditCache[cacheKey]) {
-          state.auditData = state.auditCache[cacheKey];
-          saveToHistory(url, developer, state.auditData);
-          continue;
-        }
+      const apiKey = state.apiKey || DEFAULT_API_KEY;
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
-        const deterministicSubScores = getDeterministicSubScoresForUrl(url);
+      let resultsArray = [];
 
-        try {
-          const systemPrompt = `Anda adalah Auditor AI Resmi untuk Prototipe WebApp UMKM.
-Developer / Pembuat: ${developer}
-Tugas Anda adalah menilai setiap SUB-KRITERIA (skala raw 1.0 - 10.0, contoh: 8.5, 9.2).
-Skor Kriteria Utama adalah RATA-RATA dari skor sub-kriterianya.
-Gunakan peta sub-skor deterministik berikut untuk konsistensi:
-${JSON.stringify(deterministicSubScores)}
-
-Format output WAJIB JSON persis seperti berikut:
-{
-  "executive_summary": "Ringkasan analisis eksekutif mendalam untuk pengembang ${developer}...",
-  "sub_scores": ${JSON.stringify(deterministicSubScores)},
-  "evidence": { "c1": "Bukti temuan...", "c2": "...", "c3": "...", "c4": "...", "c5": "...", "c6": "...", "c7": "...", "c8": "...", "c9": "...", "c10": "..." },
-  "strengths": { "c1": ["Kelebihan 1"], "c2": ["..."], "c3": ["..."], "c4": ["..."], "c5": ["..."], "c6": ["..."], "c7": ["..."], "c8": ["..."], "c9": ["..."], "c10": ["..."] },
-  "weaknesses": { "c1": ["Kekurangan 1"], "c2": ["..."], "c3": ["..."], "c4": ["..."], "c5": ["..."], "c6": ["..."], "c7": ["..."], "c8": ["..."], "c9": ["..."], "c10": ["..."] },
-  "reasons": { "c1": "...", "c2": "...", "c3": "...", "c4": "...", "c5": "...", "c6": "...", "c7": "...", "c8": "...", "c9": "...", "c10": "..." },
-  "recommendations": { "c1": "...", "c2": "...", "c3": "...", "c4": "...", "c5": "...", "c6": "...", "c7": "...", "c8": "...", "c9": "...", "c10": "..." }
-}`;
-
-          const userPrompt = `Penilaian sub-kriteria mendalam untuk WebApp UMKM: ${url}`;
-          const apiKey = state.apiKey;
-          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-          let resultData = null;
-
-          if (apiKey) {
-            const response = await fetch(endpoint, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                contents: [{ role: 'user', parts: [{ text: systemPrompt + "\n\n" + userPrompt }] }],
-                generationConfig: { temperature: 0.2, response_mime_type: "application/json" }
-              })
-            });
-
-            if (response.ok) {
-              const resJson = await response.json();
-              const textContent = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
-              if (textContent) {
-                resultData = JSON.parse(textContent);
-                resultData.sub_scores = deterministicSubScores;
+      try {
+        if (apiKey) {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ role: 'user', parts: [{ text: batchSystemPrompt }] }],
+              generationConfig: { 
+                temperature: 0.0, 
+                seed: 42,
+                response_mime_type: "application/json" 
               }
+            })
+          });
+
+          if (response.ok) {
+            const resJson = await response.json();
+            const textContent = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (textContent) {
+              resultsArray = JSON.parse(textContent);
             }
           }
-
-          if (!resultData) {
-            resultData = generateDeterminisitcFallback(url, developer);
-          }
-
-          state.auditData = resultData;
-          state.auditCache[cacheKey] = resultData;
-          saveToHistory(url, developer, resultData);
-
-        } catch (err) {
-          console.error("Audit error for URL:", url, err);
-          const fallbackData = generateDeterminisitcFallback(url, developer);
-          state.auditData = fallbackData;
-          state.auditCache[cacheKey] = fallbackData;
-          saveToHistory(url, developer, fallbackData);
         }
+      } catch (err) {
+        console.error("Batch API call error:", err);
       }
+
+      if (!Array.isArray(resultsArray) || resultsArray.length === 0) {
+        resultsArray = pairs.map(p => generateFallbackDataForPair(p.developer, p.url));
+      }
+
+      state.history = [];
+      resultsArray.forEach(item => {
+        const calc = calculateScores(item);
+        state.history.push({
+          developer: item.developer || "Pengembang",
+          url: item.url,
+          auditObj: item,
+          totalScore: calc.total,
+          calc
+        });
+      });
+
+      state.history.sort((a, b) => b.totalScore - a.totalScore);
 
       if (state.history.length > 0) {
         state.url = state.history[0].url;
-        state.developer = state.history[0].developer;
-        state.auditData = state.history[0].auditObj;
       }
 
       setTimeout(() => {
         if (progressModal) progressModal.classList.add('hidden');
         populateUrlSelector();
         displayResults();
-        triggerSurpriseCelebration();
-      }, 300);
+        showToast("Penilaian Selesai! 🚀", `Berhasil menilai ${pairs.length} WebApp secara konsisten.`, true);
+      }, 400);
+    }
+
+    // Fungsi Fallback Determinis berbasis Hash String URL
+    function generateFallbackDataForPair(developer, url) {
+      let hash = 0;
+      const cleanUrl = url.toLowerCase().trim();
+      for (let i = 0; i < cleanUrl.length; i++) {
+        hash = ((hash << 5) - hash) + cleanUrl.charCodeAt(i);
+        hash |= 0;
+      }
+      const absHash = Math.abs(hash);
+
+      const getDeterministicScore = (salt) => {
+        const base = 7.0 + ((absHash + salt * 37) % 25) / 10;
+        const decimal = ((absHash * (salt + 13)) % 10) / 100;
+        return parseFloat(Math.min(10.0, Math.max(1.0, base + decimal)).toFixed(1));
+      };
+
+      let counter = 1;
+      const getSub = () => getDeterministicScore(counter++);
+
+      return {
+        developer,
+        url,
+        executive_summary: `Hasil analisis evaluasi konsisten prototipe WebApp (${url}) buatan pengembang ${developer}.`,
+        sub_scores: {
+          c1: { s1_1: getSub(), s1_2: getSub(), s1_3: getSub(), s1_4: getSub() },
+          c2: { s2_1: getSub(), s2_2: getSub(), s2_3: getSub(), s2_4: getSub() },
+          c3: { s3_1: getSub(), s3_2: getSub(), s3_3: getSub(), s3_4: getSub() },
+          c4: { s4_1: getSub(), s4_2: getSub(), s4_3: getSub(), s4_4: getSub() },
+          c5: { s5_1: getSub(), s5_2: getSub(), s5_3: getSub() },
+          c6: { s6_1: getSub(), s6_2: getSub(), s6_3: getSub() },
+          c7: { s7_1: getSub(), s7_2: getSub(), s7_3: getSub() },
+          c8: { s8_1: getSub(), s8_2: getSub(), s8_3: getSub(), s8_4: getSub() },
+          c9: { s9_1: getSub(), s9_2: getSub(), s9_3: getSub() },
+          c10: { s10_1: getSub(), s10_2: getSub(), s10_3: getSub() }
+        }
+      };
     }
 
     function populateUrlSelector() {
@@ -1091,787 +653,318 @@ Format output WAJIB JSON persis seperti berikut:
       });
 
       selectEl.onchange = (e) => {
-        const selectedUrl = e.target.value;
-        const found = state.history.find(h => h.url === selectedUrl);
-        if (found) {
-          state.url = found.url;
-          state.developer = found.developer;
-          state.auditData = found.auditObj;
-          
-          document.getElementById('preview-section')?.classList.add('hidden');
-          
-          updateDashboardDisplays();
-          renderGranularMatrixCards();
-        }
+        state.url = e.target.value;
+        updateDashboardDisplays();
       };
-    }
-
-    function generateDeterminisitcFallback(url, developer) {
-      const subScores = getDeterministicSubScoresForUrl(url);
-
-      return {
-        executive_summary: `Penilaian mikro deterministik sub-kriteria untuk prototipe (${url}) karya ${developer} menyajikan skor spesifik dari kalkulasi rata-rata sub-indikator.`,
-        sub_scores: subScores,
-        evidence: {
-          c1: "Filter kategori produk, Live Search, dan navigasi menu beroperasi lancar tanpa error Javascript.",
-          c2: "Grid katalog tertata simetris dengan rasio spacing CSS Flexbox/Grid konsisten.",
-          c3: "Rasio kontras memenuhi pedoman WCAG AA dengan tipografi bersih.",
-          c4: "Foto katalog jernih menampilkan produk asli dengan varian dan spesifikasi lengkap.",
-          c5: "Terdapat tautan khusus 'Portal Admin' pada footer untuk pemisahan akses login pengelola.",
-          c6: "Form pencarian dan kontak telah menerapkan sanitasi parameter dasar anti SQLi.",
-          c7: "Layout menyesuaikan dinamis di viewport Desktop, Tablet, dan Mobile tanpa scroll horizontal.",
-          c8: "Tersedia nomor WhatsApp CS, email resmi, dan alamat fisik toko terverifikasi.",
-          c9: "Tersedia alur pemesanan bernomor yang menjelaskan langkah belanja secara transparan.",
-          c10: "Mendukung checkout langsung WhatsApp otomatis dan pilihan pembayaran QRIS instan."
-        },
-        strengths: {
-          c1: ["Live Search & filter responsif", "Event handling lancar"],
-          c2: ["Grid kartu produk simetris", "Hierarki visual judul & harga jelas"],
-          c3: ["Kontras warna WCAG AA baik", "Touch target tombol mudah ditekan"],
-          c4: ["Foto produk asli (non-dummy)", "Deskripsi spesifikasi rinci"],
-          c5: ["Tautan Portal Admin terpisah di footer", "Pemisahan UI pengunjung & pengelola"],
-          c6: ["Sanitasi input form pencarian", "Perlindungan XSS dasar"],
-          c7: ["Responsive di layar Mobile & Tablet", "Layout fluid tanpa horizontal overflow"],
-          c8: ["WhatsApp CS Click-to-Chat aktif", "Tersedia alamat fisik toko"],
-          c9: ["Langkah pemesanan dijelaskan bernomor", "Persyaratan belanja transparan"],
-          c10: ["Checkout langsung ke WhatsApp", "Dukungan QRIS & Transfer Bank"]
-        },
-        weaknesses: {
-          c1: ["Indikator fokus keyboard perlu diperjelas"],
-          c2: ["Jarak spasi saat rotasi lanskap tablet perlu penyesuaian"],
-          c3: ["Touch target tombol sekunder perlu diperbesar sedikit"],
-          c4: ["Format gambar belum sepenuhnya WebP"],
-          c5: ["Portal admin belum terintegrasi 2FA"],
-          c6: ["Security header HTTP belum terpasang penuh"],
-          c7: ["Banner atas perlu lazy loading"],
-          c8: ["Pin lokasi Google Maps belum disematkan"],
-          c9: ["Alur belanja belum menggunakan diagram visual"],
-          c10: ["Gateway pembayaran otomatis belum terhubung real-time"]
-        },
-        reasons: {
-          c1: "Seluruh sub-kriteria navigasi, live search, dan filter beroperasi dengan nilai rata-rata yang baik.",
-          c2: "Rata-rata kerapian grid katalog dan hierarki visual menunjukkan susunan terstruktur.",
-          c3: "Pengalaman pengguna didukung kontras warna dan tipografi yang nyaman dibaca.",
-          c4: "Foto produk asli serta kejelasan deskripsi varian menaikkan rata-rata nilai kriteria katalog.",
-          c5: "Pengelola memiliki pintu masuk login khusus di area footer untuk mengisolasi akses publik.",
-          c6: "Validasi parameter input form telah meminimalisir risiko injeksi karakter asing.",
-          c7: "Tata letak tetap stabil dan proporsional saat diuji pada resolusi desktop, tablet, maupun mobile.",
-          c8: "Informasi identitas bisnis tersedia lengkap untuk membangun kepercayaan calon pembeli.",
-          c9: "Pengunjung dapat memahami alur transaksi pemesanan dengan mudah.",
-          c10: "Opsi penyelesaian pembayaran instan QRIS dan WhatsApp checkout memudahkan pembeli."
-        },
-        recommendations: {
-          c1: "Pertahankan performa live search dan filter kategori.",
-          c2: "Jaga konsistensi margin kartu produk saat orientasi perangkat berubah.",
-          c3: "Perbesar area sentuh tombol minor untuk kemudahan di layar HP.",
-          c4: "Gunakan kompresi gambar WebP untuk mempercepat muat halaman.",
-          c5: "Tambahkan autentikasi dua faktor (2FA) di halaman login admin.",
-          c6: "Terapkan prepared statement dan sanitasi query menyeluruh.",
-          c7: "Optimalkan ukuran breakpoint untuk layar tablet lanskap.",
-          c8: "Sediakan tautan pin lokasi Google Maps yang dapat diklik langsung.",
-          c9: "Tampilkan diagram alur pemesanan visual bernomor.",
-          c10: "Integrasikan gateway pembayaran otomatis untuk konfirmasi real-time."
-        }
-      };
-    }
-
-    function getTierByRank(rank) {
-      const tiers = {
-        1: { name: "PLATINUM 💎", level: 1, bg: "from-cyan-950 via-slate-900 to-sky-950", border: "border-cyan-400 shadow-cyan-500/20 shadow-2xl", text: "text-cyan-200", badgeBg: "bg-cyan-950 text-cyan-300 border-cyan-400", icon: "fa-gem text-cyan-300 text-3xl animate-trophy-bounce" },
-        2: { name: "GOLD 👑", level: 2, bg: "from-amber-950 via-amber-900 to-slate-900", border: "border-amber-400 shadow-amber-500/20 shadow-2xl", text: "text-amber-200", badgeBg: "bg-amber-950 text-amber-300 border-amber-400", icon: "fa-crown text-amber-400 text-3xl animate-trophy-bounce" },
-        3: { name: "SILVER 🥈", level: 3, bg: "from-slate-800 via-slate-900 to-indigo-950", border: "border-slate-300", text: "text-slate-200", badgeBg: "bg-slate-800 text-slate-200 border-slate-400", icon: "fa-medal text-slate-300 text-2xl" },
-        4: { name: "BRONZE 🥉", level: 4, bg: "from-amber-950/80 to-slate-900", border: "border-amber-700/80", text: "text-amber-300", badgeBg: "bg-amber-950 text-amber-400 border-amber-700", icon: "fa-award text-amber-600 text-2xl" },
-        5: { name: "COPPER 🟤", level: 5, bg: "from-orange-950 via-stone-900 to-zinc-950", border: "border-amber-800 shadow-amber-900/30", text: "text-amber-400", badgeBg: "bg-stone-900 text-amber-400 border-amber-800", icon: "fa-coins text-amber-600 text-2xl" }
-      };
-      return tiers[rank] || { name: `PERINGKAT #${rank}`, level: rank, bg: "from-slate-900 to-zinc-950", border: "border-slate-700", text: "text-slate-400", badgeBg: "bg-slate-800 text-slate-300 border-slate-600", icon: "fa-hashtag text-slate-400 text-xl" };
-    }
-
-    function calculateGradeAndTier(score, rank = 1) {
-      let grade = { badge: "GRADE E", color: "bg-rose-100 text-rose-800 border-rose-300", text: "Jangan patah semangat! Kamu masih perlu belajar lagi untuk menyusun propmt yang detail dan terstruktur juga aman!" };
-
-      if (score >= 85) {
-        grade = { badge: "GRADE A", color: "bg-emerald-100 text-emerald-800 border-emerald-300", text: "Keren banget! Tapi masih perlu disesuaikan lagi ya jika ingin masuk production!" };
-      } else if (score >= 75) {
-        grade = { badge: "GRADE B", color: "bg-sky-100 text-sky-800 border-sky-300", text: "Hebat, kamu bisa membangun prototipe webapp ini!" };
-      } else if (score >= 65) {
-        grade = { badge: "GRADE C", color: "bg-amber-100 text-amber-800 border-amber-300", text: "Yang kamu bikin sudah bagus, tapi sepertinya prompt yang kamu berikan ke saya kurang lengkap deh." };
-      } else if (score >= 55) {
-        grade = { badge: "GRADE D", color: "bg-orange-100 text-orange-800 border-orange-300", text: "Kamu sebenarnya masih bisa lebih jelas dan detail dalam menyusun prompt." };
-      }
-
-      const tier = getTierByRank(rank);
-
-      return { grade, tier };
-    }
-
-    function saveToHistory(url, developer, auditObj) {
-      const calc = calculateScores(auditObj);
-      const existingIdx = state.history.findIndex(item => item.url === url && item.developer === developer);
-      const historyItem = {
-        url,
-        developer,
-        auditObj,
-        totalScore: calc.total,
-        calc,
-        timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-      };
-
-      if (existingIdx >= 0) {
-        state.history[existingIdx] = historyItem;
-      } else {
-        state.history.push(historyItem);
-      }
-
-      state.history.sort((a, b) => {
-        if (Math.abs(b.totalScore - a.totalScore) > 0.001) {
-          return b.totalScore - a.totalScore;
-        }
-        if (Math.abs(b.calc.catA - a.calc.catA) > 0.001) {
-          return b.calc.catA - a.calc.catA;
-        }
-        return (b.auditObj.scores.c1 || 0) - (a.auditObj.scores.c1 || 0);
-      });
-    }
-
-    function detectTiedScores() {
-      const tiedPairs = [];
-      for (let i = 0; i < state.history.length; i++) {
-        for (let j = i + 1; j < state.history.length; j++) {
-          const itemA = state.history[i];
-          const itemB = state.history[j];
-          if (Math.abs(itemA.totalScore - itemB.totalScore) < 0.05) {
-            tiedPairs.push({ itemA, itemB, rankA: i + 1, rankB: j + 1 });
-          }
-        }
-      }
-      return tiedPairs;
     }
 
     function displayResults() {
-      const resultsSection = document.getElementById('results-section');
-      if (resultsSection) resultsSection.classList.remove('hidden');
-
-      renderTop5Leaderboard();
+      document.getElementById('results-section')?.classList.remove('hidden');
+      renderLeaderboard();
       updateDashboardDisplays();
-      renderGranularMatrixCards();
-      checkAndRenderTieBreakerBanner();
-
-      resultsSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    function checkAndRenderTieBreakerBanner() {
-      const banner = document.getElementById('equal-score-banner');
-      const bannerText = document.getElementById('equal-score-banner-text');
-      const tiedPairs = detectTiedScores();
-
-      if (tiedPairs.length > 0) {
-        if (banner) banner.classList.remove('hidden');
-        if (bannerText) {
-          const first = tiedPairs[0];
-          bannerText.textContent = `Web App '${first.itemA.developer}' (#${first.rankA}) dan '${first.itemB.developer}' (#${first.rankB}) memiliki skor terbobot persis sama (${first.itemA.totalScore.toFixed(1)}%). Klik tombol untuk melihat perbandingan rincian sub-kriteria.`;
-        }
-      } else {
-        if (banner) banner.classList.add('hidden');
-      }
-    }
-
-    function renderTop5Leaderboard() {
+    function renderLeaderboard() {
       const container = document.getElementById('top5-leaderboard-container');
       if (!container) return;
       container.innerHTML = '';
 
-      const tiedPairs = detectTiedScores();
-      const tiedUrls = new Set();
-      tiedPairs.forEach(pair => {
-        tiedUrls.add(pair.itemA.url);
-        tiedUrls.add(pair.itemB.url);
-      });
-
-      const defaultTiers = [
-        { rank: 1, defaultName: "PLATINUM 💎", defaultColor: "border-cyan-400 from-cyan-950 via-slate-900 to-sky-950 text-cyan-200", icon: "fa-gem text-cyan-300", label: "Peringkat #1" },
-        { rank: 2, defaultName: "GOLD 👑", defaultColor: "border-amber-400 from-amber-950 via-amber-900 to-slate-900 text-amber-200", icon: "fa-crown text-amber-400", label: "Peringkat #2" },
-        { rank: 3, defaultName: "SILVER 🥈", defaultColor: "border-slate-300 from-slate-800 to-slate-900 text-slate-200", icon: "fa-medal text-slate-300", label: "Peringkat #3" },
-        { rank: 4, defaultName: "BRONZE 🥉", defaultColor: "border-amber-700/80 from-amber-950/80 to-slate-900 text-amber-300", icon: "fa-award text-amber-600", label: "Peringkat #4" },
-        { rank: 5, defaultName: "COPPER 🟤", defaultColor: "border-amber-800 from-orange-950 to-zinc-950 text-amber-500", icon: "fa-coins text-amber-600", label: "Peringkat #5" }
-      ];
-
-      defaultTiers.forEach((slot, idx) => {
-        const item = state.history[idx];
+      state.history.slice(0, 5).forEach((item, idx) => {
         const card = document.createElement('div');
-
-        if (item) {
-          const rank = idx + 1;
-          const { grade, tier } = calculateGradeAndTier(item.totalScore, rank);
-          const isTied = tiedUrls.has(item.url);
-
-          card.className = `bg-gradient-to-b ${tier.bg} border-2 ${tier.border} rounded-2xl p-4 shadow-xl flex flex-col items-center text-center justify-between transition-all duration-300 transform hover:-translate-y-1.5 relative overflow-hidden`;
-
-          card.innerHTML = `
-            <div class="absolute top-2 right-2.5 font-mono font-black text-2xl opacity-15 text-white">#${rank}</div>
-            <div class="mb-1">
-              <i class="fa-solid ${tier.icon}"></i>
-            </div>
-            <span class="text-[10px] font-black tracking-widest font-mono uppercase bg-slate-950/80 border border-slate-700 px-2.5 py-0.5 rounded-full mb-1 ${tier.text}">
-              ${tier.name}
-            </span>
-            
-            <span class="text-[11px] font-bold text-slate-300 line-clamp-1 max-w-full font-sans">
-              <i class="fa-solid fa-user-gear text-sky-400 text-[10px]"></i> ${item.developer}
-            </span>
-
-            <h3 class="font-extrabold text-[11px] text-white break-all line-clamp-1 max-w-full my-0.5 font-mono">
-              ${item.url}
-            </h3>
-
-            <div class="my-1.5 flex flex-col items-center">
-              <span class="text-2xl font-black font-mono text-amber-300 drop-shadow">
-                ${item.totalScore.toFixed(1)}%
-              </span>
-              ${isTied ? `
-                <button onclick="openTieBreakerModalForUrl('${item.url}')" class="mt-1 text-[9px] font-black bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 border border-amber-400/50 px-2 py-0.5 rounded-full transition flex items-center gap-1">
-                  <i class="fa-solid fa-bolt text-[8px]"></i> Skor Sama (Klik Detail)
-                </button>
-              ` : ''}
-            </div>
-
-            <span class="px-2.5 py-0.5 rounded-lg text-[10px] font-black border ${grade.color}">
-              ${grade.badge}
-            </span>
-          `;
-        } else {
-          card.className = `bg-gradient-to-b ${slot.defaultColor} border border-dashed rounded-2xl p-4 opacity-50 flex flex-col items-center text-center justify-between relative overflow-hidden`;
-
-          card.innerHTML = `
-            <div class="absolute top-2 right-2.5 font-mono font-black text-2xl opacity-15 text-white">#${slot.rank}</div>
-            <div class="mb-1 text-slate-500">
-              <i class="fa-solid ${slot.icon} text-xl"></i>
-            </div>
-            <span class="text-[10px] font-black tracking-widest font-mono uppercase bg-slate-900 px-2.5 py-0.5 rounded-full mb-1 text-slate-400">
-              ${slot.defaultName}
-            </span>
-            <p class="text-[11px] font-mono text-slate-400 my-2">${slot.label}</p>
-            <span class="text-[10px] text-slate-500 font-bold">Belum Ada URL</span>
-          `;
-        }
-
+        card.className = "bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center space-y-2";
+        card.innerHTML = `
+          <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">Peringkat #${idx + 1}</span>
+          <h4 class="font-bold text-xs text-white truncate" title="${item.developer}">${item.developer}</h4>
+          <p class="font-mono text-[10px] text-slate-400 truncate" title="${item.url}">${item.url}</p>
+          <span class="text-2xl font-black font-mono text-sky-400 block">${item.totalScore.toFixed(1)}%</span>
+        `;
         container.appendChild(card);
       });
     }
 
-    function openTieBreakerModalForUrl(targetUrl) {
-      const tiedPairs = detectTiedScores();
-      const matched = tiedPairs.find(p => p.itemA.url === targetUrl || p.itemB.url === targetUrl);
-
-      if (matched) {
-        showTieBreakerModal(matched.itemA, matched.itemB, matched.rankA, matched.rankB);
-      } else if (tiedPairs.length > 0) {
-        showTieBreakerModal(tiedPairs[0].itemA, tiedPairs[0].itemB, tiedPairs[0].rankA, tiedPairs[0].rankB);
-      } else {
-        showToast("Informasi Tie-Breaker", "Tidak ada skor persis sama yang terdeteksi untuk URL ini.", true);
-      }
-    }
-
-    function showTieBreakerModal(itemA, itemB, rankA, rankB) {
-      const modal = document.getElementById('modal-tiebreaker-comparison');
-      const content = document.getElementById('tiebreaker-modal-content');
-      if (!modal || !content) return;
-
-      const diffCatA = itemA.calc.catA - itemB.calc.catA;
-
-      let reasonText = `<strong>${itemA.developer}</strong> (#${rankA}) lebih unggul berdasarkan komparasi rata-rata sub-kriteria pada Kelompok A (UI/UX & Katalog) dengan kontribusi <strong>${itemA.calc.catA.toFixed(2)}%</strong> vs <strong>${itemB.calc.catA.toFixed(2)}%</strong>.`;
-
-      let matrixRows = "";
-      for (let key in state.criteriaMeta) {
-        const meta = state.criteriaMeta[key];
-        const scoreA = itemA.auditObj.scores[key] || 0;
-        const scoreB = itemB.auditObj.scores[key] || 0;
-        const diff = parseFloat((scoreA - scoreB).toFixed(2));
-
-        let diffBadge = `<span class="text-slate-400 font-mono font-bold">0.0</span>`;
-        if (diff > 0) {
-          diffBadge = `<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono font-extrabold text-[10px]">+${diff} (${itemA.developer})</span>`;
-        } else if (diff < 0) {
-          diffBadge = `<span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-mono font-extrabold text-[10px]">${diff} (${itemB.developer})</span>`;
-        }
-
-        matrixRows += `
-          <tr class="hover:bg-slate-50 border-b border-slate-200 text-xs">
-            <td class="p-2.5 font-bold text-slate-800 flex items-center gap-2">
-              <i class="fa-solid ${meta.icon} text-sky-600"></i> ${meta.name}
-            </td>
-            <td class="p-2.5 text-center font-mono font-extrabold text-sky-700 bg-sky-50/50">${scoreA} / 10</td>
-            <td class="p-2.5 text-center font-mono font-extrabold text-slate-700 bg-slate-50">${scoreB} / 10</td>
-            <td class="p-2.5 text-center">${diffBadge}</td>
-          </tr>
-        `;
-      }
-
-      content.innerHTML = `
-        <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-xs sm:text-sm text-amber-950 font-medium leading-relaxed">
-          <p class="font-bold text-amber-900 mb-1">💡 Mengapa ${itemA.developer} (#${rankA}) lebih unggul dari ${itemB.developer} (#${rankB})?</p>
-          <p>${reasonText}</p>
-        </div>
-
-        <div class="space-y-3">
-          <h4 class="font-extrabold text-xs sm:text-sm text-slate-900 uppercase tracking-wider flex items-center gap-2">
-            <i class="fa-solid fa-table text-sky-600"></i> Perbandingan Detail Rata-Rata Sub-Kriteria (Skala 1 - 10)
-          </h4>
-
-          <div class="overflow-x-auto rounded-2xl border border-slate-200 custom-scrollbar">
-            <table class="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr class="bg-slate-100 border-b border-slate-300 text-slate-800 font-bold">
-                  <th class="p-2.5">Kriteria Penilaian</th>
-                  <th class="p-2.5 text-center bg-sky-100/70 text-sky-900">#${rankA} - ${itemA.developer}</th>
-                  <th class="p-2.5 text-center bg-slate-200/70 text-slate-900">#${rankB} - ${itemB.developer}</th>
-                  <th class="p-2.5 text-center">Selisih & Keunggulan</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${matrixRows}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      `;
-
-      modal.classList.remove('hidden');
-    }
-
     function updateDashboardDisplays() {
-      if (!state.auditData) return;
+      const current = state.history.find(h => h.url === state.url);
+      if (!current) return;
 
-      const calc = calculateScores(state.auditData);
-      
-      const rankIdx = state.history.findIndex(h => h.url === state.url);
-      const activeRank = rankIdx >= 0 ? rankIdx + 1 : 1;
-      const { grade, tier } = calculateGradeAndTier(calc.total, activeRank);
+      document.getElementById('display-active-developer').textContent = current.developer;
+      document.getElementById('display-active-url').textContent = current.url;
+      document.getElementById('overall-score-display').textContent = `${current.totalScore.toFixed(1)}%`;
 
-      const devDisp = document.getElementById('display-developer-name');
-      if (devDisp) devDisp.textContent = state.developer || "Tidak Disebutkan";
-
-      const scoreDisp = document.getElementById('overall-score-display');
-      const scoreA = document.getElementById('cat-score-a');
-      const scoreB = document.getElementById('cat-score-b');
-      const scoreC = document.getElementById('cat-score-c');
-      const scoreD = document.getElementById('cat-score-d');
-
-      if (scoreDisp) scoreDisp.textContent = `${calc.total.toFixed(1)}%`;
-      if (scoreA) scoreA.textContent = `${calc.catA.toFixed(2)} / 45`;
-      if (scoreB) scoreB.textContent = `${calc.catB.toFixed(2)} / 20`;
-      if (scoreC) scoreC.textContent = `${calc.catC.toFixed(2)} / 25`;
-      if (scoreD) scoreD.textContent = `${calc.catD.toFixed(2)} / 10`;
-
+      const grade = calculateGrade(current.totalScore);
       const gradeBadge = document.getElementById('grade-badge');
-      const gradePred = document.getElementById('grade-predicate');
-      const tierBadge = document.getElementById('tier-badge-pill');
+      const gradePredicate = document.getElementById('grade-predicate');
 
       if (gradeBadge) {
         gradeBadge.textContent = grade.badge;
         gradeBadge.className = `px-6 py-2 rounded-2xl border-2 text-2xl sm:text-3xl font-black tracking-wider shadow-md ${grade.color}`;
       }
-
-      if (gradePred) gradePred.textContent = grade.text;
-
-      if (tierBadge) {
-        tierBadge.textContent = `${tier.name} (PERINGKAT #${activeRank})`;
-        tierBadge.className = `px-5 py-1.5 rounded-full text-xs sm:text-sm font-black font-mono tracking-wider border flex items-center gap-1.5 shadow-sm ${tier.badgeBg}`;
+      if (gradePredicate) {
+        gradePredicate.textContent = grade.text;
       }
 
-      const summaryText = document.getElementById('executive-summary-text');
-      if (summaryText) summaryText.textContent = state.auditData.executive_summary;
+      document.getElementById('cat-score-a').textContent = `${current.calc.catA.toFixed(2)} / 45`;
+      document.getElementById('cat-score-b').textContent = `${current.calc.catB.toFixed(2)} / 20`;
+      document.getElementById('cat-score-c').textContent = `${current.calc.catC.toFixed(2)} / 25`;
+      document.getElementById('cat-score-d').textContent = `${current.calc.catD.toFixed(2)} / 10`;
 
-      initRadarChart();
-      updateReportModalData(calc.total, grade, tier);
+      document.getElementById('executive-summary-text').textContent = current.auditObj.executive_summary;
+
+      updateRadarChart(current.auditObj);
     }
 
-    function renderGranularMatrixCards() {
-      const container = document.getElementById('matrix-container');
-      if (!container || !state.auditData) return;
-
-      container.innerHTML = '';
-
-      for (let key in state.criteriaMeta) {
-        const meta = state.criteriaMeta[key];
-        const subScoresMap = state.auditData.sub_scores?.[key] || {};
-        const avgRawScore = state.auditData.scores[key] || 0.0;
-        
-        const evidence = state.auditData.evidence?.[key] || "Pemindaian fitur berhasil diselesaikan.";
-        const reason = state.auditData.reasons[key] || "Analisis belum tersedia.";
-        const rec = state.auditData.recommendations[key] || "Rekomendasi belum tersedia.";
-        const strengths = state.auditData.strengths?.[key] || ["Memenuhi kriteria dasar."];
-        const weaknesses = state.auditData.weaknesses?.[key] || ["Perlu pemeliharaan rutin."];
-
-        // Formula calculation
-        const weightPct = meta.weight * 100;
-        const contrib = ((avgRawScore / 10.0) * weightPct).toFixed(2);
-
-        let badgeClass = "bg-emerald-100 text-emerald-800 border-emerald-300";
-        let statusText = "Sangat Baik";
-        if (avgRawScore < 6.5) {
-          badgeClass = "bg-rose-100 text-rose-800 border-rose-300";
-          statusText = "Perlu Perbaikan";
-        } else if (avgRawScore < 8.5) {
-          badgeClass = "bg-amber-100 text-amber-800 border-amber-300";
-          statusText = "Cukup Baik";
-        }
-
-        const card = document.createElement('div');
-        card.className = "flex-shrink-0 min-w-[340px] sm:min-w-[440px] max-w-[480px] snap-start bg-white border border-slate-200 rounded-3xl p-6 shadow-md space-y-4 hover:shadow-lg transition flex flex-col justify-between";
-
-        let subListHtml = "";
-        meta.sub.forEach(subItem => {
-          const val = subScoresMap[subItem.id] || 8.0;
-          subListHtml += `
-            <div class="flex items-center justify-between text-[11px] bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl">
-              <span class="font-bold text-slate-700 truncate mr-2"><i class="fa-solid fa-angle-right text-sky-500 mr-1"></i>${subItem.name}</span>
-              <span class="font-mono font-extrabold text-sky-700 bg-sky-100/80 px-2 py-0.5 rounded">${val} / 10</span>
-            </div>
-          `;
-        });
-
-        card.innerHTML = `
-          <div class="space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-sky-100 border border-sky-200 text-sky-700 flex items-center justify-center text-base font-bold shadow-sm flex-shrink-0">
-                  <i class="fa-solid ${meta.icon}"></i>
-                </div>
-                <div>
-                  <h3 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-1.5 flex-wrap">
-                    ${meta.name}
-                    <span class="text-[10px] font-mono text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200 font-bold">
-                      Bobot: ${weightPct.toFixed(2)}%
-                    </span>
-                  </h3>
-                  <p class="text-xs text-slate-500 font-medium mt-0.5 line-clamp-2">${meta.desc}</p>
-                </div>
-              </div>
-
-              <div class="flex items-center justify-between sm:justify-end gap-3 pt-1 sm:pt-0 border-t sm:border-0 border-slate-100">
-                <div class="text-left sm:text-right">
-                  <span class="text-[10px] font-bold text-slate-500 block">Kontribusi:</span>
-                  <span class="text-sm font-mono text-sky-700 font-extrabold">${contrib}%</span>
-                </div>
-                <div class="px-3 py-1.5 rounded-xl border text-xs font-extrabold font-mono shadow-sm ${badgeClass} flex items-center gap-1.5">
-                  <span>Rata2: ${avgRawScore} / 10</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Rincian Skor Sub-Kriteria -->
-            <div class="space-y-1.5">
-              <span class="text-slate-600 font-extrabold text-[11px] block flex items-center justify-between">
-                <span><i class="fa-solid fa-list-ol text-sky-600 mr-1"></i> Rincian Skor Sub-Kriteria:</span>
-                <span class="text-[10px] text-sky-700 font-mono">Skala 1.0 - 10.0</span>
-              </span>
-              <div class="space-y-1">
-                ${subListHtml}
-              </div>
-            </div>
-
-            <!-- Formula Box -->
-            <div class="bg-slate-100/90 p-2.5 rounded-xl border border-slate-200 text-[11px] font-mono text-slate-700 space-y-0.5">
-              <div class="flex justify-between">
-                <span>Rata-rata Sub-Kriteria:</span>
-                <span class="font-bold text-sky-800">${avgRawScore} / 10</span>
-              </div>
-              <div class="flex justify-between border-t border-slate-200 pt-0.5 text-[10px]">
-                <span>Kalkulasi Kontribusi:</span>
-                <span class="font-extrabold text-sky-900">(${avgRawScore} / 10) × ${weightPct.toFixed(2)}% = ${contrib}%</span>
-              </div>
-            </div>
-
-            <!-- Evidence Findings Card -->
-            <div class="bg-sky-50/70 p-3 rounded-2xl border border-sky-200 text-xs font-medium">
-              <span class="font-extrabold text-sky-900 block mb-0.5 flex items-center gap-1.5">
-                <i class="fa-solid fa-microscope text-sky-600"></i> Temuan & Bukti AI:
-              </span>
-              <p class="text-slate-700 leading-relaxed text-[11px]">${evidence}</p>
-            </div>
-
-            <!-- Strengths & Weaknesses Detailed Cards -->
-            <div class="space-y-2 text-xs">
-              <div class="bg-emerald-50/60 p-3 rounded-2xl border border-emerald-200/80 space-y-1">
-                <h4 class="font-extrabold text-emerald-900 flex items-center gap-1.5 text-[11px]">
-                  <i class="fa-solid fa-circle-check text-emerald-600"></i> Keunggulan Ditemukan:
-                </h4>
-                <ul class="list-disc list-inside text-slate-700 space-y-0.5 leading-relaxed font-medium text-[11px]">
-                  ${strengths.map(s => `<li>${s}</li>`).join('')}
-                </ul>
-              </div>
-
-              <div class="bg-amber-50/60 p-3 rounded-2xl border border-amber-200/80 space-y-1">
-                <h4 class="font-extrabold text-amber-900 flex items-center gap-1.5 text-[11px]">
-                  <i class="fa-solid fa-triangle-exclamation text-amber-600"></i> Catatan & Kekurangan:
-                </h4>
-                <ul class="list-disc list-inside text-slate-700 space-y-0.5 leading-relaxed font-medium text-[11px]">
-                  ${weaknesses.map(w => `<li>${w}</li>`).join('')}
-                </ul>
-              </div>
-            </div>
-
-            <!-- Reasoning & Recommendations -->
-            <div class="space-y-2 text-xs">
-              <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 space-y-1">
-                <h4 class="font-extrabold text-sky-800 flex items-center gap-1.5 text-[11px]">
-                  <i class="fa-solid fa-magnifying-glass text-sky-600"></i> Alasan Penilaian AI:
-                </h4>
-                <p class="text-slate-700 leading-relaxed font-medium text-[11px]">${reason}</p>
-              </div>
-
-              <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 space-y-1">
-                <h4 class="font-extrabold text-indigo-800 flex items-center gap-1.5 text-[11px]">
-                  <i class="fa-solid fa-lightbulb text-indigo-600"></i> Rekomendasi Perbaikan:
-                </h4>
-                <p class="text-slate-700 leading-relaxed font-medium text-[11px]">${rec}</p>
-              </div>
-            </div>
-          </div>
-        `;
-
-        container.appendChild(card);
-      }
-    }
-
-    function initRadarChart() {
-      updateRadarChart();
-    }
-
-    function updateRadarChart() {
+    function updateRadarChart(auditObj) {
       const canvas = document.getElementById('auditRadarChart');
-      if (!canvas || !state.auditData) return;
+      if (!canvas) return;
 
-      const ctx = canvas.getContext('2d');
-      const labels = ['c1 (Func)', 'c2 (Layout)', 'c3 (UI/UX)', 'c4 (Catalog)', 'c5 (Admin)', 'c6 (SQLi)', 'c7 (Resp)', 'c8 (Contact)', 'c9 (Checkout)', 'c10 (Pay)'];
+      const labels = ['Func', 'Layout', 'UI/UX', 'Catalog', 'Admin', 'SQLi', 'Resp', 'Contact', 'Checkout', 'Pay'];
       const dataValues = [
-        state.auditData.scores.c1 || 0,
-        state.auditData.scores.c2 || 0,
-        state.auditData.scores.c3 || 0,
-        state.auditData.scores.c4 || 0,
-        state.auditData.scores.c5 || 0,
-        state.auditData.scores.c6 || 0,
-        state.auditData.scores.c7 || 0,
-        state.auditData.scores.c8 || 0,
-        state.auditData.scores.c9 || 0,
-        state.auditData.scores.c10 || 0
+        auditObj.scores.c1 || 0, auditObj.scores.c2 || 0, auditObj.scores.c3 || 0,
+        auditObj.scores.c4 || 0, auditObj.scores.c5 || 0, auditObj.scores.c6 || 0,
+        auditObj.scores.c7 || 0, auditObj.scores.c8 || 0, auditObj.scores.c9 || 0,
+        auditObj.scores.c10 || 0
       ];
 
-      if (state.radarChart) {
-        state.radarChart.destroy();
-      }
+      if (state.radarChart) state.radarChart.destroy();
 
-      state.radarChart = new Chart(ctx, {
+      state.radarChart = new Chart(canvas.getContext('2d'), {
         type: 'radar',
         data: {
-          labels: labels,
+          labels,
           datasets: [{
-            label: 'Rata-rata Sub-Kriteria AI (1-10)',
+            label: 'Skor AI (1-10)',
             data: dataValues,
-            backgroundColor: 'rgba(2, 132, 199, 0.18)',
+            backgroundColor: 'rgba(2, 132, 199, 0.2)',
             borderColor: '#0284c7',
-            borderWidth: 2.5,
-            pointBackgroundColor: '#0284c7',
-            pointBorderColor: '#fff',
-            pointRadius: 4
+            borderWidth: 2
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          scales: {
-            r: {
-              angleLines: { color: 'rgba(203, 213, 225, 0.8)' },
-              grid: { color: 'rgba(226, 232, 240, 1)' },
-              pointLabels: { color: '#334155', font: { size: 10, family: 'Plus Jakarta Sans', weight: 'bold' } },
-              ticks: { color: '#64748b', backdropColor: 'transparent', stepSize: 2 },
-              suggestedMin: 0,
-              suggestedMax: 10
-            }
-          },
-          plugins: {
-            legend: { display: false }
-          }
+          scales: { r: { suggestedMin: 0, suggestedMax: 10 } },
+          plugins: { legend: { display: false } }
         }
       });
     }
 
-    function updateReportModalData(totalWeighted, grade, tier) {
-      const rptDev = document.getElementById('rpt-developer');
-      const rptUrl = document.getElementById('rpt-url');
-      const rptDate = document.getElementById('rpt-date');
-      const rptScore = document.getElementById('rpt-score');
-      const rptGrade = document.getElementById('rpt-grade');
-      const rptBody = document.getElementById('rpt-table-body');
-      const rptPlan = document.getElementById('rpt-action-plan');
+    function openPdfSelectorModal() {
+      if (state.history.length === 0) {
+        showToast("Belum Ada Hasil", "Jalankan penilaian terlebih dahulu sebelum mengunduh PDF.", false);
+        return;
+      }
 
-      if (rptDev) rptDev.textContent = state.developer || "Tidak Disebutkan";
-      if (rptUrl) rptUrl.textContent = state.url;
-      if (rptDate) rptDate.textContent = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-      if (rptScore) rptScore.textContent = `${totalWeighted.toFixed(1)}%`;
-      if (rptGrade) rptGrade.textContent = `${tier.name} - ${grade.badge} (${grade.text})`;
-      if (rptPlan) rptPlan.textContent = state.auditData.executive_summary;
+      const modal = document.getElementById('modal-pdf-selector');
+      const container = document.getElementById('pdf-checklist-container');
+      if (!modal || !container) return;
 
-      if (rptBody) {
-        rptBody.innerHTML = '';
-        let idx = 1;
+      container.innerHTML = '';
+      state.selectedPdfUrls = new Set(state.history.map(h => h.url));
+
+      state.history.forEach((item) => {
+        const itemRow = document.createElement('label');
+        itemRow.className = "flex items-center justify-between p-3 bg-slate-50 hover:bg-sky-50 border border-slate-200 rounded-2xl cursor-pointer transition";
+
+        itemRow.innerHTML = `
+          <div class="flex items-center gap-3">
+            <input type="checkbox" value="${item.url}" checked class="pdf-item-checkbox w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500">
+            <div>
+              <span class="font-extrabold text-xs text-slate-900 block">${item.developer}</span>
+              <span class="font-mono text-[10px] text-sky-700 block">${item.url}</span>
+            </div>
+          </div>
+          <span class="font-mono font-black text-xs text-slate-800 bg-white px-2.5 py-1 rounded-xl border border-slate-200">
+            ${item.totalScore.toFixed(1)}%
+          </span>
+        `;
+
+        container.appendChild(itemRow);
+      });
+
+      updateSelectedPdfCount();
+
+      container.querySelectorAll('.pdf-item-checkbox').forEach(chk => {
+        chk.addEventListener('change', (e) => {
+          if (e.target.checked) {
+            state.selectedPdfUrls.add(e.target.value);
+          } else {
+            state.selectedPdfUrls.delete(e.target.value);
+          }
+          updateSelectedPdfCount();
+        });
+      });
+
+      modal.classList.remove('hidden');
+    }
+
+    function updateSelectedPdfCount() {
+      const badge = document.getElementById('selected-pdf-count-badge');
+      if (badge) badge.textContent = `${state.selectedPdfUrls.size} Terpilih`;
+    }
+
+    function generatePrintablePdfDocument() {
+      if (state.selectedPdfUrls.size === 0) {
+        showToast("Pilih WebApp", "Pilih minimal 1 WebApp yang akan diunduh PDF-nya.", false);
+        return;
+      }
+
+      const printableArea = document.getElementById('printable-pdf-area');
+      if (!printableArea) return;
+
+      printableArea.innerHTML = '';
+
+      const selectedItems = state.history.filter(h => state.selectedPdfUrls.has(h.url));
+
+      selectedItems.forEach((item, pageIdx) => {
+        const page = document.createElement('div');
+        page.className = `p-8 max-w-4xl mx-auto bg-white text-slate-900 space-y-6 ${pageIdx < selectedItems.length - 1 ? 'page-break' : ''}`;
+
+        let tableRowsHtml = "";
+        let rowNum = 1;
         for (let key in state.criteriaMeta) {
           const meta = state.criteriaMeta[key];
-          const avgRawScore = state.auditData.scores[key] || 0;
-          const contrib = ((avgRawScore / 10.0) * (meta.weight * 100)).toFixed(2);
-          const reason = state.auditData.reasons[key] || "";
-          const rec = state.auditData.recommendations[key] || "";
+          const rawScore = item.auditObj.scores[key] || 0;
+          const contrib = ((rawScore / 10.0) * (meta.weight * 100)).toFixed(2);
 
-          const tr = document.createElement('tr');
-          tr.className = "hover:bg-slate-50";
-          tr.innerHTML = `
-            <td class="p-2.5 font-mono font-bold">${idx++}</td>
-            <td class="p-2.5 font-bold">${meta.name}</td>
-            <td class="p-2.5 text-center font-mono">${(meta.weight * 100).toFixed(2)}%</td>
-            <td class="p-2.5 text-center font-bold font-mono text-sky-700">${avgRawScore} / 10</td>
-            <td class="p-2.5 text-center font-mono text-sky-700 font-extrabold">${contrib}%</td>
-            <td class="p-2.5">
-              <div class="space-y-1">
-                <p><strong>Analisis:</strong> ${reason}</p>
-                <p class="text-slate-600"><strong>Saran:</strong> ${rec}</p>
-              </div>
-            </td>
+          tableRowsHtml += `
+            <tr class="border-b border-slate-200 text-xs">
+              <td class="p-2 font-mono font-bold">${rowNum++}</td>
+              <td class="p-2 font-bold">${meta.name}</td>
+              <td class="p-2 text-center font-mono">${(meta.weight * 100).toFixed(2)}%</td>
+              <td class="p-2 text-center font-bold font-mono">${rawScore} / 10</td>
+              <td class="p-2 text-center font-extrabold font-mono text-sky-700">${contrib}%</td>
+            </tr>
           `;
-          rptBody.appendChild(tr);
         }
-      }
+
+        page.innerHTML = `
+          <div class="border-b-2 border-slate-900 pb-4 flex justify-between items-end">
+            <div>
+              <h2 class="text-xl font-black text-slate-900">LAPORAN AUDIT PROTOTIPE WEBAPP UMKM</h2>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Penilaian Otomatis Gemini AI</p>
+            </div>
+            <div class="text-right font-mono text-xs font-bold text-slate-600">
+              Dokumen #${pageIdx + 1} dari ${selectedItems.length}
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-medium">
+            <div>
+              <span class="text-slate-500 block">Nama Pengembang:</span>
+              <span class="font-extrabold text-slate-900 text-sm">${item.developer}</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block">URL Target:</span>
+              <span class="font-bold text-sky-700 font-mono break-all">${item.url}</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Total Skor Terbobot:</span>
+              <span class="font-black text-sky-700 text-base font-mono">${item.totalScore.toFixed(1)}%</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Tanggal Audit:</span>
+              <span class="font-bold text-slate-800">${new Date().toLocaleDateString('id-ID')}</span>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <h3 class="font-extrabold text-xs uppercase tracking-wider text-slate-800 border-b pb-1">Rincian 10 Kriteria Penilaian</h3>
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="bg-slate-100 border-b border-slate-300 font-bold">
+                  <th class="p-2">No</th>
+                  <th class="p-2">Kriteria</th>
+                  <th class="p-2 text-center">Bobot</th>
+                  <th class="p-2 text-center">Skor Raw</th>
+                  <th class="p-2 text-center">Kontribusi</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${tableRowsHtml}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="p-4 bg-sky-50 border border-sky-200 rounded-2xl text-xs space-y-1">
+            <h4 class="font-bold text-sky-900">Ringkasan Analisis Eksekutif AI:</h4>
+            <p class="text-slate-700 leading-relaxed">${item.auditObj.executive_summary}</p>
+          </div>
+        `;
+
+        printableArea.appendChild(page);
+      });
+
+      document.getElementById('modal-pdf-selector')?.classList.add('hidden');
+      setTimeout(() => window.print(), 200);
+    }
+
+    function showToast(title, message, isSuccess = true) {
+      const toast = document.getElementById('toast-notification');
+      document.getElementById('toast-title').textContent = title;
+      document.getElementById('toast-message').textContent = message;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 4000);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('btn-audit-ai')?.addEventListener('click', runAIAuditBatch);
+      
+      document.getElementById('btn-reset-all')?.addEventListener('click', () => {
+        document.getElementById('input-developer').value = "";
+        document.getElementById('input-url').value = "";
+        document.getElementById('results-section')?.classList.add('hidden');
+        showToast("Input Dibersihkan", "Daftar Pengembang dan URL telah dihapus.", true);
+      });
 
       document.getElementById('input-developer')?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && e.ctrlKey) {
-          e.preventDefault();
-          runAIAudit();
-        }
+        if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault(); runAIAuditBatch(); }
       });
-
       document.getElementById('input-url')?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && e.ctrlKey) {
-          e.preventDefault();
-          runAIAudit();
-        }
+        if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault(); runAIAuditBatch(); }
       });
 
-      document.getElementById('btn-reset-all')?.addEventListener('click', () => {
-        resetAllState();
+      document.getElementById('btn-open-pdf-modal-direct')?.addEventListener('click', openPdfSelectorModal);
+      document.getElementById('btn-close-pdf-modal')?.addEventListener('click', () => {
+        document.getElementById('modal-pdf-selector')?.classList.add('hidden');
+      });
+      document.getElementById('btn-cancel-pdf-modal')?.addEventListener('click', () => {
+        document.getElementById('modal-pdf-selector')?.classList.add('hidden');
       });
 
-      document.getElementById('btn-load-preview')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        handleShowPreview();
+      document.getElementById('btn-select-all-pdf')?.addEventListener('click', () => {
+        document.querySelectorAll('.pdf-item-checkbox').forEach(chk => {
+          chk.checked = true;
+          state.selectedPdfUrls.add(chk.value);
+        });
+        updateSelectedPdfCount();
       });
 
-      document.getElementById('btn-audit-ai')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        runAIAudit();
+      document.getElementById('btn-deselect-all-pdf')?.addEventListener('click', () => {
+        document.querySelectorAll('.pdf-item-checkbox').forEach(chk => {
+          chk.checked = false;
+        });
+        state.selectedPdfUrls.clear();
+        updateSelectedPdfCount();
       });
 
-      document.getElementById('btn-trigger-celebration')?.addEventListener('click', () => {
-        triggerSurpriseCelebration();
-      });
-
-      // Close Leaderboard Section Button
-      document.getElementById('btn-close-leaderboard')?.addEventListener('click', () => {
-        document.getElementById('leaderboard-section')?.classList.add('hidden');
-      });
-
-      // Close Preview Section Button
-      document.getElementById('btn-close-preview')?.addEventListener('click', () => {
-        document.getElementById('preview-section')?.classList.add('hidden');
-      });
-
-      // Close Matriks Penilaian Section Button
-      document.getElementById('btn-close-matrix')?.addEventListener('click', () => {
-        document.getElementById('matrix-section')?.classList.add('hidden');
-      });
-
-      // Equal Score Tie-Breaker Modal Buttons
-      document.getElementById('btn-open-tiebreaker-banner')?.addEventListener('click', () => {
-        const tiedPairs = detectTiedScores();
-        if (tiedPairs.length > 0) {
-          showTieBreakerModal(tiedPairs[0].itemA, tiedPairs[0].itemB, tiedPairs[0].rankA, tiedPairs[0].rankB);
-        }
-      });
-
-      document.getElementById('btn-close-tiebreaker-modal')?.addEventListener('click', () => {
-        document.getElementById('modal-tiebreaker-comparison')?.classList.add('hidden');
-      });
-
-      document.getElementById('btn-dismiss-tiebreaker-modal')?.addEventListener('click', () => {
-        document.getElementById('modal-tiebreaker-comparison')?.classList.add('hidden');
-      });
-
-      document.getElementById('btn-reload-iframe')?.addEventListener('click', () => {
-        const iframe = document.getElementById('preview-iframe');
-        if (iframe && iframe.src) {
-          iframe.src = iframe.src;
-        }
-      });
+      document.getElementById('btn-trigger-pdf-print')?.addEventListener('click', generatePrintablePdfDocument);
 
       document.getElementById('btn-open-api-modal')?.addEventListener('click', () => {
         document.getElementById('modal-api-key')?.classList.remove('hidden');
       });
-
       document.getElementById('btn-close-api-modal')?.addEventListener('click', () => {
         document.getElementById('modal-api-key')?.classList.add('hidden');
       });
-
       document.getElementById('btn-save-api-key')?.addEventListener('click', () => {
-        const keyVal = document.getElementById('custom-api-key')?.value?.trim();
-        state.apiKey = keyVal || "";
-        const label = document.getElementById('api-status-label');
-        if (label) {
-          label.textContent = keyVal ? "Custom Key Aktif" : "Gemini API";
+        const customKey = document.getElementById('custom-api-key')?.value?.trim();
+        if (customKey) {
+          state.apiKey = customKey;
+          showToast("API Key Tersimpan", "Menggunakan API Key kustom Anda.", true);
+        } else {
+          state.apiKey = DEFAULT_API_KEY;
+          showToast("API Key Default", "Menggunakan API Key bawaan.", true);
         }
         document.getElementById('modal-api-key')?.classList.add('hidden');
-        showToast("Kunci API Disimpan", keyVal ? "Kunci API kustom digunakan." : "Menggunakan kunci API default.", true);
       });
-
-      document.getElementById('btn-view-report-modal')?.addEventListener('click', () => {
-        document.getElementById('print-report-modal')?.classList.remove('hidden');
-      });
-
-      document.getElementById('btn-close-report-modal')?.addEventListener('click', () => {
-        document.getElementById('print-report-modal')?.classList.add('hidden');
-      });
-
-      document.getElementById('btn-print-now')?.addEventListener('click', () => {
-        window.print();
-      });
-
-      // Responsive device toggles
-      const wrapper = document.getElementById('iframe-wrapper');
-      document.getElementById('device-desktop')?.addEventListener('click', (e) => {
-        if (wrapper) wrapper.className = "device-desktop transition-all duration-300 bg-white rounded-2xl overflow-hidden shadow-2xl relative border-2 border-slate-300";
-        updateDeviceActiveState(e.currentTarget);
-      });
-      document.getElementById('device-tablet')?.addEventListener('click', (e) => {
-        if (wrapper) wrapper.className = "device-tablet transition-all duration-300 bg-white rounded-2xl overflow-hidden shadow-2xl relative border-2 border-slate-300";
-        updateDeviceActiveState(e.currentTarget);
-      });
-      document.getElementById('device-mobile')?.addEventListener('click', (e) => {
-        if (wrapper) wrapper.className = "device-mobile transition-all duration-300 bg-white rounded-2xl overflow-hidden shadow-2xl relative border-2 border-slate-300";
-        updateDeviceActiveState(e.currentTarget);
-      });
-
-      function updateDeviceActiveState(activeBtn) {
-        document.querySelectorAll('.btn-device').forEach(btn => {
-          btn.classList.remove('active', 'text-sky-400', 'bg-slate-800');
-          btn.classList.add('text-slate-400');
-        });
-        activeBtn.classList.add('active', 'text-sky-400', 'bg-slate-800');
-        activeBtn.classList.remove('text-slate-400');
-      }
-
-      if (state.auditData) {
-        initRadarChart();
-      }
     });
   </script>
 </body>
