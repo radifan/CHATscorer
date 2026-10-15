@@ -222,10 +222,10 @@
             </div>
 
             <div class="text-left text-xs space-y-2 border-t border-sky-200 pt-4 font-medium">
-              <div class="flex justify-between"><span>Kelompok A (UI/UX & Katalog):</span><span id="cat-score-a" class="font-mono font-extrabold text-sky-700">0.00 / 45</span></div>
-              <div class="flex justify-between"><span>Kelompok B (Admin & Keamanan):</span><span id="cat-score-b" class="font-mono font-extrabold text-sky-700">0.00 / 20</span></div>
-              <div class="flex justify-between"><span>Kelompok C (Responsif & Kontak):</span><span id="cat-score-c" class="font-mono font-extrabold text-sky-700">0.00 / 25</span></div>
-              <div class="flex justify-between"><span>Kelompok D (Checkout & Payment):</span><span id="cat-score-d" class="font-mono font-extrabold text-sky-700">0.00 / 10</span></div>
+              <div class="flex justify-between"><span>UI/UX & Katalog:</span><span id="cat-score-a" class="font-mono font-extrabold text-sky-700">0.00 / 45</span></div>
+              <div class="flex justify-between"><span>Admin & Keamanan:</span><span id="cat-score-b" class="font-mono font-extrabold text-sky-700">0.00 / 20</span></div>
+              <div class="flex justify-between"><span>Responsif & Kontak:</span><span id="cat-score-c" class="font-mono font-extrabold text-sky-700">0.00 / 25</span></div>
+              <div class="flex justify-between"><span>Checkout & Payment:</span><span id="cat-score-d" class="font-mono font-extrabold text-sky-700">0.00 / 10</span></div>
             </div>
           </div>
 
@@ -457,11 +457,11 @@
     }
 
     function calculateGrade(score) {
-      if (score >= 85) return { badge: "GRADE A", text: "Sangat Unggul & Siap Produksi", color: "bg-emerald-100 text-emerald-800 border-emerald-300" };
-      if (score >= 75) return { badge: "GRADE B", text: "Layak & Profesional", color: "bg-sky-100 text-sky-800 border-sky-300" };
-      if (score >= 65) return { badge: "GRADE C", text: "Cukup Baik & Perlu Optimasi", color: "bg-amber-100 text-amber-800 border-amber-300" };
-      if (score >= 55) return { badge: "GRADE D", text: "Perlu Banyak Penyesuaian", color: "bg-orange-100 text-orange-800 border-orange-300" };
-      return { badge: "GRADE E", text: "Belum Memenuhi Standard Minimal", color: "bg-rose-100 text-rose-800 border-rose-300" };
+      if (score >= 85) return { badge: "GRADE A", text: "Luar Biasa!", color: "bg-emerald-100 text-emerald-800 border-emerald-300" };
+      if (score >= 75) return { badge: "GRADE B", text: "Hebat!", color: "bg-sky-100 text-sky-800 border-sky-300" };
+      if (score >= 65) return { badge: "GRADE C", text: "Tingkatkan Lagi!", color: "bg-amber-100 text-amber-800 border-amber-300" };
+      if (score >= 55) return { badge: "GRADE D", text: "Pelajari Lagi!", color: "bg-orange-100 text-orange-800 border-orange-300" };
+      return { badge: "GRADE E", text: "Mungkin Kamu Terburu-buru :(", color: "bg-rose-100 text-rose-800 border-rose-300" };
     }
 
     function generateFallbackDataForPair(developer, url) {
@@ -489,7 +489,7 @@
       return {
         developer,
         url,
-        executive_summary: `Hasil audit otomatis untuk situs web (${url}) buatan ${developer} menyajikan evaluasi terbobot berdasarkan kriteria standar prototipe katalog.`,
+        executive_summary: `Hasil penilaian AI untuk (${url}) buatan ${developer}.`,
         sub_scores: sub,
         evidence,
         strengths,
@@ -523,7 +523,7 @@
         if (banner) banner.classList.remove('hidden');
         if (bannerText) {
           const first = tiedPairs[0];
-          bannerText.textContent = `Web App '${first.itemA.developer}' (#${first.rankA}) dan '${first.itemB.developer}' (#${first.rankB}) memiliki skor total yang sama (${first.itemA.totalScore.toFixed(1)}%). Klik tombol untuk melihat perbandingan rincian sub-kriteria.`;
+          bannerText.textContent = `Web '${first.itemA.developer}' (#${first.rankA}) dan '${first.itemB.developer}' (#${first.rankB}) memiliki skor total yang sama (${first.itemA.totalScore.toFixed(1)}%). Klik untuk membandingkan.`;
         }
       } else {
         if (banner) banner.classList.add('hidden');
@@ -575,7 +575,7 @@
                   <th class="p-2.5">Kriteria Penilaian</th>
                   <th class="p-2.5 text-center bg-sky-100/70 text-sky-900">#${rankA} - ${itemA.developer}</th>
                   <th class="p-2.5 text-center bg-slate-200/70 text-slate-900">#${rankB} - ${itemB.developer}</th>
-                  <th class="p-2.5 text-center">Selisih & Keunggulan</th>
+                  <th class="p-2.5 text-center">Selisih</th>
                 </tr>
               </thead>
               <tbody>
@@ -1026,7 +1026,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
       const checkedUrls = Array.from(document.querySelectorAll('.pdf-select-item:checked')).map(cb => cb.value);
 
       if (checkedUrls.length === 0) {
-        showToast("Pilihan Kosong", "Centang minimal 1 WebApp untuk dicetak.", false);
+        showToast("Pilihan Kosong", "Pilih minimal 1", false);
         return;
       }
 
