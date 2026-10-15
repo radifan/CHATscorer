@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CHATScorer - Penilaian Prototipe Web Katalog</title>
+  <title>CHATScorer</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -150,7 +150,7 @@
         </div>
 
         <p class="text-[11px] text-slate-500 font-medium">
-          <i class="fa-solid fa-circle-info text-sky-600"></i> Tekan <kbd class="px-1.5 py-0.5 bg-slate-200 border rounded font-mono font-bold text-[10px]">Ctrl + Enter</kbd> atau klik <i class="fa-solid fa-wand-magic-sparkles text-amber-300 text-xl"></i> untuk mulai menilai.
+          <i class="fa-solid fa-circle-info text-sky-600"></i> Tekan <kbd class="px-1.5 py-0.5 bg-slate-200 border rounded font-mono font-bold text-[10px]">Ctrl + Enter</kbd> atau klik tombol ikon magic wand untuk mulai menilai.
         </p>
       </div>
     </section>
@@ -164,11 +164,11 @@
           <div class="w-10 h-10 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-lg flex-shrink-0">⚡</div>
           <div>
             <h4 class="font-extrabold text-xs sm:text-sm text-amber-950">Skor Sama Terdeteksi!</h4>
-            <p id="equal-score-banner-text" class="text-xs text-amber-900 font-medium mt-0.5">Beberapa WebApp memiliki nilai skor sama namun berada di posisi peringkat yang berbeda.</p>
+            <p id="equal-score-banner-text" class="text-xs text-amber-900 font-medium mt-0.5">Beberapa WebApp memiliki nilai skor total yang sama.</p>
           </div>
         </div>
         <button id="btn-open-tiebreaker-banner" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black rounded-xl transition shadow-md whitespace-nowrap flex items-center gap-1.5">
-          <i class="fa-solid fa-magnifying-glass text-xs"></i><span>Cari Tahu Perbedaannya</span>
+          <i class="fa-solid fa-magnifying-glass text-xs"></i><span>Lihat Tabel Perbandingan</span>
         </button>
       </div>
 
@@ -185,6 +185,9 @@
           <div class="flex items-center gap-3">
             <button id="btn-trigger-celebration" class="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm rounded-xl transition shadow-lg">
               Selebrasi 🎉
+            </button>
+            <button id="btn-open-pdf-modal" class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs sm:text-sm rounded-xl transition shadow-lg flex items-center gap-2">
+              <i class="fa-solid fa-file-pdf"></i> Simpan PDF
             </button>
           </div>
         </div>
@@ -205,9 +208,6 @@
           <div class="flex items-center gap-2">
             <label for="select-active-url" class="text-xs font-extrabold text-slate-600">Pilih Hasil:</label>
             <select id="select-active-url" class="bg-slate-100 border-2 border-sky-300 text-sky-900 font-mono font-bold text-xs rounded-xl px-3 py-2 focus:outline-none"></select>
-            <button id="btn-open-pdf-modal" class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs sm:text-sm rounded-xl transition shadow-lg flex items-center gap-2">
-              <i class="fa-solid fa-file-pdf"></i> Simpan PDF
-            </button>
           </div>
         </div>
 
@@ -222,15 +222,15 @@
             </div>
 
             <div class="text-left text-xs space-y-2 border-t border-sky-200 pt-4 font-medium">
-              <div class="flex justify-between"><span>UI/UX & Katalog:</span><span id="cat-score-a" class="font-mono font-extrabold text-sky-700">0.00 / 45</span></div>
-              <div class="flex justify-between"><span>Admin & Keamanan:</span><span id="cat-score-b" class="font-mono font-extrabold text-sky-700">0.00 / 20</span></div>
-              <div class="flex justify-between"><span>Responsif & Kontak:</span><span id="cat-score-c" class="font-mono font-extrabold text-sky-700">0.00 / 25</span></div>
-              <div class="flex justify-between"><span>Checkout & Payment:</span><span id="cat-score-d" class="font-mono font-extrabold text-sky-700">0.00 / 10</span></div>
+              <div class="flex justify-between"><span>Kelompok A (UI/UX & Katalog):</span><span id="cat-score-a" class="font-mono font-extrabold text-sky-700">0.00 / 45</span></div>
+              <div class="flex justify-between"><span>Kelompok B (Admin & Keamanan):</span><span id="cat-score-b" class="font-mono font-extrabold text-sky-700">0.00 / 20</span></div>
+              <div class="flex justify-between"><span>Kelompok C (Responsif & Kontak):</span><span id="cat-score-c" class="font-mono font-extrabold text-sky-700">0.00 / 25</span></div>
+              <div class="flex justify-between"><span>Kelompok D (Checkout & Payment):</span><span id="cat-score-d" class="font-mono font-extrabold text-sky-700">0.00 / 10</span></div>
             </div>
           </div>
 
           <div class="md:col-span-7 bg-slate-50 border border-slate-200 rounded-3xl p-6 space-y-4">
-            <h4 class="text-xs font-extrabold uppercase text-slate-800">Hasil Penilaian AI</h4>
+            <h4 class="text-xs font-extrabold uppercase text-slate-800">Analisis Eksekutif AI</h4>
             <p id="executive-summary-text" class="text-xs leading-relaxed text-slate-700 bg-white p-4 rounded-2xl border shadow-sm">-</p>
             
             <div class="w-full h-64 relative">
@@ -246,9 +246,9 @@
           <div>
             <h3 class="text-lg font-black text-slate-900 flex items-center gap-2.5">
               <i class="fa-solid fa-list-check text-sky-600"></i>
-              Detail Penilaian
+              Kartu Rincian Detail 10 Kriteria
             </h3>
-            <p class="text-xs text-slate-500 font-medium">Geser ke kanan untuk melihat lebih banyak</p>
+            <p class="text-xs text-slate-500 font-medium">Geser ke kanan untuk melihat rincian sub-kriteria, bukti temuan, kelebihan, kekurangan, & saran perbaikan AI.</p>
           </div>
           <span class="text-xs font-bold text-slate-400">Geser &rarr;</span>
         </div>
@@ -271,7 +271,7 @@
           <div class="w-11 h-11 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xl shadow-md">⚡</div>
           <div>
             <h3 class="font-extrabold text-slate-900 text-base sm:text-lg">Analisis Pembanding Skor Seri</h3>
-            <p class="text-xs text-slate-500 font-medium mt-0.5">Penjelasan penentuan posisi peringkat berdasarkan komparasi detail penilaian.</p>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">Komparasi detail per kriteria penilaian untuk menentukan posisi peringkat.</p>
           </div>
         </div>
         <button id="btn-close-tiebreaker-modal" class="p-2 text-slate-400 hover:text-slate-600 text-lg">
@@ -296,7 +296,7 @@
     <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-file-pdf text-rose-600"></i> Pilih untuk Unduh PDF
+          <i class="fa-solid fa-file-pdf text-rose-600"></i> Pilih WebApp untuk Cetak PDF
         </h3>
         <button id="btn-close-pdf-select" class="text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
@@ -304,11 +304,11 @@
       </div>
 
       <div class="flex items-center justify-between text-xs">
-        <span class="text-slate-500 font-medium">Pilih WebApp yang ingin dicetak:</span>
+        <span class="text-slate-500 font-medium">Centang WebApp yang ingin dicetak:</span>
         <div class="space-x-2">
           <button id="btn-select-all-pdf" class="text-sky-600 font-bold hover:underline">Pilih Semua</button>
           <span>|</span>
-          <button id="btn-deselect-all-pdf" class="text-slate-500 font-bold hover:underline">Batal Pilih</button>
+          <button id="btn-deselect-all-pdf" class="text-slate-500 font-bold hover:underline">Batal Semua</button>
         </div>
       </div>
 
@@ -318,7 +318,7 @@
 
       <div class="flex justify-end gap-3 border-t pt-4">
         <button id="btn-generate-pdf-now" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl transition shadow-md flex items-center justify-center gap-2">
-          <i class="fa-solid fa-print"></i> Simpan PDF
+          <i class="fa-solid fa-print"></i> Cetak Dokumen PDF
         </button>
       </div>
     </div>
@@ -331,7 +331,7 @@
         <h2 class="text-lg font-black text-slate-900">Pratinjau Dokumen PDF</h2>
         <div class="space-x-2">
           <button id="btn-print-action" class="px-4 py-2 bg-emerald-600 text-white text-xs font-extrabold rounded-xl hover:bg-emerald-500">
-            <i class="fa-solid fa-print mr-1"></i> Simpan PDF
+            <i class="fa-solid fa-print mr-1"></i> Cetak / Simpan PDF
           </button>
           <button id="btn-close-print-modal" class="px-3 py-2 bg-slate-200 text-slate-700 text-xs font-bold rounded-xl hover:bg-slate-300">
             Tutup
@@ -352,7 +352,7 @@
       <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center mx-auto text-2xl">
         <i class="fa-solid fa-brain animate-pulse"></i>
       </div>
-      <h3 class="font-black text-slate-900 text-base">Sedang Menilai...</h3>
+      <h3 class="font-black text-slate-900 text-base">Sedang Menilai WebApp...</h3>
       <p id="ai-progress-status" class="text-xs text-slate-500 font-medium">Mengevaluasi kriteria & sub-indikator...</p>
       <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
         <div id="ai-progress-bar" class="bg-gradient-to-r from-sky-500 to-indigo-600 h-3 rounded-full transition-all duration-300 w-1/4"></div>
@@ -457,11 +457,11 @@
     }
 
     function calculateGrade(score) {
-      if (score >= 85) return { badge: "GRADE A", text: "Sungguh Sungguh Hebat, Mengagumkan!", color: "bg-emerald-100 text-emerald-800 border-emerald-300" };
-      if (score >= 75) return { badge: "GRADE B", text: "Sungguh Hebat, Mengagumkan!", color: "bg-sky-100 text-sky-800 border-sky-300" };
-      if (score >= 65) return { badge: "GRADE C", text: "Hebat, tapi masih perlu ditingkatkan!", color: "bg-amber-100 text-amber-800 border-amber-300" };
-      if (score >= 55) return { badge: "GRADE D", text: "Jangan menyerah!", color: "bg-orange-100 text-orange-800 border-orange-300" };
-      return { badge: "GRADE E", text: "Mungkin sekarang bukan waktunya, masih ada esok hari. Semangat!", color: "bg-rose-100 text-rose-800 border-rose-300" };
+      if (score >= 85) return { badge: "GRADE A", text: "Sangat Unggul & Siap Produksi", color: "bg-emerald-100 text-emerald-800 border-emerald-300" };
+      if (score >= 75) return { badge: "GRADE B", text: "Layak & Profesional", color: "bg-sky-100 text-sky-800 border-sky-300" };
+      if (score >= 65) return { badge: "GRADE C", text: "Cukup Baik & Perlu Optimasi", color: "bg-amber-100 text-amber-800 border-amber-300" };
+      if (score >= 55) return { badge: "GRADE D", text: "Perlu Banyak Penyesuaian", color: "bg-orange-100 text-orange-800 border-orange-300" };
+      return { badge: "GRADE E", text: "Belum Memenuhi Standard Minimal", color: "bg-rose-100 text-rose-800 border-rose-300" };
     }
 
     function generateFallbackDataForPair(developer, url) {
@@ -489,7 +489,7 @@
       return {
         developer,
         url,
-        executive_summary: `Hasil penilaian otomatis untuk situs web (${url}) buatan ${developer} menyajikan rincian berdasarkan kriteria standar prototipe katalog.`,
+        executive_summary: `Hasil audit otomatis untuk situs web (${url}) buatan ${developer} menyajikan evaluasi terbobot berdasarkan kriteria standar prototipe katalog.`,
         sub_scores: sub,
         evidence,
         strengths,
@@ -523,7 +523,7 @@
         if (banner) banner.classList.remove('hidden');
         if (bannerText) {
           const first = tiedPairs[0];
-          bannerText.textContent = `Web App '${first.itemA.developer}' (#${first.rankA}) dan '${first.itemB.developer}' (#${first.rankB}) memiliki skor persis sama (${first.itemA.totalScore.toFixed(1)}%). Klik tombol untuk melihat perbandingan rincian sub-kriteria.`;
+          bannerText.textContent = `Web App '${first.itemA.developer}' (#${first.rankA}) dan '${first.itemB.developer}' (#${first.rankB}) memiliki skor total yang sama (${first.itemA.totalScore.toFixed(1)}%). Klik tombol untuk melihat perbandingan rincian sub-kriteria.`;
         }
       } else {
         if (banner) banner.classList.add('hidden');
@@ -534,8 +534,6 @@
       const modal = document.getElementById('modal-tiebreaker-comparison');
       const content = document.getElementById('tiebreaker-modal-content');
       if (!modal || !content) return;
-
-      let reasonText = `<strong>${itemA.developer}</strong> (#${rankA}) lebih unggul berdasarkan komparasi rata-rata sub-kriteria pada UI/UX & Katalog dengan kontribusi <strong>${itemA.calc.catA.toFixed(2)}%</strong> vs <strong>${itemB.calc.catA.toFixed(2)}%</strong>.`;
 
       let matrixRows = "";
       for (let key in state.criteriaMeta) {
@@ -555,6 +553,7 @@
           <tr class="hover:bg-slate-50 border-b border-slate-200 text-xs">
             <td class="p-2.5 font-bold text-slate-800 flex items-center gap-2">
               <i class="fa-solid ${meta.icon || 'fa-check'} text-sky-600"></i> ${meta.name}
+              <span class="text-[10px] font-mono font-normal text-slate-500">(Bobot: ${(meta.weight * 100).toFixed(2)}%)</span>
             </td>
             <td class="p-2.5 text-center font-mono font-extrabold text-sky-700 bg-sky-50/50">${scoreA} / 10</td>
             <td class="p-2.5 text-center font-mono font-extrabold text-slate-700 bg-slate-50">${scoreB} / 10</td>
@@ -564,11 +563,6 @@
       }
 
       content.innerHTML = `
-        <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-xs sm:text-sm text-amber-950 font-medium leading-relaxed">
-          <p class="font-bold text-amber-900 mb-1">💡 Mengapa ${itemA.developer} (#${rankA}) lebih unggul dari ${itemB.developer} (#${rankB})?</p>
-          <p>${reasonText}</p>
-        </div>
-
         <div class="space-y-3">
           <h4 class="font-extrabold text-xs sm:text-sm text-slate-900 uppercase tracking-wider flex items-center gap-2">
             <i class="fa-solid fa-table text-sky-600"></i> Perbandingan Detail Rata-Rata Sub-Kriteria (Skala 1 - 10)
@@ -698,10 +692,27 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         });
       }
 
+      /* MEKANISME SORTING TIE-BREAKER KHIERARKI KRITERIA BOBOT TERBESAR */
       state.history.sort((a, b) => {
-        if (Math.abs(b.totalScore - a.totalScore) > 0.001) return b.totalScore - a.totalScore;
-        if (Math.abs(b.calc.catA - a.calc.catA) > 0.001) return b.calc.catA - a.calc.catA;
-        return (b.auditObj.scores.c1 || 0) - (a.auditObj.scores.c1 || 0);
+        if (Math.abs(b.totalScore - a.totalScore) > 0.001) {
+          return b.totalScore - a.totalScore;
+        }
+
+        // Urutkan kriteria berdasarkan bobot terbesar ke terendah
+        const sortedCriteriaKeys = Object.keys(state.criteriaMeta).sort((k1, k2) => {
+          return state.criteriaMeta[k2].weight - state.criteriaMeta[k1].weight;
+        });
+
+        // Cari kriteria pertama yang memiliki skor berbeda
+        for (let key of sortedCriteriaKeys) {
+          const scoreA = a.auditObj.scores[key] || 0;
+          const scoreB = b.auditObj.scores[key] || 0;
+          if (Math.abs(scoreB - scoreA) > 0.001) {
+            return scoreB - scoreA;
+          }
+        }
+
+        return 0;
       });
 
       setTimeout(() => {
