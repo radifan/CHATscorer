@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CHATScorer - Penilaian Prototipe Web Katalog</title>
+  <title>CHATScorer</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -93,10 +93,9 @@
       </div>
 
       <div class="flex items-center gap-3">
-        <button id="btn-open-api-modal" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-700 text-xs font-bold flex items-center gap-2 transition shadow-sm">
-          <i id="api-status-icon" class="fa-solid fa-key text-amber-500 text-sm"></i>
-          <span id="api-status-label">Atur API Key</span>
-        </button>
+        <div class="px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-2">
+          <i class="fa-solid fa-shield-halved text-emerald-500 text-sm"></i>
+        </div>
       </div>
     </div>
   </header>
@@ -187,9 +186,6 @@
             <button id="btn-trigger-celebration" class="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm rounded-xl transition shadow-lg">
               Selebrasi 🎉
             </button>
-            <button id="btn-open-pdf-modal" class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs sm:text-sm rounded-xl transition shadow-lg flex items-center gap-2">
-              <i class="fa-solid fa-file-pdf"></i> Simpan PDF
-            </button>
           </div>
         </div>
 
@@ -209,6 +205,9 @@
           <div class="flex items-center gap-2">
             <label for="select-active-url" class="text-xs font-extrabold text-slate-600">Pilih Hasil:</label>
             <select id="select-active-url" class="bg-slate-100 border-2 border-sky-300 text-sky-900 font-mono font-bold text-xs rounded-xl px-3 py-2 focus:outline-none"></select>
+            <button id="btn-open-pdf-modal" class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs sm:text-sm rounded-xl transition shadow-lg flex items-center gap-2">
+              <i class="fa-solid fa-file-pdf"></i> Simpan PDF
+            </button>
           </div>
         </div>
 
@@ -223,10 +222,10 @@
             </div>
 
             <div class="text-left text-xs space-y-2 border-t border-sky-200 pt-4 font-medium">
-              <div class="flex justify-between"><span>Kelompok A (UI/UX & Katalog):</span><span id="cat-score-a" class="font-mono font-extrabold text-sky-700">0.00 / 45</span></div>
-              <div class="flex justify-between"><span>Kelompok B (Admin & Keamanan):</span><span id="cat-score-b" class="font-mono font-extrabold text-sky-700">0.00 / 20</span></div>
-              <div class="flex justify-between"><span>Kelompok C (Responsif & Kontak):</span><span id="cat-score-c" class="font-mono font-extrabold text-sky-700">0.00 / 25</span></div>
-              <div class="flex justify-between"><span>Kelompok D (Checkout & Payment):</span><span id="cat-score-d" class="font-mono font-extrabold text-sky-700">0.00 / 10</span></div>
+              <div class="flex justify-between"><span>UI/UX & Katalog:</span><span id="cat-score-a" class="font-mono font-extrabold text-sky-700">0.00 / 45</span></div>
+              <div class="flex justify-between"><span>Admin & Keamanan:</span><span id="cat-score-b" class="font-mono font-extrabold text-sky-700">0.00 / 20</span></div>
+              <div class="flex justify-between"><span>Responsif & Kontak:</span><span id="cat-score-c" class="font-mono font-extrabold text-sky-700">0.00 / 25</span></div>
+              <div class="flex justify-between"><span>Checkout & Payment:</span><span id="cat-score-d" class="font-mono font-extrabold text-sky-700">0.00 / 10</span></div>
             </div>
           </div>
 
@@ -263,49 +262,6 @@
     </div>
 
   </main>
-
-  <!-- MODAL PENGATURAN GEMINI API KEY -->
-  <div id="modal-api-key" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl">
-      <div class="flex items-center justify-between border-b pb-3">
-        <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-key text-amber-500"></i> Konfigurasi Gemini API Key
-        </h3>
-        <button id="btn-close-api-modal" class="text-slate-400 hover:text-slate-600 text-lg">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <div class="space-y-3 text-xs">
-        <p class="text-slate-600 leading-relaxed">
-          Masukkan Gemini API Key Anda untuk mengaktifkan analisis kontekstual AI secara penuh. Kunci disimpan secara lokal di browser (<code>localStorage</code>) dan tidak dikirim ke server pihak ketiga selain Google Gemini API.
-        </p>
-
-        <div class="space-y-1.5">
-          <label for="input-api-key" class="block font-extrabold text-slate-700">Gemini API Key:</label>
-          <div class="relative">
-            <input type="password" id="input-api-key" placeholder="AIzaSy..." class="w-full pl-3.5 pr-10 py-2.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-sky-600">
-            <button type="button" id="btn-toggle-api-visibility" title="Tampilkan/Sembunyikan" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-              <i class="fa-solid fa-eye"></i>
-            </button>
-          </div>
-        </div>
-
-        <p class="text-[11px] text-slate-500">
-          * Jika dikosongkan, sistem otomatis berjalan menggunakan <strong>Mode Fallback Deterministik</strong>.
-        </p>
-      </div>
-
-      <div class="flex items-center justify-between gap-2 border-t pt-4">
-        <button id="btn-clear-api-key" class="px-4 py-2.5 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 font-bold text-xs rounded-xl transition">
-          Hapus Key
-        </button>
-        <button id="btn-save-api-key" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs rounded-xl transition shadow-md flex items-center gap-1.5">
-          <i class="fa-solid fa-floppy-disk"></i> Simpan Konfigurasi
-        </button>
-      </div>
-    </div>
-  </div>
 
   <!-- MODAL PEMBANDING SKOR KEMBAR (TIE-BREAKER MODAL) -->
   <div id="modal-tiebreaker-comparison" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
@@ -405,10 +361,10 @@
   </div>
 
   <script>
-    const API_KEY_STORAGE = "chatscorer_gemini_api_key";
+    const DEFAULT_API_KEY = ""; // Masukkan Gemini API Key jika ada
 
     const state = {
-      apiKey: localStorage.getItem(API_KEY_STORAGE) || "",
+      apiKey: DEFAULT_API_KEY,
       history: [],
       url: "",
       developer: "",
@@ -427,23 +383,6 @@
         c10: { id: "c10", cat: "D", weight: 0.1000, name: "Direct Checkout & Pembayaran QRIS", icon: "fa-credit-card", desc: "Manajemen keranjang, checkout WA otomatis, & QRIS.", sub: [ { id: "s10_1", name: "Manajemen Keranjang Belanja" }, { id: "s10_2", name: "Direct Checkout Otomatis via WhatsApp" }, { id: "s10_3", name: "Pilihan Pembayaran Instant QRIS & Bank" } ] }
       }
     };
-
-    function updateApiKeyBadge() {
-      const icon = document.getElementById('api-status-icon');
-      const label = document.getElementById('api-status-label');
-      const btn = document.getElementById('btn-open-api-modal');
-      if (!icon || !label || !btn) return;
-
-      if (state.apiKey && state.apiKey.trim().length > 0) {
-        icon.className = "fa-solid fa-shield-halved text-emerald-500 text-sm";
-        label.textContent = "API Key Aktif";
-        btn.className = "px-3.5 py-2 rounded-xl border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100 text-emerald-900 text-xs font-bold flex items-center gap-2 transition shadow-sm";
-      } else {
-        icon.className = "fa-solid fa-key text-amber-500 text-sm";
-        label.textContent = "Atur API Key (Fallback)";
-        btn.className = "px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-700 text-xs font-bold flex items-center gap-2 transition shadow-sm";
-      }
-    }
 
     function generateDeterministicHashScore(url, salt) {
       const str = (url + salt).toLowerCase();
@@ -518,11 +457,11 @@
     }
 
     function calculateGrade(score) {
-      if (score >= 85) return { badge: "GRADE A", text: "Sangat Unggul & Siap Produksi", color: "bg-emerald-100 text-emerald-800 border-emerald-300" };
-      if (score >= 75) return { badge: "GRADE B", text: "Layak & Profesional", color: "bg-sky-100 text-sky-800 border-sky-300" };
-      if (score >= 65) return { badge: "GRADE C", text: "Cukup Baik & Perlu Optimasi", color: "bg-amber-100 text-amber-800 border-amber-300" };
-      if (score >= 55) return { badge: "GRADE D", text: "Perlu Banyak Penyesuaian", color: "bg-orange-100 text-orange-800 border-orange-300" };
-      return { badge: "GRADE E", text: "Belum Memenuhi Standard Minimal", color: "bg-rose-100 text-rose-800 border-rose-300" };
+      if (score >= 85) return { badge: "GRADE A", text: "Luar Biasa!", color: "bg-emerald-100 text-emerald-800 border-emerald-300" };
+      if (score >= 75) return { badge: "GRADE B", text: "Hebat!", color: "bg-sky-100 text-sky-800 border-sky-300" };
+      if (score >= 65) return { badge: "GRADE C", text: "Tingkatkan Lagi!", color: "bg-amber-100 text-amber-800 border-amber-300" };
+      if (score >= 55) return { badge: "GRADE D", text: "Pelajari Lagi!", color: "bg-orange-100 text-orange-800 border-orange-300" };
+      return { badge: "GRADE E", text: "Mungkin Kamu Terburu-buru :(", color: "bg-rose-100 text-rose-800 border-rose-300" };
     }
 
     function generateFallbackDataForPair(developer, url) {
@@ -550,7 +489,7 @@
       return {
         developer,
         url,
-        executive_summary: `Hasil audit otomatis untuk situs web (${url}) buatan ${developer} menyajikan evaluasi terbobot berdasarkan kriteria standar prototipe katalog.`,
+        executive_summary: `Hasil penilaian AI untuk (${url}) buatan ${developer}.`,
         sub_scores: sub,
         evidence,
         strengths,
@@ -584,7 +523,7 @@
         if (banner) banner.classList.remove('hidden');
         if (bannerText) {
           const first = tiedPairs[0];
-          bannerText.textContent = `Web App '${first.itemA.developer}' (#${first.rankA}) dan '${first.itemB.developer}' (#${first.rankB}) memiliki skor total yang sama (${first.itemA.totalScore.toFixed(1)}%). Klik tombol untuk melihat perbandingan rincian sub-kriteria.`;
+          bannerText.textContent = `Web '${first.itemA.developer}' (#${first.rankA}) dan '${first.itemB.developer}' (#${first.rankB}) memiliki skor total yang sama (${first.itemA.totalScore.toFixed(1)}%). Klik untuk membandingkan.`;
         }
       } else {
         if (banner) banner.classList.add('hidden');
@@ -636,7 +575,7 @@
                   <th class="p-2.5">Kriteria Penilaian</th>
                   <th class="p-2.5 text-center bg-sky-100/70 text-sky-900">#${rankA} - ${itemA.developer}</th>
                   <th class="p-2.5 text-center bg-slate-200/70 text-slate-900">#${rankB} - ${itemB.developer}</th>
-                  <th class="p-2.5 text-center">Selisih & Keunggulan</th>
+                  <th class="p-2.5 text-center">Selisih</th>
                 </tr>
               </thead>
               <tbody>
@@ -670,21 +609,15 @@
       const pairs = devLines.map((dev, i) => ({ developer: dev, url: normalizeUrl(urlLines[i]) }));
       
       const modalProgress = document.getElementById('modal-ai-progress');
-      const progressBar = document.getElementById('ai-progress-bar');
-      const progressStatus = document.getElementById('ai-progress-status');
       if (modalProgress) modalProgress.classList.remove('hidden');
-      if (progressBar) progressBar.style.width = "35%";
 
       state.history = [];
 
       try {
-        const apiKey = state.apiKey.trim();
+        const apiKey = state.apiKey;
         let aiResults = null;
 
         if (apiKey) {
-          if (progressStatus) progressStatus.textContent = "Menghubungi Gemini AI (Batch Single Request)...";
-          if (progressBar) progressBar.style.width = "65%";
-
           const systemPrompt = `Anda adalah Auditor AI Resmi Prototipe WebApp UMKM. Tugas Anda: Lakukan audit komprehensif terhadap DAFTAR PASANGAN (Pengembang & URL) berikut dalam SATU PROSES BATCH SINGLE REQUEST:
 ${JSON.stringify(pairs)}
 
@@ -732,11 +665,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
               const parsed = JSON.parse(textContent);
               aiResults = Array.isArray(parsed) ? parsed : (parsed.data || parsed.results || null);
             }
-          } else {
-            showToast("API Fallback", "Gagal memanggil Gemini API, beralih ke mode evaluasi fallback.", false);
           }
-        } else {
-          if (progressStatus) progressStatus.textContent = "Menjalankan evaluasi mode fallback deterministik...";
         }
 
         pairs.forEach((pair, idx) => {
@@ -763,16 +692,18 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         });
       }
 
-      /* MEKANISME SORTING TIE-BREAKER HIERARKI KRITERIA BOBOT TERBESAR */
+      /* MEKANISME SORTING TIE-BREAKER KHIERARKI KRITERIA BOBOT TERBESAR */
       state.history.sort((a, b) => {
         if (Math.abs(b.totalScore - a.totalScore) > 0.001) {
           return b.totalScore - a.totalScore;
         }
 
+        // Urutkan kriteria berdasarkan bobot terbesar ke terendah
         const sortedCriteriaKeys = Object.keys(state.criteriaMeta).sort((k1, k2) => {
           return state.criteriaMeta[k2].weight - state.criteriaMeta[k1].weight;
         });
 
+        // Cari kriteria pertama yang memiliki skor berbeda
         for (let key of sortedCriteriaKeys) {
           const scoreA = a.auditObj.scores[key] || 0;
           const scoreB = b.auditObj.scores[key] || 0;
@@ -784,11 +715,8 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         return 0;
       });
 
-      if (progressBar) progressBar.style.width = "100%";
-
       setTimeout(() => {
         if (modalProgress) modalProgress.classList.add('hidden');
-        if (progressBar) progressBar.style.width = "25%";
         if (state.history.length > 0) {
           state.developer = state.history[0].developer;
           state.url = state.history[0].url;
@@ -1077,7 +1005,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
       if (!modal || !container) return;
 
       container.innerHTML = '';
-      state.history.forEach((item) => {
+      state.history.forEach((item, idx) => {
         const div = document.createElement('div');
         div.className = "flex items-center justify-between p-2.5 bg-slate-50 border rounded-xl text-xs";
         div.innerHTML = `
@@ -1098,7 +1026,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
       const checkedUrls = Array.from(document.querySelectorAll('.pdf-select-item:checked')).map(cb => cb.value);
 
       if (checkedUrls.length === 0) {
-        showToast("Pilihan Kosong", "Centang minimal 1 WebApp untuk dicetak.", false);
+        showToast("Pilihan Kosong", "Pilih minimal 1", false);
         return;
       }
 
@@ -1199,49 +1127,6 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      updateApiKeyBadge();
-
-      /* API KEY MODAL HANDLERS */
-      const apiModal = document.getElementById('modal-api-key');
-      const apiInput = document.getElementById('input-api-key');
-
-      document.getElementById('btn-open-api-modal')?.addEventListener('click', () => {
-        if (apiInput) apiInput.value = state.apiKey;
-        apiModal?.classList.remove('hidden');
-      });
-
-      document.getElementById('btn-close-api-modal')?.addEventListener('click', () => {
-        apiModal?.classList.add('hidden');
-      });
-
-      document.getElementById('btn-toggle-api-visibility')?.addEventListener('click', () => {
-        if (!apiInput) return;
-        apiInput.type = apiInput.type === "password" ? "text" : "password";
-      });
-
-      document.getElementById('btn-save-api-key')?.addEventListener('click', () => {
-        const val = (apiInput?.value || "").trim();
-        state.apiKey = val;
-        if (val) {
-          localStorage.setItem(API_KEY_STORAGE, val);
-          showToast("API Key Disimpan", "Konfigurasi Gemini API Key berhasil disimpan di browser.", true);
-        } else {
-          localStorage.removeItem(API_KEY_STORAGE);
-          showToast("Mode Fallback", "API Key kosong, sistem menggunakan evaluasi fallback.", true);
-        }
-        updateApiKeyBadge();
-        apiModal?.classList.add('hidden');
-      });
-
-      document.getElementById('btn-clear-api-key')?.addEventListener('click', () => {
-        state.apiKey = "";
-        if (apiInput) apiInput.value = "";
-        localStorage.removeItem(API_KEY_STORAGE);
-        updateApiKeyBadge();
-        showToast("API Key Dihapus", "API Key dihapus dari browser.", true);
-      });
-
-      /* AUDIT & UI HANDLERS */
       document.getElementById('btn-audit-ai')?.addEventListener('click', runAIAuditBatch);
       
       document.getElementById('input-url')?.addEventListener('keydown', (e) => {
@@ -1254,12 +1139,6 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         state.history = [];
         document.getElementById('results-section')?.classList.add('hidden');
         showToast("Bersih", "Seluruh form input telah dikosongkan.", true);
-      });
-
-      document.getElementById('btn-trigger-celebration')?.addEventListener('click', () => {
-        if (typeof confetti === 'function') {
-          confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        }
       });
 
       document.getElementById('btn-open-tiebreaker-banner')?.addEventListener('click', () => {
