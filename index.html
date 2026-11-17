@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CHATScorer</title>
+  <title>CHATScorer - Penilaian Prototipe Web Katalog</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -93,9 +93,10 @@
       </div>
 
       <div class="flex items-center gap-3">
-        <div class="px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-2">
-          <i class="fa-solid fa-shield-halved text-emerald-500 text-sm"></i>
-        </div>
+        <button id="btn-open-api-modal" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-700 text-xs font-bold flex items-center gap-2 transition shadow-sm">
+          <i id="api-status-icon" class="fa-solid fa-key text-amber-500 text-sm"></i>
+          <span id="api-status-label">Atur API Key</span>
+        </button>
       </div>
     </div>
   </header>
@@ -263,6 +264,48 @@
 
   </main>
 
+  <!-- MODAL PENGATURAN API KEY & CORS PROXY -->
+  <div id="modal-api-key" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-key text-amber-500"></i> Konfigurasi AI & Inspeksi DOM
+        </h3>
+        <button id="btn-close-api-modal" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div class="space-y-1.5">
+          <label for="input-api-key" class="block font-extrabold text-slate-700">Gemini API Key (Disimpan lokal di browser):</label>
+          <div class="relative">
+            <input type="password" id="input-api-key" placeholder="AIzaSy..." class="w-full pl-3.5 pr-10 py-2.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-sky-600">
+            <button type="button" id="btn-toggle-api-visibility" title="Tampilkan/Sembunyikan" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-500">Kosongkan jika ingin memakai Mode Fallback Deterministik.</p>
+        </div>
+
+        <div class="space-y-1.5">
+          <label for="input-proxy-url" class="block font-extrabold text-slate-700">CORS Proxy Endpoint (Untuk Inspeksi HTML Nyata):</label>
+          <input type="text" id="input-proxy-url" placeholder="https://api.allorigins.win/get?url=" class="w-full px-3.5 py-2.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-sky-600">
+          <p class="text-[11px] text-slate-500">Default menggunakan <code>allorigins.win</code>. Gunakan URL Cloudflare Worker kustom jika ingin memeriksa HTTP Security Headers lengkap.</p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between gap-2 border-t pt-4">
+        <button id="btn-clear-api-key" class="px-4 py-2.5 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 font-bold text-xs rounded-xl transition">
+          Reset Default
+        </button>
+        <button id="btn-save-api-key" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs rounded-xl transition shadow-md flex items-center gap-1.5">
+          <i class="fa-solid fa-floppy-disk"></i> Simpan Konfigurasi
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL PEMBANDING SKOR KEMBAR (TIE-BREAKER MODAL) -->
   <div id="modal-tiebreaker-comparison" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white border border-slate-200 rounded-3xl max-w-4xl w-full p-6 sm:p-8 space-y-6 shadow-2xl my-8">
@@ -361,10 +404,13 @@
   </div>
 
   <script>
-    const DEFAULT_API_KEY = ""; // Masukkan Gemini API Key jika ada
+    const API_KEY_STORAGE = "chatscorer_gemini_api_key";
+    const PROXY_URL_STORAGE = "chatscorer_cors_proxy_url";
+    const DEFAULT_PROXY_URL = "https://api.allorigins.win/get?url=";
 
     const state = {
-      apiKey: DEFAULT_API_KEY,
+      apiKey: localStorage.getItem(API_KEY_STORAGE) || "",
+      proxyUrl: localStorage.getItem(PROXY_URL_STORAGE) || DEFAULT_PROXY_URL,
       history: [],
       url: "",
       developer: "",
@@ -384,6 +430,23 @@
       }
     };
 
+    function updateApiKeyBadge() {
+      const icon = document.getElementById('api-status-icon');
+      const label = document.getElementById('api-status-label');
+      const btn = document.getElementById('btn-open-api-modal');
+      if (!icon || !label || !btn) return;
+
+      if (state.apiKey && state.apiKey.trim().length > 0) {
+        icon.className = "fa-solid fa-shield-halved text-emerald-500 text-sm";
+        label.textContent = "API Key Aktif";
+        btn.className = "px-3.5 py-2 rounded-xl border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100 text-emerald-900 text-xs font-bold flex items-center gap-2 transition shadow-sm";
+      } else {
+        icon.className = "fa-solid fa-key text-amber-500 text-sm";
+        label.textContent = "Atur API Key (Fallback)";
+        btn.className = "px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-700 text-xs font-bold flex items-center gap-2 transition shadow-sm";
+      }
+    }
+
     function generateDeterministicHashScore(url, salt) {
       const str = (url + salt).toLowerCase();
       let hash = 0;
@@ -395,13 +458,30 @@
       return parseFloat(Math.min(10.0, Math.max(5.0, val)).toFixed(1));
     }
 
-    function generateDynamicTextByScore(cKey, avgScore, url) {
+    function generateDynamicTextByScore(cKey, avgScore, url, inspection = null) {
       const domain = url.replace(/^https?:\/\//i, '').split('/')[0];
       const criteriaName = state.criteriaMeta[cKey]?.name || cKey;
 
+      let realNote = "";
+      if (inspection && inspection.reachable) {
+        if (cKey === "c5") {
+          realNote = inspection.c5_admin_links.length > 0
+            ? ` (Terdeteksi ${inspection.c5_admin_links.length} tautan portal/admin: ${inspection.c5_admin_links.join(", ")})`
+            : ` (Tidak ditemukan tautan rute /admin atau /login pada HTML statis)`;
+        } else if (cKey === "c6") {
+          realNote = ` (Ditemukan ${inspection.c6_form_inputs_total} elemen input form, ${inspection.c6_inline_scripts} inline script, CSP: ${inspection.c6_security_headers.csp})`;
+        } else if (cKey === "c7") {
+          realNote = inspection.c7_has_viewport ? ` (Meta tag viewport terpasang)` : ` (Meta tag viewport tidak ditemukan)`;
+        } else if (cKey === "c8") {
+          realNote = inspection.c8_has_whatsapp ? ` (Tautan WhatsApp direct chat terdeteksi)` : ` (Tautan wa.me tidak ditemukan di halaman utama)`;
+        } else if (cKey === "c10") {
+          realNote = inspection.c10_has_qris ? ` (Referensi metode pembayaran QRIS terdeteksi)` : ` (Kata kunci QRIS tidak ditemukan di halaman utama)`;
+        }
+      }
+
       if (avgScore >= 8.5) {
         return {
-          evidence: `Fitur ${criteriaName} pada domain ${domain} terkonfirmasi beroperasi sangat lancar dan sesuai standar.`,
+          evidence: `Fitur ${criteriaName} pada domain ${domain} terkonfirmasi beroperasi sangat lancar dan sesuai standar.${realNote}`,
           strengths: [`Implementasi ${criteriaName} sangat optimal`, `Antarmuka dan alur pengguna di ${domain} responsif`],
           weaknesses: [`Perlu pemeliharaan performa rutin berkala`],
           reasons: `Skor ${avgScore} diberikan karena seluruh sub-indikator terpenuhi di atas standar minimal.`,
@@ -409,17 +489,17 @@
         };
       } else if (avgScore >= 7.0) {
         return {
-          evidence: `Komponen ${criteriaName} pada ${domain} berfungsi cukup baik, namun terdapat sedikit jeda respons.`,
+          evidence: `Komponen ${criteriaName} pada ${domain} berfungsi cukup baik, namun terdapat sedikit catatan teknis.${realNote}`,
           strengths: [`Fungsionalitas dasar ${criteriaName} sudah berjalan`],
-          weaknesses: [`Beberapa elemen butuh penyesuaian tata letak & kelancaran`],
+          weaknesses: [`Beberapa elemen butuh penyesuaian tata letak & validasi`],
           reasons: `Skor ${avgScore} mencerminkan kesiapan fungsi dasar meskipun ada catatan minor.`,
-          recommendations: `Lakukan optimasi pada tata letak dan tingkatkan kecepatan muat halaman.`
+          recommendations: `Lakukan optimasi pada struktur elemen dan validasi input.`
         };
       } else {
         return {
-          evidence: `Ditemukan ketidaksesuaian elemen atau indikator ${criteriaName} pada situs ${domain}.`,
+          evidence: `Ditemukan ketidaksesuaian elemen atau indikator ${criteriaName} pada situs ${domain}.${realNote}`,
           strengths: [`Kerangka dasar antarmuka sudah tersedia`],
-          weaknesses: [`Validasi elemen belum konsisten`, `Sering terjadi kesalahan tampilan/fungsi`],
+          weaknesses: [`Validasi elemen belum konsisten`, `Indikator kriteria belum lengkap`],
           reasons: `Skor ${avgScore} diberikan karena beberapa sub-indikator belum memenuhi standar minimal.`,
           recommendations: `Lakukan perbaikan menyeluruh pada komponen kriteria ini sebelum rilis ke publik.`
         };
@@ -464,20 +544,36 @@
       return { badge: "GRADE E", text: "Mungkin Kamu Terburu-buru :(", color: "bg-rose-100 text-rose-800 border-rose-300" };
     }
 
-    function generateFallbackDataForPair(developer, url) {
+    function generateFallbackDataForPair(developer, url, inspection = null) {
       const sub = {};
       const evidence = {}, strengths = {}, weaknesses = {}, reasons = {}, recommendations = {};
 
       for (let i = 1; i <= 10; i++) {
         const cKey = `c${i}`;
-        const s1 = generateDeterministicHashScore(url, `${i}_1`);
-        const s2 = generateDeterministicHashScore(url, `${i}_2`);
-        const s3 = generateDeterministicHashScore(url, `${i}_3`);
+        let s1 = generateDeterministicHashScore(url, `${i}_1`);
+        let s2 = generateDeterministicHashScore(url, `${i}_2`);
+        let s3 = generateDeterministicHashScore(url, `${i}_3`);
+
+        // Penyesuaian skor deterministik jika hasil inspeksi DOM nyata tersedia
+        if (inspection && inspection.reachable) {
+          if (cKey === "c5" && inspection.c5_admin_links.length === 0) {
+            s1 = Math.min(s1, 6.0);
+          }
+          if (cKey === "c6" && inspection.c6_security_headers.csp === "Tidak terdeteksi") {
+            s2 = Math.min(s2, 7.2);
+          }
+          if (cKey === "c7" && inspection.c7_has_viewport) {
+            s3 = Math.max(s3, 8.8);
+          }
+          if (cKey === "c8" && inspection.c8_has_whatsapp) {
+            s1 = Math.max(s1, 9.0);
+          }
+        }
 
         sub[cKey] = { [`s${i}_1`]: s1, [`s${i}_2`]: s2, [`s${i}_3`]: s3 };
 
         const avg = parseFloat(((s1 + s2 + s3) / 3).toFixed(1));
-        const dyn = generateDynamicTextByScore(cKey, avg, url);
+        const dyn = generateDynamicTextByScore(cKey, avg, url, inspection);
 
         evidence[cKey] = dyn.evidence;
         strengths[cKey] = dyn.strengths;
@@ -489,7 +585,7 @@
       return {
         developer,
         url,
-        executive_summary: `Hasil penilaian AI untuk (${url}) buatan ${developer}.`,
+        executive_summary: `Hasil penilaian evaluasi untuk (${url}) buatan ${developer}${inspection?.reachable ? ' dengan pemindaian struktur HTML nyata' : ''}.`,
         sub_scores: sub,
         evidence,
         strengths,
@@ -589,6 +685,68 @@
       modal.classList.remove('hidden');
     }
 
+    /* INSPEKSI DOM & HTTP SECURITY HEADERS NYATA SEBELUM PENILAIAN */
+    async function inspectTargetWebsite(url) {
+      const proxyBase = (state.proxyUrl || DEFAULT_PROXY_URL).trim();
+      if (!proxyBase) return { reachable: false, error: "Proxy tidak dikonfigurasi" };
+
+      try {
+        const res = await fetch(`${proxyBase}${encodeURIComponent(url)}`);
+        if (!res.ok) throw new Error("Gagal mengakses URL melalui proxy");
+        const data = await res.json();
+
+        // AllOrigins menyimpan HTML di 'contents', Cloudflare Worker kustom di 'html'
+        const rawHtml = data.contents || data.html || "";
+        const headers = data.headers || {};
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(rawHtml, "text/html");
+
+        // 1. Cek C5 (Pemisahan Akses Admin & Rute Login)
+        const links = Array.from(doc.querySelectorAll("a")).map(a => a.getAttribute("href") || "");
+        const adminLinks = links.filter(href => /admin|login|dashboard|panel|masuk/i.test(href));
+
+        // 2. Cek C6 (Keamanan Input Form, Sanitasi & Inline Script)
+        const inputs = Array.from(doc.querySelectorAll("input, textarea"));
+        const inputValidations = inputs.slice(0, 12).map(el => ({
+          type: el.getAttribute("type") || "text",
+          required: el.hasAttribute("required"),
+          pattern: el.hasAttribute("pattern"),
+          maxlength: el.getAttribute("maxlength")
+        }));
+        const inlineScripts = doc.querySelectorAll("script:not([src])").length;
+
+        // 3. Cek HTTP Security Headers
+        const securityHeaders = {
+          csp: headers["content-security-policy"] || "Tidak terdeteksi",
+          xFrame: headers["x-frame-options"] || "Tidak terdeteksi",
+          xContentType: headers["x-content-type-options"] || "Tidak terdeteksi",
+          hsts: headers["strict-transport-security"] || "Tidak terdeteksi"
+        };
+
+        // 4. Cek C7, C8, C10 (Viewport, WhatsApp, QRIS)
+        const hasViewport = !!doc.querySelector('meta[name="viewport"]');
+        const hasWhatsApp = links.some(href => /wa\.me|whatsapp\.com/i.test(href));
+        const bodyText = (doc.body?.innerText || "").replace(/\s+/g, " ");
+        const hasQRIS = /qris/i.test(bodyText);
+
+        return {
+          reachable: true,
+          c5_admin_links: adminLinks,
+          c6_form_inputs_total: inputs.length,
+          c6_input_validations: inputValidations,
+          c6_inline_scripts: inlineScripts,
+          c6_security_headers: securityHeaders,
+          c7_has_viewport: hasViewport,
+          c8_has_whatsapp: hasWhatsApp,
+          c10_has_qris: hasQRIS,
+          page_text_sample: bodyText.slice(0, 1200)
+        };
+      } catch (err) {
+        return { reachable: false, error: err.message };
+      }
+    }
+
     async function runAIAuditBatch() {
       const devRaw = (document.getElementById('input-developer')?.value || "").trim();
       const urlRaw = (document.getElementById('input-url')?.value || "").trim();
@@ -598,8 +756,10 @@
         return;
       }
 
-      const devLines = devRaw.split('\n').map(s => s.trim()).filter(Boolean);
-      const urlLines = urlRaw.split('\n').map(s => s.trim()).filter(Boolean);
+      const devLines = devRaw.split('
+').map(s => s.trim()).filter(Boolean);
+      const urlLines = urlRaw.split('
+').map(s => s.trim()).filter(Boolean);
 
       if (devLines.length !== urlLines.length) {
         showToast("Baris Tidak Sama", `Jumlah Nama Pengembang (${devLines.length}) & URL (${urlLines.length}) harus sama 1-ke-1.`, false);
@@ -609,19 +769,45 @@
       const pairs = devLines.map((dev, i) => ({ developer: dev, url: normalizeUrl(urlLines[i]) }));
       
       const modalProgress = document.getElementById('modal-ai-progress');
+      const progressBar = document.getElementById('ai-progress-bar');
+      const progressStatus = document.getElementById('ai-progress-status');
       if (modalProgress) modalProgress.classList.remove('hidden');
+      if (progressBar) progressBar.style.width = "30%";
 
       state.history = [];
+      let enrichedPairs = [];
 
       try {
-        const apiKey = state.apiKey;
+        if (progressStatus) progressStatus.textContent = "Memindai struktur HTML & Header keamanan situs target...";
+        enrichedPairs = await Promise.all(
+          pairs.map(async (pair) => {
+            const inspection = await inspectTargetWebsite(pair.url);
+            return {
+              developer: pair.developer,
+              url: pair.url,
+              real_dom_and_header_inspection: inspection
+            };
+          })
+        );
+
+        if (progressBar) progressBar.style.width = "65%";
+
+        const apiKey = state.apiKey.trim();
         let aiResults = null;
 
         if (apiKey) {
-          const systemPrompt = `Anda adalah Auditor AI Resmi Prototipe WebApp UMKM. Tugas Anda: Lakukan audit komprehensif terhadap DAFTAR PASANGAN (Pengembang & URL) berikut dalam SATU PROSES BATCH SINGLE REQUEST:
-${JSON.stringify(pairs)}
+          if (progressStatus) progressStatus.textContent = "Mengevaluasi hasil inspeksi dengan Gemini AI...";
 
-Evaluasi tiap pasangan secara spesifik dan kontekstual sesuai karakteristik situs URL tersebut pada skala angka desimal 1.0 - 10.0 untuk sub-kriteria (s1_1 hingga s10_3).
+          const systemPrompt = `Anda adalah Auditor AI Resmi Prototipe WebApp UMKM. Tugas Anda: Lakukan audit komprehensif terhadap DAFTAR PASANGAN berikut berdasarkan DATA INSPEKSI DOM & HEADER NYATA dalam SATU PROSES BATCH SINGLE REQUEST:
+${JSON.stringify(enrichedPairs)}
+
+Aturan Penilaian Objektif:
+1. Gunakan 'real_dom_and_header_inspection' sebagai bukti utama bila reachable: true.
+2. Untuk c5 (Akses Admin): Periksa 'c5_admin_links'. Jika kosong dan tidak ada portal pengelola di sampel teks halaman, beri skor rendah (<= 5.5).
+3. Untuk c6 (Keamanan): Periksa 'c6_security_headers' dan 'c6_input_validations'. Jika input form tanpa atribut validasi (required/pattern/maxlength) dan header keamanan tidak ada, turunkan skor secara proporsional.
+4. Cantumkan temuan teknis nyata tersebut di dalam field 'evidence'.
+
+Evaluasi tiap pasangan pada skala angka desimal 1.0 - 10.0 untuk sub-kriteria (s1_1 hingga s10_3).
 Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
 [
   {
@@ -665,18 +851,24 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
               const parsed = JSON.parse(textContent);
               aiResults = Array.isArray(parsed) ? parsed : (parsed.data || parsed.results || null);
             }
+          } else {
+            showToast("API Fallback", "Gagal memanggil Gemini API, beralih ke mode evaluasi fallback.", false);
           }
+        } else {
+          if (progressStatus) progressStatus.textContent = "Menjalankan evaluasi mode fallback deterministik...";
         }
 
-        pairs.forEach((pair, idx) => {
-          let itemObj = (aiResults && aiResults[idx]) ? aiResults[idx] : generateFallbackDataForPair(pair.developer, pair.url);
-          itemObj.developer = pair.developer;
-          itemObj.url = pair.url;
+        enrichedPairs.forEach((item, idx) => {
+          let itemObj = (aiResults && aiResults[idx])
+            ? aiResults[idx]
+            : generateFallbackDataForPair(item.developer, item.url, item.real_dom_and_header_inspection);
+          itemObj.developer = item.developer;
+          itemObj.url = item.url;
 
           const calc = calculateScores(itemObj);
           state.history.push({
-            developer: pair.developer,
-            url: pair.url,
+            developer: item.developer,
+            url: item.url,
             auditObj: itemObj,
             totalScore: calc.total,
             calc
@@ -685,25 +877,24 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
 
       } catch (err) {
         console.error(err);
-        pairs.forEach(pair => {
-          const fallback = generateFallbackDataForPair(pair.developer, pair.url);
+        pairs.forEach((pair, idx) => {
+          const insp = enrichedPairs[idx]?.real_dom_and_header_inspection || null;
+          const fallback = generateFallbackDataForPair(pair.developer, pair.url, insp);
           const calc = calculateScores(fallback);
           state.history.push({ developer: pair.developer, url: pair.url, auditObj: fallback, totalScore: calc.total, calc });
         });
       }
 
-      /* MEKANISME SORTING TIE-BREAKER KHIERARKI KRITERIA BOBOT TERBESAR */
+      /* MEKANISME SORTING TIE-BREAKER HIERARKI KRITERIA BOBOT TERBESAR */
       state.history.sort((a, b) => {
         if (Math.abs(b.totalScore - a.totalScore) > 0.001) {
           return b.totalScore - a.totalScore;
         }
 
-        // Urutkan kriteria berdasarkan bobot terbesar ke terendah
         const sortedCriteriaKeys = Object.keys(state.criteriaMeta).sort((k1, k2) => {
           return state.criteriaMeta[k2].weight - state.criteriaMeta[k1].weight;
         });
 
-        // Cari kriteria pertama yang memiliki skor berbeda
         for (let key of sortedCriteriaKeys) {
           const scoreA = a.auditObj.scores[key] || 0;
           const scoreB = b.auditObj.scores[key] || 0;
@@ -715,8 +906,11 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         return 0;
       });
 
+      if (progressBar) progressBar.style.width = "100%";
+
       setTimeout(() => {
         if (modalProgress) modalProgress.classList.add('hidden');
+        if (progressBar) progressBar.style.width = "25%";
         if (state.history.length > 0) {
           state.developer = state.history[0].developer;
           state.url = state.history[0].url;
@@ -1005,7 +1199,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
       if (!modal || !container) return;
 
       container.innerHTML = '';
-      state.history.forEach((item, idx) => {
+      state.history.forEach((item) => {
         const div = document.createElement('div');
         div.className = "flex items-center justify-between p-2.5 bg-slate-50 border rounded-xl text-xs";
         div.innerHTML = `
@@ -1127,6 +1321,58 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      updateApiKeyBadge();
+
+      /* API KEY & PROXY MODAL HANDLERS */
+      const apiModal = document.getElementById('modal-api-key');
+      const apiInput = document.getElementById('input-api-key');
+      const proxyInput = document.getElementById('input-proxy-url');
+
+      document.getElementById('btn-open-api-modal')?.addEventListener('click', () => {
+        if (apiInput) apiInput.value = state.apiKey;
+        if (proxyInput) proxyInput.value = state.proxyUrl;
+        apiModal?.classList.remove('hidden');
+      });
+
+      document.getElementById('btn-close-api-modal')?.addEventListener('click', () => {
+        apiModal?.classList.add('hidden');
+      });
+
+      document.getElementById('btn-toggle-api-visibility')?.addEventListener('click', () => {
+        if (!apiInput) return;
+        apiInput.type = apiInput.type === "password" ? "text" : "password";
+      });
+
+      document.getElementById('btn-save-api-key')?.addEventListener('click', () => {
+        const val = (apiInput?.value || "").trim();
+        const pVal = (proxyInput?.value || "").trim() || DEFAULT_PROXY_URL;
+        state.apiKey = val;
+        state.proxyUrl = pVal;
+
+        if (val) {
+          localStorage.setItem(API_KEY_STORAGE, val);
+        } else {
+          localStorage.removeItem(API_KEY_STORAGE);
+        }
+        localStorage.setItem(PROXY_URL_STORAGE, pVal);
+
+        updateApiKeyBadge();
+        apiModal?.classList.add('hidden');
+        showToast("Konfigurasi Disimpan", val ? "Gemini API Key & Proxy aktif." : "Mode fallback aktif dengan inspeksi DOM.", true);
+      });
+
+      document.getElementById('btn-clear-api-key')?.addEventListener('click', () => {
+        state.apiKey = "";
+        state.proxyUrl = DEFAULT_PROXY_URL;
+        if (apiInput) apiInput.value = "";
+        if (proxyInput) proxyInput.value = DEFAULT_PROXY_URL;
+        localStorage.removeItem(API_KEY_STORAGE);
+        localStorage.removeItem(PROXY_URL_STORAGE);
+        updateApiKeyBadge();
+        showToast("Reset Selesai", "Konfigurasi dikembalikan ke default.", true);
+      });
+
+      /* AUDIT & UI HANDLERS */
       document.getElementById('btn-audit-ai')?.addEventListener('click', runAIAuditBatch);
       
       document.getElementById('input-url')?.addEventListener('keydown', (e) => {
@@ -1139,6 +1385,12 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         state.history = [];
         document.getElementById('results-section')?.classList.add('hidden');
         showToast("Bersih", "Seluruh form input telah dikosongkan.", true);
+      });
+
+      document.getElementById('btn-trigger-celebration')?.addEventListener('click', () => {
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }
       });
 
       document.getElementById('btn-open-tiebreaker-banner')?.addEventListener('click', () => {
