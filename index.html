@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CHATScorer - Penilaian Prototipe Web Katalog</title>
+  <title>CHATScorer</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -95,7 +95,7 @@
       <div class="flex items-center gap-3">
         <button id="btn-open-api-modal" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-700 text-xs font-bold flex items-center gap-2 transition shadow-sm">
           <i id="api-status-icon" class="fa-solid fa-key text-amber-500 text-sm"></i>
-          <span id="api-status-label">Atur API Key</span>
+          <span id="api-status-label">Input API Key</span>
         </button>
       </div>
     </div>
@@ -756,10 +756,8 @@
         return;
       }
 
-      const devLines = devRaw.split('
-').map(s => s.trim()).filter(Boolean);
-      const urlLines = urlRaw.split('
-').map(s => s.trim()).filter(Boolean);
+      const devLines = devRaw.split('\n').map(s => s.trim()).filter(Boolean);
+      const urlLines = urlRaw.split('\n').map(s => s.trim()).filter(Boolean);
 
       if (devLines.length !== urlLines.length) {
         showToast("Baris Tidak Sama", `Jumlah Nama Pengembang (${devLines.length}) & URL (${urlLines.length}) harus sama 1-ke-1.`, false);
