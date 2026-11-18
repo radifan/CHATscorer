@@ -93,7 +93,7 @@
       </div>
 
       <div class="flex items-center gap-3">
-        <button id="btn-open-api-modal" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-700 text-xs font-bold flex items-center gap-2 transition shadow-sm">
+        <button type="button" id="btn-open-api-modal" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-700 text-xs font-bold flex items-center gap-2 transition shadow-sm">
           <i id="api-status-icon" class="fa-solid fa-key text-amber-500 text-sm"></i>
           <span id="api-status-label">Atur API Key</span>
         </button>
@@ -123,7 +123,7 @@
             <p class="text-xs text-slate-500 mt-1">Setiap baris Nama Pengembang berpasangan 1-ke-1 dengan baris URL WebApp (mendukung semua jenis aplikasi web).</p>
           </div>
 
-          <button id="btn-reset-all" class="px-4 py-2 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-300 text-xs font-bold rounded-xl transition flex items-center gap-2">
+          <button type="button" id="btn-reset-all" class="px-4 py-2 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-300 text-xs font-bold rounded-xl transition flex items-center gap-2">
             <i class="fa-solid fa-rotate-left"></i> Bersihkan
           </button>
         </div>
@@ -143,7 +143,7 @@
             <div class="relative">
               <textarea id="input-url" rows="5" placeholder="https://portal-akademik.vercel.app&#10;https://katalog-toko.vercel.app&#10;https://sistem-reservasi.vercel.app" class="w-full pl-4 pr-16 py-3 bg-slate-50 border-2 border-slate-300 rounded-2xl text-xs sm:text-sm font-mono font-bold focus:outline-none focus:border-sky-600 resize-none custom-scrollbar"></textarea>
               
-              <button id="btn-audit-ai" title="Mulai Penilaian" class="absolute right-2 top-2 bottom-2 px-5 bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white rounded-xl shadow-md transition flex items-center justify-center">
+              <button type="button" id="btn-audit-ai" title="Mulai Penilaian" class="absolute right-2 top-2 bottom-2 px-5 bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white rounded-xl shadow-md transition flex items-center justify-center">
                 <i class="fa-solid fa-wand-magic-sparkles text-amber-300 text-xl"></i>
               </button>
             </div>
@@ -168,7 +168,7 @@
             <p id="equal-score-banner-text" class="text-xs text-amber-900 font-medium mt-0.5">Beberapa WebApp memiliki nilai skor total yang sama.</p>
           </div>
         </div>
-        <button id="btn-open-tiebreaker-banner" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black rounded-xl transition shadow-md whitespace-nowrap flex items-center gap-1.5">
+        <button type="button" id="btn-open-tiebreaker-banner" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black rounded-xl transition shadow-md whitespace-nowrap flex items-center gap-1.5">
           <i class="fa-solid fa-magnifying-glass text-xs"></i><span>Lihat Tabel Perbandingan</span>
         </button>
       </div>
@@ -184,7 +184,7 @@
           </div>
 
           <div class="flex items-center gap-3">
-            <button id="btn-trigger-celebration" class="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm rounded-xl transition shadow-lg">
+            <button type="button" id="btn-trigger-celebration" class="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm rounded-xl transition shadow-lg">
               Selebrasi 🎉
             </button>
           </div>
@@ -206,7 +206,7 @@
           <div class="flex items-center gap-2">
             <label for="select-active-url" class="text-xs font-extrabold text-slate-600">Pilih Hasil:</label>
             <select id="select-active-url" class="bg-slate-100 border-2 border-sky-300 text-sky-900 font-mono font-bold text-xs rounded-xl px-3 py-2 focus:outline-none"></select>
-            <button id="btn-open-pdf-modal" class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs sm:text-sm rounded-xl transition shadow-lg flex items-center gap-2">
+            <button type="button" id="btn-open-pdf-modal" class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs sm:text-sm rounded-xl transition shadow-lg flex items-center gap-2">
               <i class="fa-solid fa-file-pdf"></i> Simpan PDF
             </button>
           </div>
@@ -285,7 +285,7 @@
         <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
           <i class="fa-solid fa-key text-amber-500"></i> Konfigurasi AI & Inspeksi DOM
         </h3>
-        <button id="btn-close-api-modal" class="text-slate-400 hover:text-slate-600 text-lg">
+        <button type="button" id="btn-close-api-modal" class="text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -310,10 +310,10 @@
       </div>
 
       <div class="flex items-center justify-between gap-2 border-t pt-4">
-        <button id="btn-clear-api-key" class="px-4 py-2.5 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 font-bold text-xs rounded-xl transition">
+        <button type="button" id="btn-clear-api-key" class="px-4 py-2.5 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 font-bold text-xs rounded-xl transition">
           Reset Default
         </button>
-        <button id="btn-save-api-key" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs rounded-xl transition shadow-md flex items-center gap-1.5">
+        <button type="button" id="btn-save-api-key" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs rounded-xl transition shadow-md flex items-center gap-1.5">
           <i class="fa-solid fa-floppy-disk"></i> Simpan Konfigurasi
         </button>
       </div>
@@ -331,7 +331,7 @@
             <p class="text-xs text-slate-500 font-medium mt-0.5">Komparasi detail per kriteria penilaian untuk menentukan posisi peringkat.</p>
           </div>
         </div>
-        <button id="btn-close-tiebreaker-modal" class="p-2 text-slate-400 hover:text-slate-600 text-lg">
+        <button type="button" id="btn-close-tiebreaker-modal" class="p-2 text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -341,7 +341,7 @@
       </div>
 
       <div class="flex justify-end pt-2 border-t border-slate-200">
-        <button id="btn-dismiss-tiebreaker-modal" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-extrabold rounded-xl transition shadow-md">
+        <button type="button" id="btn-dismiss-tiebreaker-modal" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-extrabold rounded-xl transition shadow-md">
           Mengerti!
         </button>
       </div>
@@ -355,7 +355,7 @@
         <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
           <i class="fa-solid fa-file-pdf text-rose-600"></i> Pilih WebApp untuk Cetak PDF
         </h3>
-        <button id="btn-close-pdf-select" class="text-slate-400 hover:text-slate-600 text-lg">
+        <button type="button" id="btn-close-pdf-select" class="text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -363,9 +363,9 @@
       <div class="flex items-center justify-between text-xs">
         <span class="text-slate-500 font-medium">Centang WebApp yang ingin dicetak:</span>
         <div class="space-x-2">
-          <button id="btn-select-all-pdf" class="text-sky-600 font-bold hover:underline">Pilih Semua</button>
+          <button type="button" id="btn-select-all-pdf" class="text-sky-600 font-bold hover:underline">Pilih Semua</button>
           <span>|</span>
-          <button id="btn-deselect-all-pdf" class="text-slate-500 font-bold hover:underline">Batal Semua</button>
+          <button type="button" id="btn-deselect-all-pdf" class="text-slate-500 font-bold hover:underline">Batal Semua</button>
         </div>
       </div>
 
@@ -374,7 +374,7 @@
       </div>
 
       <div class="flex justify-end gap-3 border-t pt-4">
-        <button id="btn-generate-pdf-now" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl transition shadow-md flex items-center justify-center gap-2">
+        <button type="button" id="btn-generate-pdf-now" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl transition shadow-md flex items-center justify-center gap-2">
           <i class="fa-solid fa-print"></i> Cetak Dokumen PDF
         </button>
       </div>
@@ -387,10 +387,10 @@
       <div class="flex items-center justify-between border-b pb-4 no-print">
         <h2 class="text-lg font-black text-slate-900">Pratinjau Dokumen PDF</h2>
         <div class="space-x-2">
-          <button id="btn-print-action" class="px-4 py-2 bg-emerald-600 text-white text-xs font-extrabold rounded-xl hover:bg-emerald-500">
+          <button type="button" id="btn-print-action" class="px-4 py-2 bg-emerald-600 text-white text-xs font-extrabold rounded-xl hover:bg-emerald-500">
             <i class="fa-solid fa-print mr-1"></i> Cetak / Simpan PDF
           </button>
-          <button id="btn-close-print-modal" class="px-3 py-2 bg-slate-200 text-slate-700 text-xs font-bold rounded-xl hover:bg-slate-300">
+          <button type="button" id="btn-close-print-modal" class="px-3 py-2 bg-slate-200 text-slate-700 text-xs font-bold rounded-xl hover:bg-slate-300">
             Tutup
           </button>
         </div>
@@ -422,15 +422,38 @@
     const PROXY_URL_STORAGE = "chatscorer_cors_proxy_url";
     const DEFAULT_PROXY_URL = "https://api.allorigins.win/get?url=";
 
+    // Wrapper penyimpanan aman agar tidak pernah error di sandboxed iframe / incognito ketat
+    const safeStorage = {
+      _mem: {},
+      get(key) {
+        try {
+          return window.localStorage.getItem(key) ?? this._mem[key] ?? "";
+        } catch (_) {
+          return this._mem[key] ?? "";
+        }
+      },
+      set(key, val) {
+        this._mem[key] = val;
+        try {
+          window.localStorage.setItem(key, val);
+        } catch (_) {}
+      },
+      remove(key) {
+        delete this._mem[key];
+        try {
+          window.localStorage.removeItem(key);
+        } catch (_) {}
+      }
+    };
+
     const state = {
-      apiKey: localStorage.getItem(API_KEY_STORAGE) || "",
-      proxyUrl: localStorage.getItem(PROXY_URL_STORAGE) || DEFAULT_PROXY_URL,
+      apiKey: safeStorage.get(API_KEY_STORAGE) || "",
+      proxyUrl: safeStorage.get(PROXY_URL_STORAGE) || DEFAULT_PROXY_URL,
       history: [],
       url: "",
       developer: "",
       auditData: null,
       radarChart: null,
-      /* 10 KRITERIA BAWAAN DENGAN BOBOT TETAP (TOTAL 100%) - DIADAPTASI UNTUK SEMUA JENIS WEBAPP */
       criteriaMeta: {
         c1: {
           id: "c1", cat: "A", weight: 0.1125,
@@ -545,85 +568,279 @@
       }
     };
 
+    function escapeHtml(str) {
+      return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
     function updateApiKeyBadge() {
       const icon = document.getElementById('api-status-icon');
       const label = document.getElementById('api-status-label');
       const btn = document.getElementById('btn-open-api-modal');
       if (!icon || !label || !btn) return;
 
-      if (state.apiKey && state.apiKey.trim().length > 0) {
+      const hasKey = state.apiKey && state.apiKey.trim().length > 0;
+      const isCustomProxy = state.proxyUrl && state.proxyUrl.trim() !== DEFAULT_PROXY_URL;
+
+      if (hasKey) {
         icon.className = "fa-solid fa-shield-halved text-emerald-500 text-sm";
-        label.textContent = "API Key Aktif";
-        btn.className = "px-3.5 py-2 rounded-xl border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100 text-emerald-900 text-xs font-bold flex items-center gap-2 transition shadow-sm";
+        label.textContent = isCustomProxy ? "API Key & Worker Aktif" : "API Key Aktif";
+        btn.className = "px-3.5 py-2 rounded-xl border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100 text-emerald-900 text-xs font-bold flex items-center gap-2 transition shadow-sm cursor-pointer";
       } else {
         icon.className = "fa-solid fa-key text-amber-500 text-sm";
-        label.textContent = "Atur API Key (Fallback)";
-        btn.className = "px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-700 text-xs font-bold flex items-center gap-2 transition shadow-sm";
+        label.textContent = isCustomProxy ? "Worker Aktif (Fallback)" : "Atur API Key (Fallback)";
+        btn.className = "px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-700 text-xs font-bold flex items-center gap-2 transition shadow-sm cursor-pointer";
       }
     }
 
-    function generateDeterministicHashScore(url, salt) {
-      const str = (url + salt).toLowerCase();
-      let hash = 0;
-      for (let i = 0; i < str.length; i++) {
-        hash = ((hash << 5) - hash) + str.charCodeAt(i);
-        hash |= 0;
-      }
-      const val = 6.5 + (Math.abs(hash) % 25) / 10;
-      return parseFloat(Math.min(9.5, Math.max(5.0, val)).toFixed(1));
+    function openApiModal() {
+      const apiModal = document.getElementById('modal-api-key');
+      const apiInput = document.getElementById('input-api-key');
+      const proxyInput = document.getElementById('input-proxy-url');
+      if (apiInput) apiInput.value = state.apiKey || "";
+      if (proxyInput) proxyInput.value = state.proxyUrl || DEFAULT_PROXY_URL;
+      if (apiModal) apiModal.classList.remove('hidden');
     }
 
-    function generateDynamicTextByScore(cKey, avgScore, url, inspection = null) {
-      const domain = url.replace(/^https?:\/\//i, '').split('/')[0];
-      const criteriaName = state.criteriaMeta[cKey]?.name || cKey;
+    function closeApiModal() {
+      const apiModal = document.getElementById('modal-api-key');
+      if (apiModal) apiModal.classList.add('hidden');
+    }
 
-      let realNote = "";
-      if (inspection && inspection.reachable) {
-        if (cKey === "c1") {
-          realNote = ` (Terdeteksi ${inspection.c1_nav_links_count} tautan navigasi, ${inspection.c1_buttons_count} tombol aksi, ${inspection.c1_broken_links_count} tautan kosong/#, serta indikator status memuat: ${inspection.c1_has_loading_error ? 'Ya - ditemukan pesan gagal/kosong' : 'Tidak'})`;
-        } else if (cKey === "c4") {
-          realNote = ` (Terdeteksi ${inspection.c4_images_total} tag gambar, ${inspection.c4_missing_src_images} gambar tanpa sumber valid)`;
-        } else if (cKey === "c5") {
-          realNote = ` (Tautan area pengelola/login: ${inspection.c5_admin_links.length > 0 ? inspection.c5_admin_links.join(", ") : "Tidak terekspos publik"}; Indikasi kebocoran stack/enumerasi: ${inspection.c5_enumeration_clues.length > 0 ? inspection.c5_enumeration_clues.join(", ") : "Minimal"})`;
-        } else if (cKey === "c6") {
-          realNote = ` (Input form: ${inspection.c6_form_inputs_total}, input tervalidasi: ${inspection.c6_validated_inputs_count}, inline script: ${inspection.c6_inline_scripts}, CSP: ${inspection.c6_security_headers.csp}, X-Frame: ${inspection.c6_security_headers.xFrame})`;
-        } else if (cKey === "c7") {
-          realNote = inspection.c7_has_viewport ? ` (Meta tag viewport responsif terpasang)` : ` (Meta tag viewport tidak ditemukan)`;
-        } else if (cKey === "c8") {
-          realNote = ` (Bagian About Us: ${inspection.c8_has_about_us ? 'Tersedia' : 'Tidak terdeteksi'}, Kontak/WA/Email: ${inspection.c8_has_contact ? 'Tersedia' : 'Tidak terdeteksi'})`;
-        } else if (cKey === "c9") {
-          realNote = ` (Jenis terdeteksi: ${inspection.detected_app_type}; Mekanisme hubungi penjual/pengelola: ${inspection.c9_has_seller_contact ? 'Tersedia' : 'Tidak terdeteksi'})`;
-        } else if (cKey === "c10") {
-          realNote = ` (Jenis terdeteksi: ${inspection.detected_app_type}; Fitur checkout/keranjang: ${inspection.c10_has_checkout ? 'Ada' : 'Tidak'}, Pembayaran QRIS/Transfer: ${inspection.c10_has_payment ? 'Ada' : 'Tidak'})`;
+    function buildProxyRequestUrl(proxyBase, targetUrl) {
+      const cleanProxy = (proxyBase || DEFAULT_PROXY_URL).trim();
+      const encodedTarget = encodeURIComponent(targetUrl);
+      if (cleanProxy.includes("{url}")) {
+        return cleanProxy.replace("{url}", encodedTarget);
+      }
+      if (cleanProxy.endsWith("=") || cleanProxy.endsWith("?")) {
+        return `${cleanProxy}${encodedTarget}`;
+      }
+      const sep = cleanProxy.includes("?") ? "&" : "?";
+      return `${cleanProxy}${sep}url=${encodedTarget}`;
+    }
+
+    async function fetchWithTimeout(resource, options = {}, timeoutMs = 12000) {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        return await fetch(resource, { ...options, signal: controller.signal });
+      } finally {
+        clearTimeout(id);
+      }
+    }
+
+    function normalizeHeadersMap(rawHeadersObj, fetchHeaders) {
+      const map = {};
+      if (rawHeadersObj && typeof rawHeadersObj === "object") {
+        for (const [k, v] of Object.entries(rawHeadersObj)) {
+          if (v !== undefined && v !== null && String(v).trim() !== "") {
+            map[k.toLowerCase()] = String(v).trim();
+          }
         }
-      } else if (inspection && !inspection.reachable) {
-        realNote = ` (Peringatan: Situs gagal dimuat saat pemindaian teknis: ${inspection.error || 'Tidak dapat dijangkau'})`;
+      }
+      if (fetchHeaders && typeof fetchHeaders.forEach === "function") {
+        fetchHeaders.forEach((v, k) => {
+          const lk = k.toLowerCase();
+          if (!map[lk] && v && String(v).trim() !== "") {
+            map[lk] = String(v).trim();
+          }
+        });
+      }
+      return map;
+    }
+
+    async function fetchViaProxyOrWorker(proxyBase, targetUrl) {
+      const reqUrl = buildProxyRequestUrl(proxyBase, targetUrl);
+      const res = await fetchWithTimeout(reqUrl, {}, 12000);
+      if (!res.ok) {
+        throw new Error(`Proxy/Worker HTTP ${res.status}`);
       }
 
-      if (avgScore >= 8.5) {
-        return {
-          evidence: `Komponen ${criteriaName} pada domain ${domain} terverifikasi berjalan optimal, lengkap, dan sesuai standar evaluasi.${realNote}`,
-          strengths: [`Implementasi ${criteriaName} sangat baik dan berfungsi`, `Struktur antarmuka dan alur pengguna di ${domain} terkelola rapi`],
-          weaknesses: [`Perlu pengujian regresi dan pemantauan keamanan berkala`],
-          reasons: `Skor ${avgScore} diberikan karena seluruh indikator teknis dan fungsional terpenuhi secara konsisten.`,
-          recommendations: `Pertahankan kualitas implementasi serta lakukan audit keamanan dan performa secara berkala.`
-        };
-      } else if (avgScore >= 6.8) {
-        return {
-          evidence: `Komponen ${criteriaName} pada ${domain} berfungsi cukup baik, namun terdapat beberapa catatan perbaikan teknis.${realNote}`,
-          strengths: [`Struktur dan fungsi dasar ${criteriaName} sudah tersedia`],
-          weaknesses: [`Masih ditemukan kekurangan kelengkapan atribut, validasi, atau perlindungan keamanan`],
-          reasons: `Skor ${avgScore} mencerminkan fungsi dasar berjalan namun belum memenuhi standar produksi secara menyeluruh.`,
-          recommendations: `Lengkapi validasi input, perkuat header keamanan HTTP, dan pastikan seluruh elemen interaktif berfungsi penuh.`
-        };
+      const contentType = (res.headers.get("content-type") || "").toLowerCase();
+      const rawText = await res.text();
+
+      let htmlContent = "";
+      let headerMap = normalizeHeadersMap(null, res.headers);
+
+      if (contentType.includes("application/json") || rawText.trim().startsWith("{")) {
+        try {
+          const parsed = JSON.parse(rawText);
+          htmlContent = parsed.contents || parsed.html || parsed.body || parsed.data || "";
+          headerMap = normalizeHeadersMap(parsed.headers || parsed.responseHeaders || {}, res.headers);
+        } catch (_) {
+          htmlContent = rawText;
+        }
       } else {
+        htmlContent = rawText;
+      }
+
+      return { html: htmlContent, headers: headerMap };
+    }
+
+    /* INSPEKSI DOM, FUNGSIONALITAS ELEMEN & KEAMANAN SIBER (SQLi, SHELL SCRIPTING, ENUMERATION, X-HEADERS) */
+    async function inspectTargetWebsite(url) {
+      const primaryProxy = (state.proxyUrl || DEFAULT_PROXY_URL).trim();
+      let fetched = null;
+      let lastErr = null;
+
+      // Coba proxy/worker pilihan user terlebih dahulu, lalu fallback ke default proxy jika gagal
+      const candidates = [primaryProxy];
+      if (primaryProxy !== DEFAULT_PROXY_URL) {
+        candidates.push(DEFAULT_PROXY_URL);
+      }
+
+      for (const proxyCandidate of candidates) {
+        try {
+          const result = await fetchViaProxyOrWorker(proxyCandidate, url);
+          if (result.html && result.html.trim().length >= 50) {
+            fetched = result;
+            break;
+          } else {
+            lastErr = new Error("Konten HTML kosong atau terlalu pendek");
+          }
+        } catch (e) {
+          lastErr = e;
+        }
+      }
+
+      if (!fetched) {
         return {
-          evidence: `Ditemukan kendala fungsionalitas, kelengkapan konten, atau celah keamanan pada aspek ${criteriaName} di ${domain}.${realNote}`,
-          strengths: [`Kerangka dasar halaman sudah dapat diakses`],
-          weaknesses: [`Elemen gagal dimuat / fitur utama belum berfungsi`, `Kurangnya validasi keamanan & kelengkapan informasi`],
-          reasons: `Skor ${avgScore} diberikan karena ditemukan indikator kegagalan pemuatan konten atau ketiadaan fitur wajib.`,
-          recommendations: `Perbaiki segera pemuatan data/elemen yang gagal, lengkapi informasi kontak/About Us, dan terapkan sanitasi keamanan dasar.`
+          reachable: false,
+          error: lastErr ? lastErr.message : "Target tidak dapat dijangkau melalui Proxy/Worker"
         };
+      }
+
+      try {
+        const rawHtml = fetched.html;
+        const headers = fetched.headers;
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(rawHtml, "text/html");
+        const bodyText = (doc.body?.innerText || doc.body?.textContent || "").replace(/\s+/g, " ").trim();
+        const lowerHtml = rawHtml.toLowerCase();
+
+        // Deteksi arsitektur Client-Side Rendering / SPA (React, Vite, Vue, Next.js, dll.)
+        const scriptTags = Array.from(doc.querySelectorAll("script[src]"));
+        const scriptSrcs = scriptTags.map(s => s.getAttribute("src") || "");
+        const hasRootContainer = !!doc.querySelector("#root, #app, #__next, [data-reactroot], [ng-app]");
+        const hasJsBundles = scriptSrcs.some(src => /assets\/|static\/js\/|chunk|bundle|main\.|index-|vite|react|vue|next/i.test(src));
+        const isClientSideSPA = (bodyText.length < 180 && (hasRootContainer || hasJsBundles));
+
+        // Ambil sampel bundel JS utama jika SPA agar teks & fitur aplikasi tetap terpindai
+        let jsBundleSample = "";
+        if (isClientSideSPA && scriptSrcs.length > 0) {
+          try {
+            const firstBundle = scriptSrcs.find(s => /assets\/|static\/js\/|index-|main\./i.test(s)) || scriptSrcs[0];
+            const resolvedJsUrl = new URL(firstBundle, url).href;
+            const jsFetched = await fetchViaProxyOrWorker(primaryProxy, resolvedJsUrl);
+            jsBundleSample = (jsFetched.html || "").slice(0, 30000);
+          } catch (_) {}
+        }
+
+        // Deteksi jenis WebApp (Web Katalog / E-Commerce vs Aplikasi Web Umum)
+        const combinedSignalText = (bodyText + " " + (doc.title || "") + " " + rawHtml + " " + jsBundleSample).toLowerCase();
+        const isCatalogOrCommerce = /produk|katalog|keranjang|cart|beli|checkout|harga|rp\s?\d|stok|order|pesanan|toko|shop|store|umkm|batik/i.test(combinedSignalText);
+        const detectedAppType = isCatalogOrCommerce ? "Web Katalog / E-Commerce" : "Aplikasi Web Umum / Non-Katalog";
+
+        // 1. Cek C1 (Keberfungsian Elemen, Navigasi & Deteksi Kegagalan Pemuatan Data/Katalog)
+        const anchors = Array.from(doc.querySelectorAll("a"));
+        const links = anchors.map(a => a.getAttribute("href") || "");
+        const brokenLinksCount = links.filter(href => href === "" || href === "#" || href.startsWith("javascript:void")).length;
+        const buttonsCount = doc.querySelectorAll("button, [role='button'], input[type='submit']").length;
+        const hasSearchOrFilter = !!doc.querySelector("input[type='search'], input[placeholder*='cari' i], input[placeholder*='search' i], select");
+        const hasLoadingError = /gagal memuat|failed to fetch|error loading|tidak dapat dimuat|unable to load|404 not found|internal server error|database error|sqlstate/i.test(bodyText);
+
+        // 2. Cek C4 (Pemuatan Gambar & Media)
+        const images = Array.from(doc.querySelectorAll("img"));
+        const missingSrcImages = images.filter(img => {
+          const src = (img.getAttribute("src") || "").trim();
+          return !src || src === "#" || src === "undefined" || src === "null";
+        }).length;
+
+        // 3. Cek C5 (Pemisahan Akses Admin & Mitigasi Web Enumeration)
+        const adminLinks = links.filter(href => /admin|login|dashboard|panel|masuk|cpanel|wp-admin/i.test(href));
+        const enumerationClues = [];
+        if (headers["x-powered-by"]) enumerationClues.push(`X-Powered-By: ${headers["x-powered-by"]}`);
+        if (headers["server"]) enumerationClues.push(`Server: ${headers["server"]}`);
+        if (/<!--[\s\S]*?(todo|password|secret|api_key|debug|internal|localhost|127\.0\.0\.1)[\s\S]*?-->/i.test(rawHtml)) {
+          enumerationClues.push("Komentar HTML mengandung info sensitif/debug");
+        }
+        if (/index of \/|\.env|\.git|phpinfo|stack trace/i.test(bodyText)) {
+          enumerationClues.push("Indikasi Directory Listing / Stack Trace");
+        }
+
+        // 4. Cek C6 (Ketahanan Keamanan: Anti SQLi, Shell Scripting Injection, XSS & X-Headers)
+        const inputs = Array.from(doc.querySelectorAll("input, textarea, select"));
+        const inputValidations = inputs.slice(0, 15).map(el => ({
+          name: el.getAttribute("name") || el.getAttribute("id") || "unnamed",
+          type: el.getAttribute("type") || el.tagName.toLowerCase(),
+          required: el.hasAttribute("required"),
+          pattern: el.hasAttribute("pattern"),
+          maxlength: el.getAttribute("maxlength"),
+          accept: el.getAttribute("accept")
+        }));
+        const validatedInputsCount = inputValidations.filter(v => v.required || v.pattern || v.maxlength || v.accept).length;
+        const fileUploadInputs = inputs.filter(el => (el.getAttribute("type") || "").toLowerCase() === "file");
+        const unrestrictedFileUploads = fileUploadInputs.filter(el => !el.hasAttribute("accept")).length;
+        const inlineScripts = doc.querySelectorAll("script:not([src])").length;
+        const hasDangerousSink = /eval\(|document\.write\(|innerHTML\s*=|exec\(|system\(|shell_exec\(/i.test(lowerHtml);
+
+        const securityHeaders = {
+          csp: headers["content-security-policy"] || "Tidak terdeteksi",
+          xFrame: headers["x-frame-options"] || "Tidak terdeteksi",
+          xContentType: headers["x-content-type-options"] || "Tidak terdeteksi",
+          hsts: headers["strict-transport-security"] || "Tidak terdeteksi"
+        };
+
+        // 5. Cek C7, C8, C9, C10
+        const fullScanText = bodyText + " " + jsBundleSample;
+        const hasViewport = !!doc.querySelector('meta[name="viewport"]');
+        const hasAboutUs = /tentang kami|about us|profil kami|siapa kami|visi misi|tentang aplikasi|tentang/i.test(fullScanText);
+        const hasWhatsApp = links.some(href => /wa\.me|whatsapp\.com/i.test(href)) || /wa\.me|whatsapp|08\d{8,11}|\+62\d{8,11}/i.test(fullScanText);
+        const hasEmailOrAddress = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i.test(fullScanText) || /alamat|jl\.|jalan|gedung|kontak|hubungi kami|contact us/i.test(fullScanText);
+        const hasContact = hasWhatsApp || hasEmailOrAddress;
+
+        const hasSellerContact = hasWhatsApp || /hubungi penjual|chat penjual|tanya penjual|pesan via wa|order via whatsapp|hubungi/i.test(fullScanText);
+        const hasCheckout = /keranjang|cart|checkout|buat pesanan|ringkasan pesanan|tambah ke keranjang|pesan sekarang|beli sekarang/i.test(fullScanText);
+        const hasPayment = /qris|transfer bank|pembayaran|payment|metode bayar|e-wallet|gopay|ovo|dana|bca|bri|mandiri|tunai|cod/i.test(fullScanText);
+
+        return {
+          reachable: true,
+          page_title: (doc.title || "").trim(),
+          is_client_side_spa: isClientSideSPA,
+          js_bundles_count: scriptSrcs.length,
+          detected_app_type: detectedAppType,
+          c1_nav_links_count: links.length,
+          c1_broken_links_count: brokenLinksCount,
+          c1_buttons_count: buttonsCount,
+          c1_has_search_or_filter: hasSearchOrFilter,
+          c1_has_loading_error: hasLoadingError,
+          c4_images_total: images.length,
+          c4_missing_src_images: missingSrcImages,
+          c5_admin_links: adminLinks,
+          c5_enumeration_clues: enumerationClues,
+          c6_form_inputs_total: inputs.length,
+          c6_validated_inputs_count: validatedInputsCount,
+          c6_unrestricted_file_uploads: unrestrictedFileUploads,
+          c6_input_validations: inputValidations,
+          c6_inline_scripts: inlineScripts,
+          c6_has_dangerous_sink: hasDangerousSink,
+          c6_security_headers: securityHeaders,
+          c7_has_viewport: hasViewport,
+          c8_has_about_us: hasAboutUs,
+          c8_has_contact: hasContact,
+          c9_has_seller_contact: hasSellerContact,
+          c10_has_checkout: hasCheckout,
+          c10_has_payment: hasPayment,
+          page_text_sample: bodyText.slice(0, 1500)
+        };
+      } catch (err) {
+        return { reachable: false, error: err.message };
       }
     }
 
@@ -635,7 +852,7 @@
         const meta = state.criteriaMeta[key];
         const subMap = auditObj.sub_scores?.[key] || {};
         const subValues = Object.values(subMap);
-        
+
         let avgRaw = 7.5;
         if (subValues.length > 0) {
           const sum = subValues.reduce((a, b) => a + parseFloat(b || 0), 0);
@@ -1006,15 +1223,15 @@
 
         let diffBadge = `<span class="text-slate-400 font-mono font-bold">0.0</span>`;
         if (diff > 0) {
-          diffBadge = `<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono font-extrabold text-[10px]">+${diff} (${itemA.developer})</span>`;
+          diffBadge = `<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono font-extrabold text-[10px]">+${diff} (${escapeHtml(itemA.developer)})</span>`;
         } else if (diff < 0) {
-          diffBadge = `<span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-mono font-extrabold text-[10px]">${diff} (${itemB.developer})</span>`;
+          diffBadge = `<span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-mono font-extrabold text-[10px]">${diff} (${escapeHtml(itemB.developer)})</span>`;
         }
 
         matrixRows += `
           <tr class="hover:bg-slate-50 border-b border-slate-200 text-xs">
             <td class="p-2.5 font-bold text-slate-800 flex items-center gap-2">
-              <i class="fa-solid ${meta.icon || 'fa-check'} text-sky-600"></i> ${meta.name}
+              <i class="fa-solid ${meta.icon || 'fa-check'} text-sky-600"></i> ${escapeHtml(meta.name)}
               <span class="text-[10px] font-mono font-normal text-slate-500">(Bobot: ${(meta.weight * 100).toFixed(2)}%)</span>
             </td>
             <td class="p-2.5 text-center font-mono font-extrabold text-sky-700 bg-sky-50/50">${scoreA} / 10</td>
@@ -1035,8 +1252,8 @@
               <thead>
                 <tr class="bg-slate-100 border-b border-slate-300 text-slate-800 font-bold">
                   <th class="p-2.5">Kriteria Penilaian</th>
-                  <th class="p-2.5 text-center bg-sky-100/70 text-sky-900">#${rankA} - ${itemA.developer}</th>
-                  <th class="p-2.5 text-center bg-slate-200/70 text-slate-900">#${rankB} - ${itemB.developer}</th>
+                  <th class="p-2.5 text-center bg-sky-100/70 text-sky-900">#${rankA} - ${escapeHtml(itemA.developer)}</th>
+                  <th class="p-2.5 text-center bg-slate-200/70 text-slate-900">#${rankB} - ${escapeHtml(itemB.developer)}</th>
                   <th class="p-2.5 text-center">Selisih</th>
                 </tr>
               </thead>
@@ -1049,153 +1266,6 @@
       `;
 
       modal.classList.remove('hidden');
-    }
-
-    /* INSPEKSI DOM, FUNGSIONALITAS ELEMEN & KEAMANAN SIBER (SQLi, SHELL SCRIPTING, ENUMERATION, X-HEADERS) */
-    async function inspectTargetWebsite(url) {
-      const proxyBase = (state.proxyUrl || DEFAULT_PROXY_URL).trim();
-      if (!proxyBase) return { reachable: false, error: "Proxy tidak dikonfigurasi" };
-
-      try {
-        const res = await fetch(`${proxyBase}${encodeURIComponent(url)}`);
-        if (!res.ok) throw new Error(`HTTP Status ${res.status}`);
-        const data = await res.json();
-
-        const rawHtml = data.contents || data.html || "";
-        const headers = data.headers || {};
-
-        if (!rawHtml || rawHtml.trim().length < 50) {
-          return { reachable: false, error: "Konten HTML kosong atau gagal dimuat" };
-        }
-
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(rawHtml, "text/html");
-        const bodyText = (doc.body?.innerText || "").replace(/\s+/g, " ").trim();
-        const lowerHtml = rawHtml.toLowerCase();
-
-        // Deteksi apakah WebApp menggunakan arsitektur Client-Side Rendering / SPA (React, Vite, Vue, Next.js, dll.)
-        const scriptTags = Array.from(doc.querySelectorAll("script[src]"));
-        const scriptSrcs = scriptTags.map(s => s.getAttribute("src") || "");
-        const hasRootContainer = !!doc.querySelector("#root, #app, #__next, [data-reactroot], [ng-app]");
-        const hasJsBundles = scriptSrcs.some(src => /assets\/|static\/js\/|chunk|bundle|main\.|index-|vite|react|vue|next/i.test(src));
-        const isClientSideSPA = (bodyText.length < 150 && (hasRootContainer || hasJsBundles));
-
-        // Coba ambil sampel kode bundel JS utama jika SPA agar fitur di dalam JS juga ikut terpindai
-        let jsBundleSample = "";
-        if (isClientSideSPA && scriptSrcs.length > 0) {
-          try {
-            const firstBundle = scriptSrcs.find(s => /assets\/|static\/js\/|index-|main\./i.test(s)) || scriptSrcs[0];
-            const resolvedJsUrl = new URL(firstBundle, url).href;
-            const jsRes = await fetch(`${proxyBase}${encodeURIComponent(resolvedJsUrl)}`);
-            if (jsRes.ok) {
-              const jsJson = await jsRes.json();
-              jsBundleSample = (jsJson.contents || jsJson.html || "").slice(0, 25000);
-            }
-          } catch (_) {}
-        }
-
-        // Deteksi jenis WebApp (Katalog/E-Commerce vs Aplikasi Web Umum)
-        const combinedSignalText = (bodyText + " " + doc.title + " " + rawHtml + " " + jsBundleSample).toLowerCase();
-        const isCatalogOrCommerce = /produk|katalog|keranjang|cart|beli|checkout|harga|rp\s?\d|stok|order|pesanan|toko|shop|store|umkm|batik/i.test(combinedSignalText);
-        const detectedAppType = isCatalogOrCommerce ? "Web Katalog / E-Commerce" : "Aplikasi Web Umum / Non-Katalog";
-
-        // 1. Cek C1 (Keberfungsian Elemen, Navigasi & Deteksi Kegagalan Pemuatan Data/Katalog)
-        const anchors = Array.from(doc.querySelectorAll("a"));
-        const links = anchors.map(a => a.getAttribute("href") || "");
-        const brokenLinksCount = links.filter(href => href === "" || href === "#" || href.startsWith("javascript:void")).length;
-        const buttonsCount = doc.querySelectorAll("button, [role='button'], input[type='submit']").length;
-        const hasSearchOrFilter = !!doc.querySelector("input[type='search'], input[placeholder*='cari' i], input[placeholder*='search' i], select");
-
-        // Deteksi pesan error pemuatan data/katalog (hanya jika benar-benar ada teks error eksplisit)
-        const hasLoadingError = /gagal memuat|failed to fetch|error loading|tidak dapat dimuat|unable to load|404 not found|internal server error|database error|sqlstate/i.test(bodyText);
-
-        // 2. Cek C4 (Pemuatan Gambar & Media)
-        const images = Array.from(doc.querySelectorAll("img"));
-        const missingSrcImages = images.filter(img => {
-          const src = (img.getAttribute("src") || "").trim();
-          return !src || src === "#" || src === "undefined" || src === "null";
-        }).length;
-
-        // 3. Cek C5 (Pemisahan Akses Admin & Mitigasi Web Enumeration)
-        const adminLinks = links.filter(href => /admin|login|dashboard|panel|masuk|cpanel|wp-admin/i.test(href));
-        const enumerationClues = [];
-        if (headers["x-powered-by"]) enumerationClues.push(`X-Powered-By: ${headers["x-powered-by"]}`);
-        if (headers["server"]) enumerationClues.push(`Server: ${headers["server"]}`);
-        if (/<!--[\s\S]*?(todo|password|secret|api_key|debug|internal|localhost|127\.0\.0\.1)[\s\S]*?-->/i.test(rawHtml)) {
-          enumerationClues.push("Komentar HTML mengandung info sensitif/debug");
-        }
-        if (/index of \/|\.env|\.git|phpinfo|stack trace/i.test(bodyText)) {
-          enumerationClues.push("Indikasi Directory Listing / Stack Trace");
-        }
-
-        // 4. Cek C6 (Ketahanan Keamanan: Anti SQLi, Shell Scripting Injection, XSS & X-Headers)
-        const inputs = Array.from(doc.querySelectorAll("input, textarea, select"));
-        const inputValidations = inputs.slice(0, 15).map(el => ({
-          name: el.getAttribute("name") || el.getAttribute("id") || "unnamed",
-          type: el.getAttribute("type") || el.tagName.toLowerCase(),
-          required: el.hasAttribute("required"),
-          pattern: el.hasAttribute("pattern"),
-          maxlength: el.getAttribute("maxlength"),
-          accept: el.getAttribute("accept")
-        }));
-        const validatedInputsCount = inputValidations.filter(v => v.required || v.pattern || v.maxlength || v.accept).length;
-        const fileUploadInputs = inputs.filter(el => (el.getAttribute("type") || "").toLowerCase() === "file");
-        const unrestrictedFileUploads = fileUploadInputs.filter(el => !el.hasAttribute("accept")).length;
-        const inlineScripts = doc.querySelectorAll("script:not([src])").length;
-        const hasDangerousSink = /eval\(|document\.write\(|innerHTML\s*=|exec\(|system\(|shell_exec\(/i.test(lowerHtml);
-
-        const securityHeaders = {
-          csp: headers["content-security-policy"] || "Tidak terdeteksi",
-          xFrame: headers["x-frame-options"] || "Tidak terdeteksi",
-          xContentType: headers["x-content-type-options"] || "Tidak terdeteksi",
-          hsts: headers["strict-transport-security"] || "Tidak terdeteksi"
-        };
-
-        // 5. Cek C7, C8, C9, C10 (Responsivitas, About Us, Kontak Penjual, Checkout & Pembayaran - mencakup HTML & Bundel JS SPA)
-        const fullScanText = bodyText + " " + jsBundleSample;
-        const hasViewport = !!doc.querySelector('meta[name="viewport"]');
-        const hasAboutUs = /tentang kami|about us|profil kami|siapa kami|visi misi|tentang aplikasi|tentang/i.test(fullScanText);
-        const hasWhatsApp = links.some(href => /wa\.me|whatsapp\.com/i.test(href)) || /wa\.me|whatsapp|08\d{8,11}|\+62\d{8,11}/i.test(fullScanText);
-        const hasEmailOrAddress = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i.test(fullScanText) || /alamat|jl\.|jalan|gedung|kontak|hubungi kami|contact us/i.test(fullScanText);
-        const hasContact = hasWhatsApp || hasEmailOrAddress;
-
-        const hasSellerContact = hasWhatsApp || /hubungi penjual|chat penjual|tanya penjual|pesan via wa|order via whatsapp|hubungi/i.test(fullScanText);
-        const hasCheckout = /keranjang|cart|checkout|buat pesanan|ringkasan pesanan|tambah ke keranjang|pesan sekarang|beli sekarang/i.test(fullScanText);
-        const hasPayment = /qris|transfer bank|pembayaran|payment|metode bayar|e-wallet|gopay|ovo|dana|bca|bri|mandiri|tunai|cod/i.test(fullScanText);
-
-        return {
-          reachable: true,
-          page_title: (doc.title || "").trim(),
-          is_client_side_spa: isClientSideSPA,
-          js_bundles_count: scriptSrcs.length,
-          detected_app_type: detectedAppType,
-          c1_nav_links_count: links.length,
-          c1_broken_links_count: brokenLinksCount,
-          c1_buttons_count: buttonsCount,
-          c1_has_search_or_filter: hasSearchOrFilter,
-          c1_has_loading_error: hasLoadingError,
-          c4_images_total: images.length,
-          c4_missing_src_images: missingSrcImages,
-          c5_admin_links: adminLinks,
-          c5_enumeration_clues: enumerationClues,
-          c6_form_inputs_total: inputs.length,
-          c6_validated_inputs_count: validatedInputsCount,
-          c6_unrestricted_file_uploads: unrestrictedFileUploads,
-          c6_input_validations: inputValidations,
-          c6_inline_scripts: inlineScripts,
-          c6_has_dangerous_sink: hasDangerousSink,
-          c6_security_headers: securityHeaders,
-          c7_has_viewport: hasViewport,
-          c8_has_about_us: hasAboutUs,
-          c8_has_contact: hasContact,
-          c9_has_seller_contact: hasSellerContact,
-          c10_has_checkout: hasCheckout,
-          c10_has_payment: hasPayment,
-          page_text_sample: bodyText.slice(0, 1500)
-        };
-      } catch (err) {
-        return { reachable: false, error: err.message };
-      }
     }
 
     async function runAIAuditBatch() {
@@ -1216,7 +1286,7 @@
       }
 
       const pairs = devLines.map((dev, i) => ({ developer: dev, url: normalizeUrl(urlLines[i]) }));
-      
+
       const modalProgress = document.getElementById('modal-ai-progress');
       const progressBar = document.getElementById('ai-progress-bar');
       const progressStatus = document.getElementById('ai-progress-status');
@@ -1241,42 +1311,30 @@
 
         if (progressBar) progressBar.style.width = "65%";
 
-        const apiKey = state.apiKey.trim();
+        const apiKey = (state.apiKey || "").trim();
         let aiResults = null;
 
         if (apiKey) {
           if (progressStatus) progressStatus.textContent = "Mengevaluasi hasil inspeksi secara objektif dengan Gemini AI...";
 
           const systemPrompt = `Anda adalah Auditor Kualitas & Keamanan Aplikasi Web (WebApp) Profesional.
-Tugas Anda: Lakukan audit menyeluruh dan objektif terhadap DAFTAR WEBAPP berikut (berlaku untuk SEMUA JENIS WebApp: e-commerce/katalog, sistem informasi, portal layanan, dashboard, edukasi, dll.) berdasarkan DATA INSPEKSI DOM & KEAMANAN NYATA dalam SATU PROSES BATCH:
+Tugas Anda: Lakukan audit menyeluruh dan objektif terhadap DAFTAR WEBAPP berikut berdasarkan DATA INSPEKSI DOM & KEAMANAN NYATA dalam SATU PROSES BATCH:
 ${JSON.stringify(enrichedPairs)}
 
-PEDOMAN PENILAIAN OBJEKTIF & KETAT (WAJIB DIPATUHI):
-1. **Bukti Nyata Utama**: Jadikan 'real_dom_and_security_inspection' (termasuk 'page_text_sample') sebagai bukti faktual utama.
-2. **Penanganan Arsitektur SPA (React/Vite/Vue) vs Error Nyata**:
-   - **PENTING**: Pemindaian proxy HTTP membaca HTML awal sebelum JavaScript dijalankan. Jika 'is_client_side_spa' bernilai true (ada container '#root'/'#app' dan 'js_bundles_count' >= 1) serta 'c1_has_loading_error' bernilai false, **JANGAN** menganggap situs itu kosong/rusak! Itu adalah aplikasi modern berbasis React/Vite/Vue yang dirender di browser. Evaluasi secara adil menggunakan 'page_title', bundle JS yang dimuat, meta tags, dan HTTP headers dengan skor kompetitif (7.8 - 9.2) sesuai kualitas bundel dan header-nya.
-   - **Penalti Kritis Bila Benar-Benar Error**: Hanya berikan skor rendah (2.0 - 4.5) pada c1 dan c4 jika 'reachable' bernilai false, 'c1_has_loading_error' bernilai true (terdapat pesan gagal memuat/error eksplisit), atau situs statis yang tidak memiliki konten maupun bundle JS.
-3. **Tata Letak & UI/UX (c2, c3, c7)**:
-   - Evaluasi kelengkapan struktur tombol, navigasi, meta viewport ('c7_has_viewport'), dan minimnya broken link ('c1_broken_links_count').
-4. **Informasi Kontak & About Us (c8)**:
-   - Periksa 'c8_has_about_us' dan 'c8_has_contact'. WebApp yang baik wajib menyediakan informasi identitas/About Us serta saluran kontak yang jelas.
-5. **Adaptasi Jenis WebApp pada c9 & c10**:
-   - **Jika jenisnya Web Katalog / E-Commerce** ('detected_app_type' mengandung Katalog/E-Commerce): Wajib menilai ketersediaan mekanisme menghubungi penjual ('c9_has_seller_contact', misal WhatsApp/chat penjual) serta fitur checkout/keranjang ('c10_has_checkout') dan mekanisme pembayaran ('c10_has_payment', seperti QRIS/transfer). Jika fitur tersebut tidak ada pada web katalog, beri skor rendah (<= 5.0) pada c9/c10.
-   - **Jika jenisnya WebApp Non-Katalog** (misal portal informasi, kalkulator, sistem manajemen, edukasi): Nilai c9 pada kejelasan panduan/alur pengguna dan kontak pengelola; nilai c10 pada kelengkapan alur pemrosesan fitur/transaksi utama aplikasi tersebut secara adil.
-6. **Keamanan Siber Wajib (c5 & c6)**:
-   - **c5 (Akses & Anti Web Enumeration)**: Periksa 'c5_admin_links' dan 'c5_enumeration_clues'. Jika server membocorkan versi stack ('X-Powered-By', 'Server'), directory listing, atau komentar sensitif, turunkan skor s5_3.
-   - **c6 (Anti SQL Injection, Shell Scripting Injection, XSS & X-Headers)**: Periksa 'c6_validated_inputs_count' vs 'c6_form_inputs_total', 'c6_unrestricted_file_uploads' (risiko upload shell script bila input file tanpa atribut accept), 'c6_has_dangerous_sink' (risiko XSS/command execution), serta 'c6_security_headers' (CSP, X-Frame-Options, X-Content-Type-Options, HSTS). Cantumkan hasil pemeriksaan X-Headers & validasi ini secara eksplisit di field 'evidence'.
+PEDOMAN PENILAIAN OBJEKTIF & KETAT:
+1. Jadikan 'real_dom_and_security_inspection' sebagai bukti faktual utama.
+2. Jika 'is_client_side_spa' bernilai true dan 'c1_has_loading_error' bernilai false, evaluasi secara adil sebagai aplikasi modern SPA (React/Vite/Vue) dengan skor kompetitif (7.8 - 9.2). Hanya beri skor rendah (2.0 - 4.5) bila 'reachable' false atau 'c1_has_loading_error' true.
+3. Periksa 'c8_has_about_us' dan 'c8_has_contact' untuk kriteria c8.
+4. Untuk Web Katalog/E-Commerce, periksa 'c9_has_seller_contact', 'c10_has_checkout', dan 'c10_has_payment'. Untuk WebApp non-katalog, nilai c9 dan c10 secara adil sesuai domain fungsinya.
+5. Untuk c5 & c6, evaluasi 'c5_enumeration_clues', 'c6_validated_inputs_count', 'c6_unrestricted_file_uploads', 'c6_has_dangerous_sink', dan 'c6_security_headers'.
+6. Seluruh nilai skor sub-kriteria (s1_1..s10_3), 'evidence', 'strengths', 'weaknesses', dan 'reasons' WAJIB merujuk langsung pada temuan scan nyata.
 
-7. **Penyelarasan Skor & Bukti dengan Hasil Scanning**:
-   - Jangan memberikan skor acak atau generik. Setiap skor sub-kriteria (s1_1 hingga s10_3), ringkasan 'evidence', 'strengths', 'weaknesses', dan 'reasons' WAJIB merujuk langsung pada nilai kuantitatif & boolean dari 'real_dom_and_security_inspection' (misalnya jumlah tautan, tombol, bundel JS, status viewport, keberadaan About Us/Kontak, mekanisme hubungi penjual, fitur checkout/pembayaran, temuan enumerasi, dan status masing-masing X-Header).
-
-Evaluasi tiap pasangan pada skala angka desimal 1.0 - 10.0 untuk sub-kriteria (s1_1 hingga s10_3).
 Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
 [
   {
     "developer": "Nama Pengembang",
     "url": "https://...",
-    "executive_summary": "Ringkasan analisis eksekutif (sebutkan jenis WebApp, status fungsionalitas utama, dan postur keamanannya)...",
+    "executive_summary": "Ringkasan analisis eksekutif...",
     "sub_scores": {
       "c1": { "s1_1": 8.5, "s1_2": 9.0, "s1_3": 8.0 },
       "c2": { "s2_1": 8.2, "s2_2": 8.0, "s2_3": 8.5 },
@@ -1289,23 +1347,23 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
       "c9": { "s9_1": 8.2, "s9_2": 8.0, "s9_3": 8.1 },
       "c10": { "s10_1": 8.5, "s10_2": 8.8, "s10_3": 8.2 }
     },
-    "evidence": { "c1": "Bukti temuan teknis nyata...", "c2": "..." },
-    "strengths": { "c1": ["Kelebihan spesifik 1", "Kelebihan 2"], "c2": [...] },
-    "weaknesses": { "c1": ["Kekurangan spesifik 1"], "c2": [...] },
-    "reasons": { "c1": "Alasan penilaian objektif kriteria c1...", "c2": "..." },
-    "recommendations": { "c1": "Saran perbaikan teknis spesifik c1...", "c2": "..." }
+    "evidence": { "c1": "...", "c2": "..." },
+    "strengths": { "c1": ["..."], "c2": ["..."] },
+    "weaknesses": { "c1": ["..."], "c2": ["..."] },
+    "reasons": { "c1": "...", "c2": "..." },
+    "recommendations": { "c1": "...", "c2": "..." }
   }
 ]`;
 
-          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-          const response = await fetch(endpoint, {
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+          const response = await fetchWithTimeout(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               contents: [{ role: 'user', parts: [{ text: systemPrompt }] }],
-              generationConfig: { temperature: 0.0, seed: 42, response_mime_type: "application/json" }
+              generationConfig: { temperature: 0.0, responseMimeType: "application/json" }
             })
-          });
+          }, 25000);
 
           if (response.ok) {
             const resJson = await response.json();
@@ -1315,10 +1373,10 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
               aiResults = Array.isArray(parsed) ? parsed : (parsed.data || parsed.results || null);
             }
           } else {
-            showToast("API Fallback", "Gagal memanggil Gemini API, beralih ke mode evaluasi fallback.", false);
+            showToast("API Fallback", `Gemini API merespons ${response.status}, beralih ke evaluasi berbasis hasil scan.`, false);
           }
         } else {
-          if (progressStatus) progressStatus.textContent = "Menjalankan evaluasi mode fallback deterministik...";
+          if (progressStatus) progressStatus.textContent = "Menjalankan evaluasi berbasis hasil scanning DOM & X-Headers...";
         }
 
         enrichedPairs.forEach((item, idx) => {
@@ -1328,7 +1386,6 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
           itemObj.url = item.url;
           itemObj.inspection = item.real_dom_and_security_inspection;
 
-          // Pastikan bukti temuan scanning nyata selalu tampil di setiap kriteria (c1 - c10)
           itemObj.evidence = itemObj.evidence || {};
           for (let k = 1; k <= 10; k++) {
             const cKey = `c${k}`;
@@ -1392,7 +1449,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         }
         populateUrlSelector();
         displayResults();
-      }, 400);
+      }, 350);
     }
 
     function populateUrlSelector() {
@@ -1447,16 +1504,22 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         card.className = "bg-slate-800/90 border border-slate-700 rounded-2xl p-4 flex flex-col items-center text-center justify-between space-y-2";
         card.innerHTML = `
           <span class="text-[10px] font-black font-mono bg-sky-950 text-sky-400 border border-sky-800 px-2 py-0.5 rounded-full">PERINGKAT #${rank}</span>
-          <span class="text-xs font-bold text-white truncate w-full">${item.developer}</span>
+          <span class="text-xs font-bold text-white truncate w-full">${escapeHtml(item.developer)}</span>
           <span class="text-2xl font-black font-mono text-amber-400">${item.totalScore.toFixed(1)}%</span>
           ${isTied ? `
-            <button onclick="openTieBreakerModalForUrl('${item.url}')" class="text-[9px] font-black bg-amber-500/20 text-amber-300 border border-amber-400/50 px-2 py-0.5 rounded-full transition hover:bg-amber-500/40">
+            <button type="button" data-tie-url="${escapeHtml(item.url)}" class="btn-tie-detail text-[9px] font-black bg-amber-500/20 text-amber-300 border border-amber-400/50 px-2 py-0.5 rounded-full transition hover:bg-amber-500/40">
               ⚡ Skor Sama
             </button>
           ` : ''}
           <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold border ${grade.color}">${grade.badge}</span>
         `;
         container.appendChild(card);
+      });
+
+      container.querySelectorAll('.btn-tie-detail').forEach(btn => {
+        btn.addEventListener('click', () => {
+          openTieBreakerModalForUrl(btn.getAttribute('data-tie-url'));
+        });
       });
     }
 
@@ -1552,12 +1615,12 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         const meta = state.criteriaMeta[key];
         const subScoresMap = state.auditData.sub_scores?.[key] || {};
         const avgRawScore = state.auditData.scores?.[key] || 0.0;
-        
+
         const evidence = state.auditData.evidence?.[key] || "Pemindaian fitur berhasil diselesaikan.";
         const reason = state.auditData.reasons?.[key] || "Analisis belum tersedia.";
         const rec = state.auditData.recommendations?.[key] || "Rekomendasi belum tersedia.";
-        const strengths = state.auditData.strengths?.[key] || ["Memenuhi kriteria dasar."];
-        const weaknesses = state.auditData.weaknesses?.[key] || ["Perlu pemeliharaan rutin."];
+        const strengths = Array.isArray(state.auditData.strengths?.[key]) ? state.auditData.strengths[key] : ["Memenuhi kriteria dasar."];
+        const weaknesses = Array.isArray(state.auditData.weaknesses?.[key]) ? state.auditData.weaknesses[key] : ["Perlu pemeliharaan rutin."];
 
         const weightPct = meta.weight * 100;
         const contrib = ((avgRawScore / 10.0) * weightPct).toFixed(2);
@@ -1571,10 +1634,10 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
 
         let subListHtml = "";
         meta.sub.forEach(subItem => {
-          const val = subScoresMap[subItem.id] || 7.5;
+          const val = subScoresMap[subItem.id] ?? 7.5;
           subListHtml += `
             <div class="flex items-center justify-between text-[11px] bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl">
-              <span class="font-bold text-slate-700 truncate mr-2"><i class="fa-solid fa-angle-right text-sky-500 mr-1"></i>${subItem.name}</span>
+              <span class="font-bold text-slate-700 truncate mr-2"><i class="fa-solid fa-angle-right text-sky-500 mr-1"></i>${escapeHtml(subItem.name)}</span>
               <span class="font-mono font-extrabold text-sky-700 bg-sky-100/80 px-2 py-0.5 rounded">${val} / 10</span>
             </div>
           `;
@@ -1589,12 +1652,12 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
                 </div>
                 <div>
                   <h3 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-1.5 flex-wrap">
-                    ${meta.name}
+                    ${escapeHtml(meta.name)}
                     <span class="text-[10px] font-mono text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200 font-bold">
                       Bobot: ${weightPct.toFixed(2)}%
                     </span>
                   </h3>
-                  <p class="text-xs text-slate-500 font-medium mt-0.5 line-clamp-2">${meta.desc}</p>
+                  <p class="text-xs text-slate-500 font-medium mt-0.5 line-clamp-2">${escapeHtml(meta.desc)}</p>
                 </div>
               </div>
 
@@ -1638,7 +1701,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
                 <span><i class="fa-solid fa-satellite-dish text-sky-600 mr-1"></i> Bukti Hasil Scanning:</span>
                 <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-sky-200/70 text-sky-900">DOM & X-HEADERS</span>
               </span>
-              <p class="text-slate-700 leading-relaxed text-[11px] font-mono bg-white/80 p-2 rounded-lg border border-sky-100">${evidence}</p>
+              <p class="text-slate-700 leading-relaxed text-[11px] font-mono bg-white/80 p-2 rounded-lg border border-sky-100 break-words">${escapeHtml(evidence)}</p>
             </div>
 
             <!-- Strengths & Weaknesses Detailed Cards -->
@@ -1648,7 +1711,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
                   <i class="fa-solid fa-circle-check text-emerald-600"></i> Keunggulan Ditemukan:
                 </h4>
                 <ul class="list-disc list-inside text-slate-700 space-y-0.5 leading-relaxed font-medium text-[11px]">
-                  ${strengths.map(s => `<li>${s}</li>`).join('')}
+                  ${strengths.map(s => `<li>${escapeHtml(s)}</li>`).join('')}
                 </ul>
               </div>
 
@@ -1657,7 +1720,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
                   <i class="fa-solid fa-triangle-exclamation text-amber-600"></i> Catatan & Kekurangan:
                 </h4>
                 <ul class="list-disc list-inside text-slate-700 space-y-0.5 leading-relaxed font-medium text-[11px]">
-                  ${weaknesses.map(w => `<li>${w}</li>`).join('')}
+                  ${weaknesses.map(w => `<li>${escapeHtml(w)}</li>`).join('')}
                 </ul>
               </div>
             </div>
@@ -1666,16 +1729,16 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
             <div class="space-y-2 text-xs">
               <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-1">
                 <h4 class="font-extrabold text-sky-800 flex items-center gap-1.5 text-[11px]">
-                  <i class="fa-solid fa-magnifying-glass text-sky-600"></i> Alasan Penilaian AI:
+                  <i class="fa-solid fa-magnifying-glass text-sky-600"></i> Alasan Penilaian:
                 </h4>
-                <p class="text-slate-700 leading-relaxed font-medium text-[11px]">${reason}</p>
+                <p class="text-slate-700 leading-relaxed font-medium text-[11px]">${escapeHtml(reason)}</p>
               </div>
 
               <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-1">
                 <h4 class="font-extrabold text-indigo-800 flex items-center gap-1.5 text-[11px]">
                   <i class="fa-solid fa-lightbulb text-indigo-600"></i> Rekomendasi Perbaikan:
                 </h4>
-                <p class="text-slate-700 leading-relaxed font-medium text-[11px]">${rec}</p>
+                <p class="text-slate-700 leading-relaxed font-medium text-[11px]">${escapeHtml(rec)}</p>
               </div>
             </div>
           </div>
@@ -1687,7 +1750,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
 
     function renderRadarChart() {
       const canvas = document.getElementById('auditRadarChart');
-      if (!canvas || !state.auditData) return;
+      if (!canvas || !state.auditData || typeof Chart === "undefined") return;
 
       const dataValues = Object.keys(state.criteriaMeta).map(k => state.auditData.scores[k] || 0);
 
@@ -1698,7 +1761,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         data: {
           labels: Object.keys(state.criteriaMeta).map(k => k.toUpperCase()),
           datasets: [{
-            label: 'Skor AI (1-10)',
+            label: 'Skor (1-10)',
             data: dataValues,
             backgroundColor: 'rgba(2, 132, 199, 0.2)',
             borderColor: '#0284c7',
@@ -1726,9 +1789,9 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         div.className = "flex items-center justify-between p-2.5 bg-slate-50 border rounded-xl text-xs";
         div.innerHTML = `
           <label class="flex items-center gap-2 cursor-pointer w-full">
-            <input type="checkbox" value="${item.url}" class="pdf-select-item rounded text-sky-600 focus:ring-sky-500 w-4 h-4" checked>
-            <span class="font-bold text-slate-800">${item.developer}</span>
-            <span class="font-mono text-slate-500 truncate max-w-[180px]">(${item.url})</span>
+            <input type="checkbox" value="${escapeHtml(item.url)}" class="pdf-select-item rounded text-sky-600 focus:ring-sky-500 w-4 h-4" checked>
+            <span class="font-bold text-slate-800">${escapeHtml(item.developer)}</span>
+            <span class="font-mono text-slate-500 truncate max-w-[180px]">(${escapeHtml(item.url)})</span>
           </label>
           <span class="font-mono font-extrabold text-sky-700">${item.totalScore.toFixed(1)}%</span>
         `;
@@ -1742,7 +1805,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
       const checkedUrls = Array.from(document.querySelectorAll('.pdf-select-item:checked')).map(cb => cb.value);
 
       if (checkedUrls.length === 0) {
-        showToast("Pilihan Kosong", "Pilih minimal 1", false);
+        showToast("Pilihan Kosong", "Pilih minimal 1 WebApp untuk dicetak.", false);
         return;
       }
 
@@ -1765,16 +1828,16 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
           const meta = state.criteriaMeta[key];
           const rawScore = item.auditObj.scores[key] || 0;
           const contrib = ((rawScore / 10.0) * (meta.weight * 100)).toFixed(2);
-          const reason = item.auditObj.reasons?.[key] || "Analisis selesai.";
+          const evidence = item.auditObj.evidence?.[key] || "Pemindaian selesai.";
 
           tableRows += `
             <tr class="border-b text-[11px]">
               <td class="p-2 font-mono font-bold text-center">${rowIdx++}</td>
-              <td class="p-2 font-bold">${meta.name}</td>
+              <td class="p-2 font-bold">${escapeHtml(meta.name)}</td>
               <td class="p-2 text-center font-mono">${(meta.weight * 100).toFixed(2)}%</td>
               <td class="p-2 text-center font-bold font-mono text-sky-700">${rawScore} / 10</td>
               <td class="p-2 text-center font-bold font-mono text-sky-700">${contrib}%</td>
-              <td class="p-2 text-slate-600">${reason}</td>
+              <td class="p-2 text-slate-600">${escapeHtml(evidence)}</td>
             </tr>
           `;
         }
@@ -1791,14 +1854,14 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
           </div>
 
           <div class="grid grid-cols-4 gap-3 p-3 bg-slate-50 rounded-xl border text-xs font-medium">
-            <div><span class="text-slate-400 block text-[10px]">Pengembang:</span><span class="font-extrabold text-slate-800">${item.developer}</span></div>
-            <div><span class="text-slate-400 block text-[10px]">URL WebApp:</span><span class="font-bold text-slate-800 font-mono break-all">${item.url}</span></div>
+            <div><span class="text-slate-400 block text-[10px]">Pengembang:</span><span class="font-extrabold text-slate-800">${escapeHtml(item.developer)}</span></div>
+            <div><span class="text-slate-400 block text-[10px]">URL WebApp:</span><span class="font-bold text-slate-800 font-mono break-all">${escapeHtml(item.url)}</span></div>
             <div><span class="text-slate-400 block text-[10px]">Skor Total:</span><span class="font-black text-sky-700 font-mono text-sm">${calc.total.toFixed(1)}%</span></div>
             <div><span class="text-slate-400 block text-[10px]">Predikat:</span><span class="font-extrabold text-emerald-700">${grade.badge}</span></div>
           </div>
 
           <div class="space-y-2">
-            <h4 class="text-xs font-bold text-slate-900 uppercase">Rincian Per Kriteria</h4>
+            <h4 class="text-xs font-bold text-slate-900 uppercase">Rincian Per Kriteria & Bukti Pemindaian</h4>
             <table class="w-full text-left border-collapse border border-slate-200">
               <thead>
                 <tr class="bg-slate-100 text-[11px] font-bold border-b">
@@ -1807,7 +1870,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
                   <th class="p-2 text-center">Bobot</th>
                   <th class="p-2 text-center">Skor (1-10)</th>
                   <th class="p-2 text-center">Kontribusi</th>
-                  <th class="p-2">Catatan AI</th>
+                  <th class="p-2">Bukti Temuan</th>
                 </tr>
               </thead>
               <tbody>${tableRows}</tbody>
@@ -1816,7 +1879,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
 
           <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl text-xs space-y-1">
             <span class="font-bold text-sky-900 block">Analisis Eksekutif:</span>
-            <p class="text-sky-950 leading-relaxed">${item.auditObj.executive_summary}</p>
+            <p class="text-sky-950 leading-relaxed">${escapeHtml(item.auditObj.executive_summary)}</p>
           </div>
         `;
 
@@ -1835,87 +1898,125 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
 
     function showToast(title, message, isSuccess = true) {
       const toast = document.getElementById('toast-notification');
+      const icon = document.getElementById('toast-icon');
       if (!toast) return;
       document.getElementById('toast-title').textContent = title;
       document.getElementById('toast-message').textContent = message;
+
+      if (isSuccess) {
+        toast.className = "fixed top-24 right-6 z-50 bg-emerald-900 text-emerald-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-emerald-700";
+        if (icon) icon.className = "fa-solid fa-circle-check text-emerald-400 text-2xl";
+      } else {
+        toast.className = "fixed top-24 right-6 z-50 bg-amber-900 text-amber-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-amber-700";
+        if (icon) icon.className = "fa-solid fa-triangle-exclamation text-amber-400 text-2xl";
+      }
+
       toast.classList.remove('hidden');
-      setTimeout(() => toast.classList.add('hidden'), 3500);
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => toast.classList.add('hidden'), 3500);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    function initApp() {
       updateApiKeyBadge();
 
-      /* API KEY & PROXY MODAL HANDLERS */
       const apiModal = document.getElementById('modal-api-key');
       const apiInput = document.getElementById('input-api-key');
       const proxyInput = document.getElementById('input-proxy-url');
 
-      document.getElementById('btn-open-api-modal')?.addEventListener('click', () => {
-        if (apiInput) apiInput.value = state.apiKey;
-        if (proxyInput) proxyInput.value = state.proxyUrl;
-        apiModal?.classList.remove('hidden');
+      document.getElementById('btn-open-api-modal')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openApiModal();
       });
 
-      document.getElementById('btn-close-api-modal')?.addEventListener('click', () => {
-        apiModal?.classList.add('hidden');
+      document.getElementById('btn-close-api-modal')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeApiModal();
       });
 
-      document.getElementById('btn-toggle-api-visibility')?.addEventListener('click', () => {
+      // Klik area gelap di luar kotak modal untuk menutup modal
+      apiModal?.addEventListener('click', (e) => {
+        if (e.target === apiModal) closeApiModal();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeApiModal();
+          document.getElementById('modal-tiebreaker-comparison')?.classList.add('hidden');
+          document.getElementById('modal-pdf-selection')?.classList.add('hidden');
+          document.getElementById('print-report-modal')?.classList.add('hidden');
+        }
+      });
+
+      document.getElementById('btn-toggle-api-visibility')?.addEventListener('click', (e) => {
+        e.preventDefault();
         if (!apiInput) return;
         apiInput.type = apiInput.type === "password" ? "text" : "password";
       });
 
-      document.getElementById('btn-save-api-key')?.addEventListener('click', () => {
+      document.getElementById('btn-save-api-key')?.addEventListener('click', (e) => {
+        e.preventDefault();
         const val = (apiInput?.value || "").trim();
         const pVal = (proxyInput?.value || "").trim() || DEFAULT_PROXY_URL;
         state.apiKey = val;
         state.proxyUrl = pVal;
 
         if (val) {
-          localStorage.setItem(API_KEY_STORAGE, val);
+          safeStorage.set(API_KEY_STORAGE, val);
         } else {
-          localStorage.removeItem(API_KEY_STORAGE);
+          safeStorage.remove(API_KEY_STORAGE);
         }
-        localStorage.setItem(PROXY_URL_STORAGE, pVal);
+        safeStorage.set(PROXY_URL_STORAGE, pVal);
 
         updateApiKeyBadge();
-        apiModal?.classList.add('hidden');
-        showToast("Konfigurasi Disimpan", val ? "Gemini API Key & Proxy aktif." : "Mode fallback aktif dengan inspeksi DOM.", true);
+        closeApiModal();
+        showToast("Konfigurasi Disimpan", val ? "Gemini API Key & Proxy/Worker aktif." : "Mode fallback aktif dengan inspeksi DOM & X-Headers.", true);
       });
 
-      document.getElementById('btn-clear-api-key')?.addEventListener('click', () => {
+      document.getElementById('btn-clear-api-key')?.addEventListener('click', (e) => {
+        e.preventDefault();
         state.apiKey = "";
         state.proxyUrl = DEFAULT_PROXY_URL;
         if (apiInput) apiInput.value = "";
         if (proxyInput) proxyInput.value = DEFAULT_PROXY_URL;
-        localStorage.removeItem(API_KEY_STORAGE);
-        localStorage.removeItem(PROXY_URL_STORAGE);
+        safeStorage.remove(API_KEY_STORAGE);
+        safeStorage.remove(PROXY_URL_STORAGE);
         updateApiKeyBadge();
         showToast("Reset Selesai", "Konfigurasi dikembalikan ke default.", true);
       });
 
-      /* AUDIT & UI HANDLERS */
-      document.getElementById('btn-audit-ai')?.addEventListener('click', runAIAuditBatch);
-      
-      document.getElementById('input-url')?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault(); runAIAuditBatch(); }
+      document.getElementById('btn-audit-ai')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        runAIAuditBatch();
       });
 
-      document.getElementById('btn-reset-all')?.addEventListener('click', () => {
-        document.getElementById('input-developer').value = '';
-        document.getElementById('input-url').value = '';
+      document.getElementById('input-url')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && e.ctrlKey) {
+          e.preventDefault();
+          runAIAuditBatch();
+        }
+      });
+
+      document.getElementById('btn-reset-all')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const devEl = document.getElementById('input-developer');
+        const urlEl = document.getElementById('input-url');
+        if (devEl) devEl.value = '';
+        if (urlEl) urlEl.value = '';
         state.history = [];
         document.getElementById('results-section')?.classList.add('hidden');
         showToast("Bersih", "Seluruh form input telah dikosongkan.", true);
       });
 
-      document.getElementById('btn-trigger-celebration')?.addEventListener('click', () => {
+      document.getElementById('btn-trigger-celebration')?.addEventListener('click', (e) => {
+        e.preventDefault();
         if (typeof confetti === 'function') {
           confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         }
       });
 
-      document.getElementById('btn-open-tiebreaker-banner')?.addEventListener('click', () => {
+      document.getElementById('btn-open-tiebreaker-banner')?.addEventListener('click', (e) => {
+        e.preventDefault();
         const tiedPairs = detectTiedScores();
         if (tiedPairs.length > 0) showTieBreakerModal(tiedPairs[0].itemA, tiedPairs[0].itemB, tiedPairs[0].rankA, tiedPairs[0].rankB);
       });
@@ -1947,7 +2048,13 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
       document.getElementById('btn-close-print-modal')?.addEventListener('click', () => {
         document.getElementById('print-report-modal')?.classList.add('hidden');
       });
-    });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initApp);
+    } else {
+      initApp();
+    }
   </script>
 </body>
 </html>
