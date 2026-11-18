@@ -864,8 +864,16 @@
         const bodyText = (doc.body?.innerText || "").replace(/\s+/g, " ").trim();
         const lowerHtml = rawHtml.toLowerCase();
 
+        // Deteksi apakah WebApp menggunakan arsitektur Client-Side Rendering / SPA (React, Vite, Vue, Next.js, dll.)
+        const scriptTags = Array.from(doc.querySelectorAll("script[src]"));
+        const scriptSrcs = scriptTags.map(s => s.getAttribute("src") || "");
+        const hasRootContainer = !!doc.querySelector("#root, #app, #__next, [data-reactroot], [ng-app]");
+        const hasJsBundles = scriptSrcs.some(src => /assets\/|static\/js\/|chunk|bundle|main\.|index-|vite|react|vue|next/i.test(src));
+        const isClientSideSPA = (bodyText.length < 150 && (hasRootContainer || hasJsBundles));
+
         // Deteksi jenis WebApp (Katalog/E-Commerce vs Aplikasi Web Umum)
-        const isCatalogOrCommerce = /produk|katalog|keranjang|cart|beli|checkout|harga|rp\s?\d|stok|order|pesanan/i.test(bodyText);
+        const combinedSignalText = (bodyText + " " + doc.title + " " + rawHtml).toLowerCase();
+        const isCatalogOrCommerce = /produk|katalog|keranjang|cart|beli|checkout|harga|rp\s?\d|stok|order|pesanan|toko|shop|store|umkm|batik/i.test(combinedSignalText);
         const detectedAppType = isCatalogOrCommerce ? "Web Katalog / E-Commerce" : "Aplikasi Web Umum / Non-Katalog";
 
         // 1. Cek C1 (Keberfungsian Elemen, Navigasi & Deteksi Kegagalan Pemuatan Data/Katalog)
@@ -875,7 +883,7 @@
         const buttonsCount = doc.querySelectorAll("button, [role='button'], input[type='submit']").length;
         const hasSearchOrFilter = !!doc.querySelector("input[type='search'], input[placeholder*='cari' i], input[placeholder*='search' i], select");
 
-        // Deteksi pesan error pemuatan data/katalog (misal: gagal memuat produk, error fetch, not found, empty state error)
+        // Deteksi pesan error pemuatan data/katalog (hanya jika benar-benar ada teks error eksplisit)
         const hasLoadingError = /gagal memuat|failed to fetch|error loading|tidak dapat dimuat|unable to load|404 not found|internal server error|database error|sqlstate/i.test(bodyText);
 
         // 2. Cek C4 (Pemuatan Gambar & Media)
@@ -933,6 +941,9 @@
 
         return {
           reachable: true,
+          page_title: (doc.title || "").trim(),
+          is_client_side_spa: isClientSideSPA,
+          js_bundles_count: scriptSrcs.length,
           detected_app_type: detectedAppType,
           c1_nav_links_count: links.length,
           c1_broken_links_count: brokenLinksCount,
@@ -1018,8 +1029,9 @@ ${JSON.stringify(enrichedPairs)}
 
 PEDOMAN PENILAIAN OBJEKTIF & KETAT (WAJIB DIPATUHI):
 1. **Bukti Nyata Utama**: Jadikan 'real_dom_and_security_inspection' (termasuk 'page_text_sample') sebagai bukti faktual utama.
-2. **Penalti Kritis Bila Konten/Katalog Gagal Dimuat**:
-   - Jika 'c1_has_loading_error' bernilai true, atau 'reachable' false, atau teks halaman menunjukkan data/katalog gagal dimuat/kosong/error, berikan skor RENDAH (2.0 - 4.5) pada kriteria c1 dan c4. Jangan pernah memberi peringkat tinggi pada web yang fitur utamanya rusak/gagal dimuat!
+2. **Penanganan Arsitektur SPA (React/Vite/Vue) vs Error Nyata**:
+   - **PENTING**: Pemindaian proxy HTTP membaca HTML awal sebelum JavaScript dijalankan. Jika 'is_client_side_spa' bernilai true (ada container '#root'/'#app' dan 'js_bundles_count' >= 1) serta 'c1_has_loading_error' bernilai false, **JANGAN** menganggap situs itu kosong/rusak! Itu adalah aplikasi modern berbasis React/Vite/Vue yang dirender di browser. Evaluasi secara adil menggunakan 'page_title', bundle JS yang dimuat, meta tags, dan HTTP headers dengan skor kompetitif (7.8 - 9.2) sesuai kualitas bundel dan header-nya.
+   - **Penalti Kritis Bila Benar-Benar Error**: Hanya berikan skor rendah (2.0 - 4.5) pada c1 dan c4 jika 'reachable' bernilai false, 'c1_has_loading_error' bernilai true (terdapat pesan gagal memuat/error eksplisit), atau situs statis yang tidak memiliki konten maupun bundle JS.
 3. **Tata Letak & UI/UX (c2, c3, c7)**:
    - Evaluasi kelengkapan struktur tombol, navigasi, meta viewport ('c7_has_viewport'), dan minimnya broken link ('c1_broken_links_count').
 4. **Informasi Kontak & About Us (c8)**:
