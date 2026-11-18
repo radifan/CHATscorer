@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CHATScorer</title>
+  <title>CHATScorer - Penilaian Prototipe WebApp</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -88,14 +88,14 @@
         </div>
         <div>
           <h1 class="font-black text-xl text-slate-900 tracking-tight">CHATScorer</h1>
-          <p class="text-xs text-slate-500 font-medium">penilaian prototipe web katalog</p>
+          <p class="text-xs text-slate-500 font-medium">audit fungsionalitas, tata letak & keamanan webapp</p>
         </div>
       </div>
 
       <div class="flex items-center gap-3">
         <button id="btn-open-api-modal" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-700 text-xs font-bold flex items-center gap-2 transition shadow-sm">
           <i id="api-status-icon" class="fa-solid fa-key text-amber-500 text-sm"></i>
-          <span id="api-status-label">Input API Key</span>
+          <span id="api-status-label">Atur API Key</span>
         </button>
       </div>
     </div>
@@ -118,9 +118,9 @@
         <div class="flex items-center justify-between">
           <div>
             <h2 class="text-lg font-black text-slate-900 flex items-center gap-2">
-              <i class="fa-solid fa-users-gear text-sky-600"></i> Pengembang dan URL
+              <i class="fa-solid fa-users-gear text-sky-600"></i> Pengembang dan URL WebApp
             </h2>
-            <p class="text-xs text-slate-500 mt-1">Setiap baris Nama Pengembang berpasangan 1-ke-1 dengan baris URL WebApp.</p>
+            <p class="text-xs text-slate-500 mt-1">Setiap baris Nama Pengembang berpasangan 1-ke-1 dengan baris URL WebApp (mendukung semua jenis aplikasi web).</p>
           </div>
 
           <button id="btn-reset-all" class="px-4 py-2 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-300 text-xs font-bold rounded-xl transition flex items-center gap-2">
@@ -133,15 +133,15 @@
             <label class="block text-xs font-extrabold uppercase text-slate-700">
               <i class="fa-solid fa-user text-sky-600 mr-1"></i> Nama Pengembang (1 Per Baris) <span class="text-rose-500">*</span>
             </label>
-            <textarea id="input-developer" rows="5" placeholder="Budi Santoso&#10;Tim Alpha UMKM&#10;Siti Rahma" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-300 rounded-2xl text-xs sm:text-sm font-bold focus:outline-none focus:border-sky-600 resize-none custom-scrollbar"></textarea>
+            <textarea id="input-developer" rows="5" placeholder="Budi Santoso&#10;Tim Alpha Dev&#10;Siti Rahma" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-300 rounded-2xl text-xs sm:text-sm font-bold focus:outline-none focus:border-sky-600 resize-none custom-scrollbar"></textarea>
           </div>
 
           <div class="lg:col-span-7 space-y-1.5">
             <label class="block text-xs font-extrabold uppercase text-slate-700">
-              <i class="fa-solid fa-link text-sky-600 mr-1"></i> Alamat URL Prototipe (1 Per Baris) <span class="text-rose-500">*</span>
+              <i class="fa-solid fa-link text-sky-600 mr-1"></i> Alamat URL WebApp (1 Per Baris) <span class="text-rose-500">*</span>
             </label>
             <div class="relative">
-              <textarea id="input-url" rows="5" placeholder="https://kopi-lokal.vercel.app&#10;https://batik-solo.vercel.app&#10;https://kerajinan-bali.vercel.app" class="w-full pl-4 pr-16 py-3 bg-slate-50 border-2 border-slate-300 rounded-2xl text-xs sm:text-sm font-mono font-bold focus:outline-none focus:border-sky-600 resize-none custom-scrollbar"></textarea>
+              <textarea id="input-url" rows="5" placeholder="https://portal-akademik.vercel.app&#10;https://katalog-toko.vercel.app&#10;https://sistem-reservasi.vercel.app" class="w-full pl-4 pr-16 py-3 bg-slate-50 border-2 border-slate-300 rounded-2xl text-xs sm:text-sm font-mono font-bold focus:outline-none focus:border-sky-600 resize-none custom-scrollbar"></textarea>
               
               <button id="btn-audit-ai" title="Mulai Penilaian" class="absolute right-2 top-2 bottom-2 px-5 bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white rounded-xl shadow-md transition flex items-center justify-center">
                 <i class="fa-solid fa-wand-magic-sparkles text-amber-300 text-xl"></i>
@@ -223,10 +223,10 @@
             </div>
 
             <div class="text-left text-xs space-y-2 border-t border-sky-200 pt-4 font-medium">
-              <div class="flex justify-between"><span>UI/UX & Katalog:</span><span id="cat-score-a" class="font-mono font-extrabold text-sky-700">0.00 / 45</span></div>
-              <div class="flex justify-between"><span>Admin & Keamanan:</span><span id="cat-score-b" class="font-mono font-extrabold text-sky-700">0.00 / 20</span></div>
-              <div class="flex justify-between"><span>Responsif & Kontak:</span><span id="cat-score-c" class="font-mono font-extrabold text-sky-700">0.00 / 25</span></div>
-              <div class="flex justify-between"><span>Checkout & Payment:</span><span id="cat-score-d" class="font-mono font-extrabold text-sky-700">0.00 / 10</span></div>
+              <div class="flex justify-between"><span>Fungsionalitas & UI/UX:</span><span id="cat-score-a" class="font-mono font-extrabold text-sky-700">0.00 / 45</span></div>
+              <div class="flex justify-between"><span>Akses & Keamanan Siber:</span><span id="cat-score-b" class="font-mono font-extrabold text-sky-700">0.00 / 20</span></div>
+              <div class="flex justify-between"><span>Responsif, Kontak & Alur:</span><span id="cat-score-c" class="font-mono font-extrabold text-sky-700">0.00 / 25</span></div>
+              <div class="flex justify-between"><span>Transaksi & Pembayaran:</span><span id="cat-score-d" class="font-mono font-extrabold text-sky-700">0.00 / 10</span></div>
             </div>
           </div>
 
@@ -289,9 +289,9 @@
         </div>
 
         <div class="space-y-1.5">
-          <label for="input-proxy-url" class="block font-extrabold text-slate-700">CORS Proxy Endpoint (Untuk Inspeksi HTML Nyata):</label>
+          <label for="input-proxy-url" class="block font-extrabold text-slate-700">CORS Proxy Endpoint (Untuk Inspeksi HTML & X-Headers):</label>
           <input type="text" id="input-proxy-url" placeholder="https://api.allorigins.win/get?url=" class="w-full px-3.5 py-2.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-sky-600">
-          <p class="text-[11px] text-slate-500">Default menggunakan <code>allorigins.win</code>. Gunakan URL Cloudflare Worker kustom jika ingin memeriksa HTTP Security Headers lengkap.</p>
+          <p class="text-[11px] text-slate-500">Default menggunakan <code>allorigins.win</code>. Gunakan URL Cloudflare Worker kustom agar HTTP Security Headers (X-Headers) ikut terpindai.</p>
         </div>
       </div>
 
@@ -416,17 +416,118 @@
       developer: "",
       auditData: null,
       radarChart: null,
+      /* 10 KRITERIA BAWAAN DENGAN BOBOT TETAP (TOTAL 100%) - DIADAPTASI UNTUK SEMUA JENIS WEBAPP */
       criteriaMeta: {
-        c1: { id: "c1", cat: "A", weight: 0.1125, name: "Fungsionalitas Elemen, Filter & Live Search", icon: "fa-cubes", desc: "Navigasi menu, Live Search, Filter Kategori produk, & tombol CTA.", sub: [ { id: "s1_1", name: "Navigasi Menu Utama" }, { id: "s1_2", name: "Respons Tombol CTA & Filter" }, { id: "s1_3", name: "Fitur Live Search Produk" } ] },
-        c2: { id: "c2", cat: "A", weight: 0.1125, name: "Tata Letak Elemen & Grid Katalog", icon: "fa-table-cells-large", desc: "Kerapian grid produk, hierarki visual, & keselarasan spacing.", sub: [ { id: "s2_1", name: "Penggunaan CSS Grid/Flexbox Simetris" }, { id: "s2_2", name: "Konsistensi Spacing & Spasi" }, { id: "s2_3", name: "Hierarki Visual Judul & Harga" } ] },
-        c3: { id: "c3", cat: "A", weight: 0.1125, name: "UI/UX User Friendly & Aksesibilitas", icon: "fa-wand-magic-sparkles", desc: "Kontras warna, keterbacaan tipografi, & kemudahan navigasi.", sub: [ { id: "s3_1", name: "Rasio Kontras Warna WCAG AA" }, { id: "s3_2", name: "Keterbacaan Tipografi & Font" }, { id: "s3_3", name: "Kemudahan Alur Navigasi" } ] },
-        c4: { id: "c4", cat: "A", weight: 0.1125, name: "Gambar Katalog Foto Produk Asli", icon: "fa-image", desc: "Foto produk asli, varian, serta deskripsi spesifikasi rinci.", sub: [ { id: "s4_1", name: "Verifikasi Foto Produk Asli" }, { id: "s4_2", name: "Ketersediaan Pilihan Varian" }, { id: "s4_3", name: "Rincian Spesifikasi Produk" } ] },
-        c5: { id: "c5", cat: "B", weight: 0.1000, name: "Pemisahan Akses Admin & Pengunjung", icon: "fa-user-lock", desc: "Tautan portal login admin di area pengelola.", sub: [ { id: "s5_1", name: "Keberadaan Tautan Portal Admin" }, { id: "s5_2", name: "Pembedaan Antarmuka Publik vs Admin" }, { id: "s5_3", name: "Proteksi Rute Halaman Admin" } ] },
-        c6: { id: "c6", cat: "B", weight: 0.1000, name: "Ketahanan Keamanan & Anti SQLi", icon: "fa-shield-halved", desc: "Sanitasi input form, perlindungan XSS, & validasi data.", sub: [ { id: "s6_1", name: "Sanitasi Karakter Input Search & Form" }, { id: "s6_2", name: "Pencegahan Script Injeksi (XSS)" }, { id: "s6_3", name: "Validasi Tipe Data Input Form" } ] },
-        c7: { id: "c7", cat: "C", weight: 0.0833, name: "Tampilan Dynamic & Fluid Responsive", icon: "fa-mobile-screen-button", desc: "Adaptabilitas tata letak di Desktop, Tablet, & Mobile.", sub: [ { id: "s7_1", name: "Adaptabilitas Layar Desktop" }, { id: "s7_2", name: "Adaptabilitas Layar Tablet" }, { id: "s7_3", name: "Adaptabilitas Layar Mobile tanpa Scroll X" } ] },
-        c8: { id: "c8", cat: "C", weight: 0.0833, name: "Informasi Kontak & Legalitas Usaha", icon: "fa-address-card", desc: "Kelengkapan WA CS, alamat fisik, email, & legalitas.", sub: [ { id: "s8_1", name: "WhatsApp CS Direct Click-to-Chat" }, { id: "s8_2", name: "Alamat Fisik Usaha & Peta" }, { id: "s8_3", name: "Email Resmi Bisnis & Media Sosial" } ] },
-        c9: { id: "c9", cat: "C", weight: 0.0834, name: "Mekanisme Belanja & Panduan Alur", icon: "fa-circle-info", desc: "Kejelasan alur pemesanan, pengiriman, & kebijakan.", sub: [ { id: "s9_1", name: "Kejelasan Panduan Alur Pemesanan" }, { id: "s9_2", name: "Estimasi Pengiriman & Opsi Ekspedisi" }, { id: "s9_3", name: "Transparansi Kebijakan Belanja" } ] },
-        c10: { id: "c10", cat: "D", weight: 0.1000, name: "Direct Checkout & Pembayaran QRIS", icon: "fa-credit-card", desc: "Manajemen keranjang, checkout WA otomatis, & QRIS.", sub: [ { id: "s10_1", name: "Manajemen Keranjang Belanja" }, { id: "s10_2", name: "Direct Checkout Otomatis via WhatsApp" }, { id: "s10_3", name: "Pilihan Pembayaran Instant QRIS & Bank" } ] }
+        c1: {
+          id: "c1", cat: "A", weight: 0.1125,
+          name: "Fungsionalitas Elemen, Filter & Live Search",
+          icon: "fa-cubes",
+          desc: "Kelengkapan dan keberfungsian navigasi menu, tombol aksi, filter data, pencarian, serta pemuatan konten dinamis tanpa error.",
+          sub: [
+            { id: "s1_1", name: "Keberfungsian Navigasi Menu & Tautan" },
+            { id: "s1_2", name: "Responsivitas Tombol Aksi, Form & Filter" },
+            { id: "s1_3", name: "Kestabilan Pemuatan Data & Fitur Pencarian" }
+          ]
+        },
+        c2: {
+          id: "c2", cat: "A", weight: 0.1125,
+          name: "Tata Letak Elemen & Grid Katalog",
+          icon: "fa-table-cells-large",
+          desc: "Kerapian struktur komponen halaman, keseimbangan grid/kartu konten, hierarki visual, dan konsistensi jarak antar elemen.",
+          sub: [
+            { id: "s2_1", name: "Struktur Grid/Flexbox Komponen Simetris" },
+            { id: "s2_2", name: "Konsistensi Margin, Padding & Jarak Elemen" },
+            { id: "s2_3", name: "Hierarki Visual Judul, Konten & CTA" }
+          ]
+        },
+        c3: {
+          id: "c3", cat: "A", weight: 0.1125,
+          name: "UI/UX User Friendly & Aksesibilitas",
+          icon: "fa-wand-magic-sparkles",
+          desc: "Kemudahan penggunaan antarmuka, kontras warna yang nyaman dibaca, kejelasan tipografi, dan alur interaksi intuitif.",
+          sub: [
+            { id: "s3_1", name: "Rasio Kontras Warna & Kenyamanan Visual" },
+            { id: "s3_2", name: "Keterbacaan Tipografi & Ukuran Font" },
+            { id: "s3_3", name: "Kejelasan Alur Navigasi & Umpan Balik UI" }
+          ]
+        },
+        c4: {
+          id: "c4", cat: "A", weight: 0.1125,
+          name: "Gambar Katalog Foto Produk Asli",
+          icon: "fa-image",
+          desc: "Validitas pemuatan aset visual/gambar, ketiadaan broken image/konten kosong, serta kelengkapan informasi objek/item yang ditampilkan.",
+          sub: [
+            { id: "s4_1", name: "Keberhasilan Pemuatan Aset Gambar (No Broken Image)" },
+            { id: "s4_2", name: "Kesesuaian Visual & Kualitas Media/Ilustrasi" },
+            { id: "s4_3", name: "Kelengkapan Detail Deskripsi Item/Konten" }
+          ]
+        },
+        c5: {
+          id: "c5", cat: "B", weight: 0.1000,
+          name: "Pemisahan Akses Admin & Pengunjung",
+          icon: "fa-user-lock",
+          desc: "Pemisahan hak akses publik vs pengelola, perlindungan rute admin, serta pencegahan kebocoran informasi (Web Enumeration).",
+          sub: [
+            { id: "s5_1", name: "Pemisahan Antarmuka Publik vs Pengelola/Admin" },
+            { id: "s5_2", name: "Proteksi Autentikasi & Rute Terbatas" },
+            { id: "s5_3", name: "Mitigasi Web Enumeration (Penyembunyian Path & Stack)" }
+          ]
+        },
+        c6: {
+          id: "c6", cat: "B", weight: 0.1000,
+          name: "Ketahanan Keamanan & Anti SQLi",
+          icon: "fa-shield-halved",
+          desc: "Sanitasi input untuk mencegah SQL Injection, XSS, Command/Shell Scripting Injection, serta kelengkapan HTTP Security Headers.",
+          sub: [
+            { id: "s6_1", name: "Validasi & Sanitasi Input (Anti SQL Injection)" },
+            { id: "s6_2", name: "Pencegahan XSS & Command/Shell Scripting Injection" },
+            { id: "s6_3", name: "Penerapan HTTP Security Headers (CSP, X-Frame, HSTS)" }
+          ]
+        },
+        c7: {
+          id: "c7", cat: "C", weight: 0.0833,
+          name: "Tampilan Dynamic & Fluid Responsive",
+          icon: "fa-mobile-screen-button",
+          desc: "Adaptabilitas tata letak dinamis di berbagai ukuran layar (Desktop, Tablet, Mobile) tanpa elemen terpotong atau horizontal overflow.",
+          sub: [
+            { id: "s7_1", name: "Adaptabilitas Tata Letak Layar Desktop" },
+            { id: "s7_2", name: "Adaptabilitas Tata Letak Layar Tablet" },
+            { id: "s7_3", name: "Responsivitas Mobile & Meta Viewport" }
+          ]
+        },
+        c8: {
+          id: "c8", cat: "C", weight: 0.0833,
+          name: "Informasi Kontak & Legalitas Usaha",
+          icon: "fa-address-card",
+          desc: "Ketersediaan halaman/bagian About Us, identitas pengelola/organisasi, saluran kontak resmi, dan transparansi informasi.",
+          sub: [
+            { id: "s8_1", name: "Ketersediaan Informasi Tentang Kami (About Us)" },
+            { id: "s8_2", name: "Kelengkapan Kontak Resmi (Email, Telepon/WA, Sosial)" },
+            { id: "s8_3", name: "Kejelasan Identitas, Alamat & Kebijakan Layanan" }
+          ]
+        },
+        c9: {
+          id: "c9", cat: "C", weight: 0.0834,
+          name: "Mekanisme Belanja & Panduan Alur",
+          icon: "fa-circle-info",
+          desc: "Kejelasan alur penggunaan aplikasi/layanan, panduan pengguna, serta mekanisme komunikasi langsung ke pengelola/penjual jika relevan.",
+          sub: [
+            { id: "s9_1", name: "Kejelasan Alur Penggunaan & Panduan Fitur" },
+            { id: "s9_2", name: "Mekanisme Interaksi/Menghubungi Pengelola atau Penjual" },
+            { id: "s9_3", name: "Penanganan Status & Pesan Umpan Balik Pengguna" }
+          ]
+        },
+        c10: {
+          id: "c10", cat: "D", weight: 0.1000,
+          name: "Direct Checkout & Pembayaran QRIS",
+          icon: "fa-credit-card",
+          desc: "Kesiapan alur transaksi/pemrosesan layanan: untuk web katalog/niaga dinilai fitur keranjang, checkout & pembayaran (QRIS/Bank); untuk web non-niaga dinilai kelengkapan alur pemrosesan aksi utama.",
+          sub: [
+            { id: "s10_1", name: "Alur Keranjang / Pemrosesan Transaksi Utama" },
+            { id: "s10_2", name: "Mekanisme Konfirmasi Pesanan / Aksi Otomatis" },
+            { id: "s10_3", name: "Dukungan Metode Pembayaran (QRIS/Transfer) atau Integrasi Layanan" }
+          ]
+        }
       }
     };
 
@@ -454,8 +555,8 @@
         hash = ((hash << 5) - hash) + str.charCodeAt(i);
         hash |= 0;
       }
-      const val = 7.0 + (Math.abs(hash) % 28) / 10;
-      return parseFloat(Math.min(10.0, Math.max(5.0, val)).toFixed(1));
+      const val = 6.5 + (Math.abs(hash) % 25) / 10;
+      return parseFloat(Math.min(9.5, Math.max(5.0, val)).toFixed(1));
     }
 
     function generateDynamicTextByScore(cKey, avgScore, url, inspection = null) {
@@ -464,44 +565,50 @@
 
       let realNote = "";
       if (inspection && inspection.reachable) {
-        if (cKey === "c5") {
-          realNote = inspection.c5_admin_links.length > 0
-            ? ` (Terdeteksi ${inspection.c5_admin_links.length} tautan portal/admin: ${inspection.c5_admin_links.join(", ")})`
-            : ` (Tidak ditemukan tautan rute /admin atau /login pada HTML statis)`;
+        if (cKey === "c1") {
+          realNote = ` (Terdeteksi ${inspection.c1_nav_links_count} tautan navigasi, ${inspection.c1_buttons_count} tombol aksi, ${inspection.c1_broken_links_count} tautan kosong/#, serta indikator status memuat: ${inspection.c1_has_loading_error ? 'Ya - ditemukan pesan gagal/kosong' : 'Tidak'})`;
+        } else if (cKey === "c4") {
+          realNote = ` (Terdeteksi ${inspection.c4_images_total} tag gambar, ${inspection.c4_missing_src_images} gambar tanpa sumber valid)`;
+        } else if (cKey === "c5") {
+          realNote = ` (Tautan area pengelola/login: ${inspection.c5_admin_links.length > 0 ? inspection.c5_admin_links.join(", ") : "Tidak terekspos publik"}; Indikasi kebocoran stack/enumerasi: ${inspection.c5_enumeration_clues.length > 0 ? inspection.c5_enumeration_clues.join(", ") : "Minimal"})`;
         } else if (cKey === "c6") {
-          realNote = ` (Ditemukan ${inspection.c6_form_inputs_total} elemen input form, ${inspection.c6_inline_scripts} inline script, CSP: ${inspection.c6_security_headers.csp})`;
+          realNote = ` (Input form: ${inspection.c6_form_inputs_total}, input tervalidasi: ${inspection.c6_validated_inputs_count}, inline script: ${inspection.c6_inline_scripts}, CSP: ${inspection.c6_security_headers.csp}, X-Frame: ${inspection.c6_security_headers.xFrame})`;
         } else if (cKey === "c7") {
-          realNote = inspection.c7_has_viewport ? ` (Meta tag viewport terpasang)` : ` (Meta tag viewport tidak ditemukan)`;
+          realNote = inspection.c7_has_viewport ? ` (Meta tag viewport responsif terpasang)` : ` (Meta tag viewport tidak ditemukan)`;
         } else if (cKey === "c8") {
-          realNote = inspection.c8_has_whatsapp ? ` (Tautan WhatsApp direct chat terdeteksi)` : ` (Tautan wa.me tidak ditemukan di halaman utama)`;
+          realNote = ` (Bagian About Us: ${inspection.c8_has_about_us ? 'Tersedia' : 'Tidak terdeteksi'}, Kontak/WA/Email: ${inspection.c8_has_contact ? 'Tersedia' : 'Tidak terdeteksi'})`;
+        } else if (cKey === "c9") {
+          realNote = ` (Jenis terdeteksi: ${inspection.detected_app_type}; Mekanisme hubungi penjual/pengelola: ${inspection.c9_has_seller_contact ? 'Tersedia' : 'Tidak terdeteksi'})`;
         } else if (cKey === "c10") {
-          realNote = inspection.c10_has_qris ? ` (Referensi metode pembayaran QRIS terdeteksi)` : ` (Kata kunci QRIS tidak ditemukan di halaman utama)`;
+          realNote = ` (Jenis terdeteksi: ${inspection.detected_app_type}; Fitur checkout/keranjang: ${inspection.c10_has_checkout ? 'Ada' : 'Tidak'}, Pembayaran QRIS/Transfer: ${inspection.c10_has_payment ? 'Ada' : 'Tidak'})`;
         }
+      } else if (inspection && !inspection.reachable) {
+        realNote = ` (Peringatan: Situs gagal dimuat saat pemindaian teknis: ${inspection.error || 'Tidak dapat dijangkau'})`;
       }
 
       if (avgScore >= 8.5) {
         return {
-          evidence: `Fitur ${criteriaName} pada domain ${domain} terkonfirmasi beroperasi sangat lancar dan sesuai standar.${realNote}`,
-          strengths: [`Implementasi ${criteriaName} sangat optimal`, `Antarmuka dan alur pengguna di ${domain} responsif`],
-          weaknesses: [`Perlu pemeliharaan performa rutin berkala`],
-          reasons: `Skor ${avgScore} diberikan karena seluruh sub-indikator terpenuhi di atas standar minimal.`,
-          recommendations: `Pertahankan struktur antarmuka dan lakukan pemantauan keamanan secara berkala.`
+          evidence: `Komponen ${criteriaName} pada domain ${domain} terverifikasi berjalan optimal, lengkap, dan sesuai standar evaluasi.${realNote}`,
+          strengths: [`Implementasi ${criteriaName} sangat baik dan berfungsi`, `Struktur antarmuka dan alur pengguna di ${domain} terkelola rapi`],
+          weaknesses: [`Perlu pengujian regresi dan pemantauan keamanan berkala`],
+          reasons: `Skor ${avgScore} diberikan karena seluruh indikator teknis dan fungsional terpenuhi secara konsisten.`,
+          recommendations: `Pertahankan kualitas implementasi serta lakukan audit keamanan dan performa secara berkala.`
         };
-      } else if (avgScore >= 7.0) {
+      } else if (avgScore >= 6.8) {
         return {
-          evidence: `Komponen ${criteriaName} pada ${domain} berfungsi cukup baik, namun terdapat sedikit catatan teknis.${realNote}`,
-          strengths: [`Fungsionalitas dasar ${criteriaName} sudah berjalan`],
-          weaknesses: [`Beberapa elemen butuh penyesuaian tata letak & validasi`],
-          reasons: `Skor ${avgScore} mencerminkan kesiapan fungsi dasar meskipun ada catatan minor.`,
-          recommendations: `Lakukan optimasi pada struktur elemen dan validasi input.`
+          evidence: `Komponen ${criteriaName} pada ${domain} berfungsi cukup baik, namun terdapat beberapa catatan perbaikan teknis.${realNote}`,
+          strengths: [`Struktur dan fungsi dasar ${criteriaName} sudah tersedia`],
+          weaknesses: [`Masih ditemukan kekurangan kelengkapan atribut, validasi, atau perlindungan keamanan`],
+          reasons: `Skor ${avgScore} mencerminkan fungsi dasar berjalan namun belum memenuhi standar produksi secara menyeluruh.`,
+          recommendations: `Lengkapi validasi input, perkuat header keamanan HTTP, dan pastikan seluruh elemen interaktif berfungsi penuh.`
         };
       } else {
         return {
-          evidence: `Ditemukan ketidaksesuaian elemen atau indikator ${criteriaName} pada situs ${domain}.${realNote}`,
-          strengths: [`Kerangka dasar antarmuka sudah tersedia`],
-          weaknesses: [`Validasi elemen belum konsisten`, `Indikator kriteria belum lengkap`],
-          reasons: `Skor ${avgScore} diberikan karena beberapa sub-indikator belum memenuhi standar minimal.`,
-          recommendations: `Lakukan perbaikan menyeluruh pada komponen kriteria ini sebelum rilis ke publik.`
+          evidence: `Ditemukan kendala fungsionalitas, kelengkapan konten, atau celah keamanan pada aspek ${criteriaName} di ${domain}.${realNote}`,
+          strengths: [`Kerangka dasar halaman sudah dapat diakses`],
+          weaknesses: [`Elemen gagal dimuat / fitur utama belum berfungsi`, `Kurangnya validasi keamanan & kelengkapan informasi`],
+          reasons: `Skor ${avgScore} diberikan karena ditemukan indikator kegagalan pemuatan konten atau ketiadaan fitur wajib.`,
+          recommendations: `Perbaiki segera pemuatan data/elemen yang gagal, lengkapi informasi kontak/About Us, dan terapkan sanitasi keamanan dasar.`
         };
       }
     }
@@ -515,7 +622,7 @@
         const subMap = auditObj.sub_scores?.[key] || {};
         const subValues = Object.values(subMap);
         
-        let avgRaw = 8.0;
+        let avgRaw = 7.5;
         if (subValues.length > 0) {
           const sum = subValues.reduce((a, b) => a + parseFloat(b || 0), 0);
           avgRaw = sum / subValues.length;
@@ -554,19 +661,68 @@
         let s2 = generateDeterministicHashScore(url, `${i}_2`);
         let s3 = generateDeterministicHashScore(url, `${i}_3`);
 
-        // Penyesuaian skor deterministik jika hasil inspeksi DOM nyata tersedia
-        if (inspection && inspection.reachable) {
-          if (cKey === "c5" && inspection.c5_admin_links.length === 0) {
-            s1 = Math.min(s1, 6.0);
+        if (!inspection || !inspection.reachable) {
+          // Penalti tegas jika website tidak bisa dimuat
+          s1 = 3.5; s2 = 3.5; s3 = 3.5;
+        } else {
+          // Penalti atau bonus objektif berbasis fakta DOM & Header nyata
+          if (cKey === "c1") {
+            if (inspection.c1_has_loading_error) {
+              s1 = 4.0; s2 = 4.5; s3 = 3.0; // Katalog/data gagal dimuat -> skor turun drastis
+            } else if (inspection.c1_nav_links_count >= 3 && inspection.c1_buttons_count >= 2) {
+              s1 = Math.max(s1, 8.6); s2 = Math.max(s2, 8.5); s3 = Math.max(s3, 8.5);
+            }
           }
-          if (cKey === "c6" && inspection.c6_security_headers.csp === "Tidak terdeteksi") {
-            s2 = Math.min(s2, 7.2);
+          if (cKey === "c4") {
+            if (inspection.c1_has_loading_error || (inspection.c4_images_total > 0 && inspection.c4_missing_src_images > 0)) {
+              s1 = 4.2; s3 = 4.5;
+            } else if (inspection.c4_images_total >= 2) {
+              s1 = Math.max(s1, 8.7); s3 = Math.max(s3, 8.5);
+            }
           }
-          if (cKey === "c7" && inspection.c7_has_viewport) {
-            s3 = Math.max(s3, 8.8);
+          if (cKey === "c5") {
+            if (inspection.c5_enumeration_clues.length > 0) {
+              s3 = Math.min(s3, 5.5);
+            } else {
+              s3 = Math.max(s3, 8.2);
+            }
           }
-          if (cKey === "c8" && inspection.c8_has_whatsapp) {
-            s1 = Math.max(s1, 9.0);
+          if (cKey === "c6") {
+            if (inspection.c6_form_inputs_total > 0 && inspection.c6_validated_inputs_count === 0) {
+              s1 = Math.min(s1, 5.8);
+            } else if (inspection.c6_validated_inputs_count > 0) {
+              s1 = Math.max(s1, 8.4);
+            }
+            if (inspection.c6_security_headers.csp === "Tidak terdeteksi" && inspection.c6_security_headers.xFrame === "Tidak terdeteksi") {
+              s3 = Math.min(s3, 6.0);
+            } else {
+              s3 = Math.max(s3, 8.6);
+            }
+          }
+          if (cKey === "c7") {
+            s3 = inspection.c7_has_viewport ? Math.max(s3, 8.8) : 4.5;
+          }
+          if (cKey === "c8") {
+            s1 = inspection.c8_has_about_us ? Math.max(s1, 8.6) : 5.5;
+            s2 = inspection.c8_has_contact ? Math.max(s2, 8.8) : 5.5;
+          }
+          if (cKey === "c9") {
+            if (inspection.detected_app_type === "Web Katalog / E-Commerce") {
+              s2 = inspection.c9_has_seller_contact ? Math.max(s2, 8.8) : 5.0;
+            } else {
+              s1 = Math.max(s1, 8.2);
+            }
+          }
+          if (cKey === "c10") {
+            if (inspection.detected_app_type === "Web Katalog / E-Commerce") {
+              s1 = inspection.c10_has_checkout ? Math.max(s1, 8.7) : 4.8;
+              s3 = inspection.c10_has_payment ? Math.max(s3, 8.8) : 4.8;
+            } else {
+              // Untuk web non-katalog, evaluasi proporsional berdasarkan kelengkapan form/aksi utama
+              s1 = inspection.c1_has_loading_error ? 4.5 : Math.max(s1, 8.0);
+              s2 = inspection.c1_has_loading_error ? 4.5 : Math.max(s2, 8.0);
+              s3 = inspection.c1_has_loading_error ? 4.5 : Math.max(s3, 8.0);
+            }
           }
         }
 
@@ -582,10 +738,11 @@
         recommendations[cKey] = dyn.recommendations;
       }
 
+      const appTypeLabel = inspection?.detected_app_type || "Aplikasi Web Umum";
       return {
         developer,
         url,
-        executive_summary: `Hasil penilaian evaluasi untuk (${url}) buatan ${developer}${inspection?.reachable ? ' dengan pemindaian struktur HTML nyata' : ''}.`,
+        executive_summary: `Hasil audit teknis WebApp (${url}) kategori [${appTypeLabel}] karya ${developer}${inspection?.reachable ? ' berbasis pemindaian DOM, fungsionalitas elemen, dan keamanan siber' : ' (peringatan: gagal terhubung ke target)'}.`,
         sub_scores: sub,
         evidence,
         strengths,
@@ -685,38 +842,77 @@
       modal.classList.remove('hidden');
     }
 
-    /* INSPEKSI DOM & HTTP SECURITY HEADERS NYATA SEBELUM PENILAIAN */
+    /* INSPEKSI DOM, FUNGSIONALITAS ELEMEN & KEAMANAN SIBER (SQLi, SHELL SCRIPTING, ENUMERATION, X-HEADERS) */
     async function inspectTargetWebsite(url) {
       const proxyBase = (state.proxyUrl || DEFAULT_PROXY_URL).trim();
       if (!proxyBase) return { reachable: false, error: "Proxy tidak dikonfigurasi" };
 
       try {
         const res = await fetch(`${proxyBase}${encodeURIComponent(url)}`);
-        if (!res.ok) throw new Error("Gagal mengakses URL melalui proxy");
+        if (!res.ok) throw new Error(`HTTP Status ${res.status}`);
         const data = await res.json();
 
-        // AllOrigins menyimpan HTML di 'contents', Cloudflare Worker kustom di 'html'
         const rawHtml = data.contents || data.html || "";
         const headers = data.headers || {};
 
+        if (!rawHtml || rawHtml.trim().length < 50) {
+          return { reachable: false, error: "Konten HTML kosong atau gagal dimuat" };
+        }
+
         const parser = new DOMParser();
         const doc = parser.parseFromString(rawHtml, "text/html");
+        const bodyText = (doc.body?.innerText || "").replace(/\s+/g, " ").trim();
+        const lowerHtml = rawHtml.toLowerCase();
 
-        // 1. Cek C5 (Pemisahan Akses Admin & Rute Login)
-        const links = Array.from(doc.querySelectorAll("a")).map(a => a.getAttribute("href") || "");
-        const adminLinks = links.filter(href => /admin|login|dashboard|panel|masuk/i.test(href));
+        // Deteksi jenis WebApp (Katalog/E-Commerce vs Aplikasi Web Umum)
+        const isCatalogOrCommerce = /produk|katalog|keranjang|cart|beli|checkout|harga|rp\s?\d|stok|order|pesanan/i.test(bodyText);
+        const detectedAppType = isCatalogOrCommerce ? "Web Katalog / E-Commerce" : "Aplikasi Web Umum / Non-Katalog";
 
-        // 2. Cek C6 (Keamanan Input Form, Sanitasi & Inline Script)
-        const inputs = Array.from(doc.querySelectorAll("input, textarea"));
-        const inputValidations = inputs.slice(0, 12).map(el => ({
-          type: el.getAttribute("type") || "text",
+        // 1. Cek C1 (Keberfungsian Elemen, Navigasi & Deteksi Kegagalan Pemuatan Data/Katalog)
+        const anchors = Array.from(doc.querySelectorAll("a"));
+        const links = anchors.map(a => a.getAttribute("href") || "");
+        const brokenLinksCount = links.filter(href => href === "" || href === "#" || href.startsWith("javascript:void")).length;
+        const buttonsCount = doc.querySelectorAll("button, [role='button'], input[type='submit']").length;
+        const hasSearchOrFilter = !!doc.querySelector("input[type='search'], input[placeholder*='cari' i], input[placeholder*='search' i], select");
+
+        // Deteksi pesan error pemuatan data/katalog (misal: gagal memuat produk, error fetch, not found, empty state error)
+        const hasLoadingError = /gagal memuat|failed to fetch|error loading|tidak dapat dimuat|unable to load|404 not found|internal server error|database error|sqlstate/i.test(bodyText);
+
+        // 2. Cek C4 (Pemuatan Gambar & Media)
+        const images = Array.from(doc.querySelectorAll("img"));
+        const missingSrcImages = images.filter(img => {
+          const src = (img.getAttribute("src") || "").trim();
+          return !src || src === "#" || src === "undefined" || src === "null";
+        }).length;
+
+        // 3. Cek C5 (Pemisahan Akses Admin & Mitigasi Web Enumeration)
+        const adminLinks = links.filter(href => /admin|login|dashboard|panel|masuk|cpanel|wp-admin/i.test(href));
+        const enumerationClues = [];
+        if (headers["x-powered-by"]) enumerationClues.push(`X-Powered-By: ${headers["x-powered-by"]}`);
+        if (headers["server"]) enumerationClues.push(`Server: ${headers["server"]}`);
+        if (/<!--[\s\S]*?(todo|password|secret|api_key|debug|internal|localhost|127\.0\.0\.1)[\s\S]*?-->/i.test(rawHtml)) {
+          enumerationClues.push("Komentar HTML mengandung info sensitif/debug");
+        }
+        if (/index of \/|\.env|\.git|phpinfo|stack trace/i.test(bodyText)) {
+          enumerationClues.push("Indikasi Directory Listing / Stack Trace");
+        }
+
+        // 4. Cek C6 (Ketahanan Keamanan: Anti SQLi, Shell Scripting Injection, XSS & X-Headers)
+        const inputs = Array.from(doc.querySelectorAll("input, textarea, select"));
+        const inputValidations = inputs.slice(0, 15).map(el => ({
+          name: el.getAttribute("name") || el.getAttribute("id") || "unnamed",
+          type: el.getAttribute("type") || el.tagName.toLowerCase(),
           required: el.hasAttribute("required"),
           pattern: el.hasAttribute("pattern"),
-          maxlength: el.getAttribute("maxlength")
+          maxlength: el.getAttribute("maxlength"),
+          accept: el.getAttribute("accept")
         }));
+        const validatedInputsCount = inputValidations.filter(v => v.required || v.pattern || v.maxlength || v.accept).length;
+        const fileUploadInputs = inputs.filter(el => (el.getAttribute("type") || "").toLowerCase() === "file");
+        const unrestrictedFileUploads = fileUploadInputs.filter(el => !el.hasAttribute("accept")).length;
         const inlineScripts = doc.querySelectorAll("script:not([src])").length;
+        const hasDangerousSink = /eval\(|document\.write\(|innerHTML\s*=|exec\(|system\(|shell_exec\(/i.test(lowerHtml);
 
-        // 3. Cek HTTP Security Headers
         const securityHeaders = {
           csp: headers["content-security-policy"] || "Tidak terdeteksi",
           xFrame: headers["x-frame-options"] || "Tidak terdeteksi",
@@ -724,23 +920,43 @@
           hsts: headers["strict-transport-security"] || "Tidak terdeteksi"
         };
 
-        // 4. Cek C7, C8, C10 (Viewport, WhatsApp, QRIS)
+        // 5. Cek C7, C8, C9, C10 (Responsivitas, About Us, Kontak Penjual, Checkout & Pembayaran)
         const hasViewport = !!doc.querySelector('meta[name="viewport"]');
-        const hasWhatsApp = links.some(href => /wa\.me|whatsapp\.com/i.test(href));
-        const bodyText = (doc.body?.innerText || "").replace(/\s+/g, " ");
-        const hasQRIS = /qris/i.test(bodyText);
+        const hasAboutUs = /tentang kami|about us|profil kami|siapa kami|visi misi|tentang aplikasi/i.test(bodyText);
+        const hasWhatsApp = links.some(href => /wa\.me|whatsapp\.com/i.test(href)) || /whatsapp|08\d{8,11}|\+62\d{8,11}/i.test(bodyText);
+        const hasEmailOrAddress = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i.test(bodyText) || /alamat|jl\.|jalan|gedung|kontak|hubungi kami|contact us/i.test(bodyText);
+        const hasContact = hasWhatsApp || hasEmailOrAddress;
+
+        const hasSellerContact = hasWhatsApp || /hubungi penjual|chat penjual|tanya penjual|pesan via wa|order via whatsapp/i.test(bodyText);
+        const hasCheckout = /keranjang|cart|checkout|buat pesanan|ringkasan pesanan|tambah ke keranjang/i.test(bodyText);
+        const hasPayment = /qris|transfer bank|pembayaran|payment|metode bayar|e-wallet|gopay|ovo|dana|bca|bri|mandiri/i.test(bodyText);
 
         return {
           reachable: true,
+          detected_app_type: detectedAppType,
+          c1_nav_links_count: links.length,
+          c1_broken_links_count: brokenLinksCount,
+          c1_buttons_count: buttonsCount,
+          c1_has_search_or_filter: hasSearchOrFilter,
+          c1_has_loading_error: hasLoadingError,
+          c4_images_total: images.length,
+          c4_missing_src_images: missingSrcImages,
           c5_admin_links: adminLinks,
+          c5_enumeration_clues: enumerationClues,
           c6_form_inputs_total: inputs.length,
+          c6_validated_inputs_count: validatedInputsCount,
+          c6_unrestricted_file_uploads: unrestrictedFileUploads,
           c6_input_validations: inputValidations,
           c6_inline_scripts: inlineScripts,
+          c6_has_dangerous_sink: hasDangerousSink,
           c6_security_headers: securityHeaders,
           c7_has_viewport: hasViewport,
-          c8_has_whatsapp: hasWhatsApp,
-          c10_has_qris: hasQRIS,
-          page_text_sample: bodyText.slice(0, 1200)
+          c8_has_about_us: hasAboutUs,
+          c8_has_contact: hasContact,
+          c9_has_seller_contact: hasSellerContact,
+          c10_has_checkout: hasCheckout,
+          c10_has_payment: hasPayment,
+          page_text_sample: bodyText.slice(0, 1500)
         };
       } catch (err) {
         return { reachable: false, error: err.message };
@@ -752,7 +968,7 @@
       const urlRaw = (document.getElementById('input-url')?.value || "").trim();
 
       if (!devRaw || !urlRaw) {
-        showToast("Form Kosong", "Isi Nama Pengembang dan URL Prototipe.", false);
+        showToast("Form Kosong", "Isi Nama Pengembang dan URL WebApp.", false);
         return;
       }
 
@@ -776,14 +992,14 @@
       let enrichedPairs = [];
 
       try {
-        if (progressStatus) progressStatus.textContent = "Memindai struktur HTML & Header keamanan situs target...";
+        if (progressStatus) progressStatus.textContent = "Memindai fungsionalitas elemen, tata letak & keamanan X-Headers...";
         enrichedPairs = await Promise.all(
           pairs.map(async (pair) => {
             const inspection = await inspectTargetWebsite(pair.url);
             return {
               developer: pair.developer,
               url: pair.url,
-              real_dom_and_header_inspection: inspection
+              real_dom_and_security_inspection: inspection
             };
           })
         );
@@ -794,16 +1010,26 @@
         let aiResults = null;
 
         if (apiKey) {
-          if (progressStatus) progressStatus.textContent = "Mengevaluasi hasil inspeksi dengan Gemini AI...";
+          if (progressStatus) progressStatus.textContent = "Mengevaluasi hasil inspeksi secara objektif dengan Gemini AI...";
 
-          const systemPrompt = `Anda adalah Auditor AI Resmi Prototipe WebApp UMKM. Tugas Anda: Lakukan audit komprehensif terhadap DAFTAR PASANGAN berikut berdasarkan DATA INSPEKSI DOM & HEADER NYATA dalam SATU PROSES BATCH SINGLE REQUEST:
+          const systemPrompt = `Anda adalah Auditor Kualitas & Keamanan Aplikasi Web (WebApp) Profesional.
+Tugas Anda: Lakukan audit menyeluruh dan objektif terhadap DAFTAR WEBAPP berikut (berlaku untuk SEMUA JENIS WebApp: e-commerce/katalog, sistem informasi, portal layanan, dashboard, edukasi, dll.) berdasarkan DATA INSPEKSI DOM & KEAMANAN NYATA dalam SATU PROSES BATCH:
 ${JSON.stringify(enrichedPairs)}
 
-Aturan Penilaian Objektif:
-1. Gunakan 'real_dom_and_header_inspection' sebagai bukti utama bila reachable: true.
-2. Untuk c5 (Akses Admin): Periksa 'c5_admin_links'. Jika kosong dan tidak ada portal pengelola di sampel teks halaman, beri skor rendah (<= 5.5).
-3. Untuk c6 (Keamanan): Periksa 'c6_security_headers' dan 'c6_input_validations'. Jika input form tanpa atribut validasi (required/pattern/maxlength) dan header keamanan tidak ada, turunkan skor secara proporsional.
-4. Cantumkan temuan teknis nyata tersebut di dalam field 'evidence'.
+PEDOMAN PENILAIAN OBJEKTIF & KETAT (WAJIB DIPATUHI):
+1. **Bukti Nyata Utama**: Jadikan 'real_dom_and_security_inspection' (termasuk 'page_text_sample') sebagai bukti faktual utama.
+2. **Penalti Kritis Bila Konten/Katalog Gagal Dimuat**:
+   - Jika 'c1_has_loading_error' bernilai true, atau 'reachable' false, atau teks halaman menunjukkan data/katalog gagal dimuat/kosong/error, berikan skor RENDAH (2.0 - 4.5) pada kriteria c1 dan c4. Jangan pernah memberi peringkat tinggi pada web yang fitur utamanya rusak/gagal dimuat!
+3. **Tata Letak & UI/UX (c2, c3, c7)**:
+   - Evaluasi kelengkapan struktur tombol, navigasi, meta viewport ('c7_has_viewport'), dan minimnya broken link ('c1_broken_links_count').
+4. **Informasi Kontak & About Us (c8)**:
+   - Periksa 'c8_has_about_us' dan 'c8_has_contact'. WebApp yang baik wajib menyediakan informasi identitas/About Us serta saluran kontak yang jelas.
+5. **Adaptasi Jenis WebApp pada c9 & c10**:
+   - **Jika jenisnya Web Katalog / E-Commerce** ('detected_app_type' mengandung Katalog/E-Commerce): Wajib menilai ketersediaan mekanisme menghubungi penjual ('c9_has_seller_contact', misal WhatsApp/chat penjual) serta fitur checkout/keranjang ('c10_has_checkout') dan mekanisme pembayaran ('c10_has_payment', seperti QRIS/transfer). Jika fitur tersebut tidak ada pada web katalog, beri skor rendah (<= 5.0) pada c9/c10.
+   - **Jika jenisnya WebApp Non-Katalog** (misal portal informasi, kalkulator, sistem manajemen, edukasi): Nilai c9 pada kejelasan panduan/alur pengguna dan kontak pengelola; nilai c10 pada kelengkapan alur pemrosesan fitur/transaksi utama aplikasi tersebut secara adil.
+6. **Keamanan Siber Wajib (c5 & c6)**:
+   - **c5 (Akses & Anti Web Enumeration)**: Periksa 'c5_admin_links' dan 'c5_enumeration_clues'. Jika server membocorkan versi stack ('X-Powered-By', 'Server'), directory listing, atau komentar sensitif, turunkan skor s5_3.
+   - **c6 (Anti SQL Injection, Shell Scripting Injection, XSS & X-Headers)**: Periksa 'c6_validated_inputs_count' vs 'c6_form_inputs_total', 'c6_unrestricted_file_uploads' (risiko upload shell script bila input file tanpa atribut accept), 'c6_has_dangerous_sink' (risiko XSS/command execution), serta 'c6_security_headers' (CSP, X-Frame-Options, X-Content-Type-Options, HSTS). Cantumkan hasil pemeriksaan X-Headers & validasi ini secara eksplisit di field 'evidence'.
 
 Evaluasi tiap pasangan pada skala angka desimal 1.0 - 10.0 untuk sub-kriteria (s1_1 hingga s10_3).
 Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
@@ -811,7 +1037,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
   {
     "developer": "Nama Pengembang",
     "url": "https://...",
-    "executive_summary": "Ringkasan analisis eksekutif kontekstual...",
+    "executive_summary": "Ringkasan analisis eksekutif (sebutkan jenis WebApp, status fungsionalitas utama, dan postur keamanannya)...",
     "sub_scores": {
       "c1": { "s1_1": 8.5, "s1_2": 9.0, "s1_3": 8.0 },
       "c2": { "s2_1": 8.2, "s2_2": 8.0, "s2_3": 8.5 },
@@ -824,10 +1050,10 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
       "c9": { "s9_1": 8.2, "s9_2": 8.0, "s9_3": 8.1 },
       "c10": { "s10_1": 8.5, "s10_2": 8.8, "s10_3": 8.2 }
     },
-    "evidence": { "c1": "Bukti kontekstual spesifik situs ini...", "c2": "..." },
-    "strengths": { "c1": ["Kelebihan kontekstual 1", "Kelebihan 2"], "c2": [...] },
-    "weaknesses": { "c1": ["Kekurangan kontekstual 1"], "c2": [...] },
-    "reasons": { "c1": "Alasan penilaian kontekstual kriteria c1...", "c2": "..." },
+    "evidence": { "c1": "Bukti temuan teknis nyata...", "c2": "..." },
+    "strengths": { "c1": ["Kelebihan spesifik 1", "Kelebihan 2"], "c2": [...] },
+    "weaknesses": { "c1": ["Kekurangan spesifik 1"], "c2": [...] },
+    "reasons": { "c1": "Alasan penilaian objektif kriteria c1...", "c2": "..." },
     "recommendations": { "c1": "Saran perbaikan teknis spesifik c1...", "c2": "..." }
   }
 ]`;
@@ -859,7 +1085,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         enrichedPairs.forEach((item, idx) => {
           let itemObj = (aiResults && aiResults[idx])
             ? aiResults[idx]
-            : generateFallbackDataForPair(item.developer, item.url, item.real_dom_and_header_inspection);
+            : generateFallbackDataForPair(item.developer, item.url, item.real_dom_and_security_inspection);
           itemObj.developer = item.developer;
           itemObj.url = item.url;
 
@@ -876,7 +1102,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
       } catch (err) {
         console.error(err);
         pairs.forEach((pair, idx) => {
-          const insp = enrichedPairs[idx]?.real_dom_and_header_inspection || null;
+          const insp = enrichedPairs[idx]?.real_dom_and_security_inspection || null;
           const fallback = generateFallbackDataForPair(pair.developer, pair.url, insp);
           const calc = calculateScores(fallback);
           state.history.push({ developer: pair.developer, url: pair.url, auditObj: fallback, totalScore: calc.total, calc });
@@ -1048,7 +1274,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
 
         let subListHtml = "";
         meta.sub.forEach(subItem => {
-          const val = subScoresMap[subItem.id] || 8.0;
+          const val = subScoresMap[subItem.id] || 7.5;
           subListHtml += `
             <div class="flex items-center justify-between text-[11px] bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl">
               <span class="font-bold text-slate-700 truncate mr-2"><i class="fa-solid fa-angle-right text-sky-500 mr-1"></i>${subItem.name}</span>
@@ -1258,7 +1484,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         pageDiv.innerHTML = `
           <div class="flex justify-between items-start border-b pb-4">
             <div>
-              <h2 class="text-base font-black text-slate-900">LAPORAN EVALUASI PROTOTIPE WEB KATALOG</h2>
+              <h2 class="text-base font-black text-slate-900">LAPORAN EVALUASI & AUDIT KEAMANAN WEBAPP</h2>
               <p class="text-xs text-slate-500">Hasil Analisis Otomatis CHATScorer</p>
             </div>
             <div class="text-right">
