@@ -155,7 +155,7 @@
         </div>
 
         <p class="text-[11px] text-slate-500 font-medium">
-          <i class="fa-solid fa-circle-info text-sky-600"></i> Tekan <kbd class="px-1.5 py-0.5 bg-slate-200 border rounded font-mono font-bold text-[10px]">Ctrl + Enter</kbd> atau klik tombol ikon magic wand untuk mulai menilai. (Model AI: <strong>gemini-4-hydrogen</strong> dengan cadangan otomatis <strong>gemini-3.8-flash</strong>).
+          <i class="fa-solid fa-circle-info text-sky-600"></i> Tekan <kbd class="px-1.5 py-0.5 bg-slate-200 border rounded font-mono font-bold text-[10px]">Ctrl + Enter</kbd> atau klik tombol ikon magic wand untuk mulai menilai. (Failover: <strong>gemini-4-hydrogen</strong> &rarr; <strong>gemini-3.8-flash</strong> &rarr; <strong>gemini-3.5-flash-lite</strong> dengan <em>Exponential Backoff</em>).
         </p>
       </div>
     </section>
@@ -344,7 +344,7 @@
               <i class="fa-solid fa-eye"></i>
             </button>
           </div>
-          <p class="text-[11px] text-slate-500">Menggunakan <strong>gemini-4-hydrogen</strong> dengan cadangan otomatis <strong>gemini-3.8-flash</strong> jika 503 Unavailable. Kosongkan jika ingin memakai Mode Fallback Deterministik.</p>
+          <p class="text-[11px] text-slate-500">Urutan otomatis: <strong>gemini-4-hydrogen</strong> &rarr; <strong>gemini-3.8-flash</strong> &rarr; <strong>gemini-3.5-flash-lite</strong> dengan <em>Exponential Backoff</em>. Kosongkan untuk Mode Fallback Deterministik.</p>
         </div>
 
         <div class="space-y-1.5">
@@ -467,11 +467,18 @@
     const PROXY_URL_STORAGE = "chatscorer_cors_proxy_url";
     const DEFAULT_PROXY_URL = "https://api.allorigins.win/get?url=";
 
-    // Urutan prioritas model AI: Utama (gemini-4-hydrogen) -> Backup (gemini-3.8-flash)
+    // Rantai prioritas model AI: Utama -> Backup 1 -> Backup 2 (Lite)
     const GEMINI_MODELS_PRIORITY = [
       "gemini-4-hydrogen",
-      "gemini-3.8-flash"
+      "gemini-3.8-flash",
+      "gemini-3.5-flash-lite"
     ];
+
+    // Konfigurasi Exponential Backoff (jeda ms sebelum retry pada status sementara 429/503/504)
+    const RETRY_DELAYS_MS = [1500, 3000];
+    const RETRYABLE_HTTP_STATUS = new Set([429, 500, 502, 503, 504]);
+
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     const safeStorage = {
       _mem: {},
@@ -639,7 +646,7 @@
 
       if (hasKey) {
         icon.className = "fa-solid fa-shield-halved text-emerald-500 text-sm";
-        label.textContent = isCustomProxy ? "Gemini 4 + Worker Aktif" : "Gemini 4 Hydrogen Aktif";
+        label.textContent = isCustomProxy ? "Gemini 4 + Worker Aktif" : "Gemini 4 + Backoff Aktif";
         btn.className = "px-3.5 py-2 rounded-xl border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100 text-emerald-900 text-xs font-bold flex items-center gap-2 transition shadow-sm cursor-pointer";
       } else {
         icon.className = "fa-solid fa-key text-amber-500 text-sm";
@@ -1372,51 +1379,89 @@
       modal.classList.remove('hidden');
     }
 
-    /* HELPER EKSEKUSI GEMINI API DENGAN FAILOVER MODEL OTOMATIS (503 / UNAVAILABLE) */
+    /* HELPER EKSEKUSI GEMINI API DENGAN EXPONENTIAL BACKOFF + FAILOVER MULTI-MODEL */
     async function requestGeminiWithModelFailover(apiKey, systemPrompt, progressStatusEl) {
       let lastErrorMsg = "";
+      const maxAttemptsPerModel = RETRY_DELAYS_MS.length + 1; // 1 percobaan awal + 2 kali backoff retry
 
-      for (let i = 0; i < GEMINI_MODELS_PRIORITY.length; i++) {
-        const modelName = GEMINI_MODELS_PRIORITY[i];
-        const isBackup = i > 0;
-
-        if (progressStatusEl) {
-          progressStatusEl.textContent = isBackup
-            ? `Model utama sibuk (503), beralih ke model backup ${modelName}...`
-            : `Mengevaluasi hasil inspeksi secara objektif dengan ${modelName}...`;
-        }
-
+      for (let mIdx = 0; mIdx < GEMINI_MODELS_PRIORITY.length; mIdx++) {
+        const modelName = GEMINI_MODELS_PRIORITY[mIdx];
+        const isBackup = mIdx > 0;
         const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${encodeURIComponent(apiKey)}`;
 
-        try {
-          const response = await fetchWithTimeout(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ role: 'user', parts: [{ text: systemPrompt }] }],
-              generationConfig: { temperature: 0.0, responseMimeType: "application/json" }
-            })
-          }, 25000);
-
-          if (response.ok) {
-            const resJson = await response.json();
-            const textContent = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (textContent) {
-              const parsed = JSON.parse(textContent);
-              const resultsArray = Array.isArray(parsed) ? parsed : (parsed.data || parsed.results || null);
-              if (resultsArray) {
-                return { results: resultsArray, usedModel: modelName, usedBackup: isBackup };
-              }
+        for (let attempt = 1; attempt <= maxAttemptsPerModel; attempt++) {
+          if (progressStatusEl) {
+            if (attempt === 1) {
+              progressStatusEl.textContent = isBackup
+                ? `Model sebelumnya padat, beralih ke cadangan ${modelName}...`
+                : `Mengevaluasi hasil inspeksi secara objektif dengan ${modelName}...`;
+            } else {
+              progressStatusEl.textContent = `Server ${modelName} sibuk, percobaan ulang ke-${attempt} dari ${maxAttemptsPerModel}...`;
             }
-            lastErrorMsg = `Respons JSON kosong dari ${modelName}`;
-          } else {
-            // Tangkap status 503 Service Unavailable atau error HTTP lainnya dan lanjut ke model berikutnya
-            lastErrorMsg = `HTTP ${response.status} pada ${modelName}`;
-            console.warn(`[CHATScorer Failover] ${lastErrorMsg}. Mencoba model cadangan berikutnya...`);
           }
-        } catch (err) {
-          lastErrorMsg = `${err.message} pada ${modelName}`;
-          console.warn(`[CHATScorer Failover] ${lastErrorMsg}. Mencoba model cadangan berikutnya...`);
+
+          try {
+            const response = await fetchWithTimeout(endpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [{ role: 'user', parts: [{ text: systemPrompt }] }],
+                generationConfig: { temperature: 0.0, responseMimeType: "application/json" }
+              })
+            }, 25000);
+
+            if (response.ok) {
+              const resJson = await response.json();
+              const textContent = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
+              if (textContent) {
+                const parsed = JSON.parse(textContent);
+                const resultsArray = Array.isArray(parsed) ? parsed : (parsed.data || parsed.results || null);
+                if (resultsArray) {
+                  return {
+                    results: resultsArray,
+                    usedModel: modelName,
+                    usedBackup: isBackup,
+                    retryCount: attempt - 1
+                  };
+                }
+              }
+              lastErrorMsg = `Respons JSON kosong dari ${modelName}`;
+              break; // Jangan retry jika format respons sukses tapi kosong
+            }
+
+            lastErrorMsg = `HTTP ${response.status} pada ${modelName}`;
+            console.warn(`[CHATScorer Backoff] ${lastErrorMsg} (Percobaan ${attempt}/${maxAttemptsPerModel})`);
+
+            // Jika error non-transient (misal 400 Bad Request, 401/403 API Key invalid), hentikan seluruh loop
+            if (response.status === 400 || response.status === 401 || response.status === 403) {
+              return { results: null, error: lastErrorMsg };
+            }
+
+            // Jika status sementara (503/429/500/502/504) dan masih ada kuota retry, tunggu sesuai exponential backoff
+            if (RETRYABLE_HTTP_STATUS.has(response.status) && attempt < maxAttemptsPerModel) {
+              const waitMs = RETRY_DELAYS_MS[attempt - 1];
+              if (progressStatusEl) {
+                progressStatusEl.textContent = `Server ${modelName} sibuk (${response.status}). Menunggu ${(waitMs / 1000).toFixed(1)} detik sebelum mencoba ulang...`;
+              }
+              await sleep(waitMs);
+              continue;
+            }
+          } catch (err) {
+            lastErrorMsg = `${err.message} pada ${modelName}`;
+            console.warn(`[CHATScorer Backoff] ${lastErrorMsg} (Percobaan ${attempt}/${maxAttemptsPerModel})`);
+
+            if (attempt < maxAttemptsPerModel) {
+              const waitMs = RETRY_DELAYS_MS[attempt - 1];
+              if (progressStatusEl) {
+                progressStatusEl.textContent = `Koneksi ke ${modelName} terputus. Menunggu ${(waitMs / 1000).toFixed(1)} detik sebelum mencoba ulang...`;
+              }
+              await sleep(waitMs);
+              continue;
+            }
+          }
+
+          // Lanjut ke model cadangan berikutnya setelah percobaan backoff habis
+          break;
         }
       }
 
@@ -1522,10 +1567,10 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
           if (aiResponse.results) {
             aiResults = aiResponse.results;
             if (aiResponse.usedBackup) {
-              showToast("Backup Model Aktif", `gemini-4-hydrogen sedang padat (503). Evaluasi sukses menggunakan ${aiResponse.usedModel}.`, true);
+              showToast("Backup Model Aktif", `Model utama padat (503). Evaluasi sukses menggunakan ${aiResponse.usedModel}.`, true);
             }
           } else {
-            showToast("API Fallback", `Semua model API sedang sibuk (${aiResponse.error}), beralih ke evaluasi berbasis hasil scan.`, false);
+            showToast("Mode Fallback Lokal", `Semua model AI sedang padat (${aiResponse.error}), beralih ke evaluasi deterministik berbasis scan.`, false);
           }
         } else {
           if (progressStatus) progressStatus.textContent = "Menjalankan evaluasi berbasis hasil scanning DOM & X-Headers...";
@@ -2187,273 +2232,3 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
             <span class="font-mono font-bold text-sky-700">#${idx + 1}</span>
             <span class="font-bold text-slate-800">${escapeHtml(item.developer)}</span>
             <span class="font-mono text-slate-500 truncate max-w-[160px]">(${escapeHtml(item.url)})</span>
-          </label>
-          <span class="font-mono font-extrabold text-sky-700">${item.totalScore.toFixed(1)}%</span>
-        `;
-        container.appendChild(div);
-      });
-
-      modal.classList.remove('hidden');
-    }
-
-    function generatePDFReportForSelected() {
-      const checkedUrls = Array.from(document.querySelectorAll('.pdf-select-item:checked')).map(cb => cb.value);
-
-      if (checkedUrls.length === 0) {
-        showToast("Pilihan Kosong", "Pilih minimal 1 WebApp untuk dicetak.", false);
-        return;
-      }
-
-      const printBody = document.getElementById('pdf-printable-body');
-      if (!printBody) return;
-      printBody.innerHTML = '';
-
-      const selectedItems = state.history.filter(item => checkedUrls.includes(item.url));
-
-      selectedItems.forEach((item) => {
-        const calc = calculateScores(item.auditObj);
-        const grade = calculateGrade(calc.total);
-
-        const pageDiv = document.createElement('div');
-        pageDiv.className = "pdf-page-item border border-slate-300 rounded-2xl p-6 space-y-4 bg-white";
-
-        let tableRows = "";
-        for (let key in state.criteriaMeta) {
-          const meta = state.criteriaMeta[key];
-          const rawScore = item.auditObj.scores[key] || 0;
-          const contrib = ((rawScore / 10.0) * (meta.weight * 100)).toFixed(2);
-          const evidence = item.auditObj.evidence?.[key] || "Pemindaian selesai.";
-          const formattedPdfEvidence = escapeHtml(evidence)
-            .replace(/✗/g, '<span class="text-rose-600 font-black">✗</span>')
-            .replace(/✓/g, '<span class="text-emerald-600 font-black">✓</span>');
-
-          tableRows += `
-            <tr class="border-b text-[11px]">
-              <td class="p-2 font-mono font-bold text-center">${key.toUpperCase()}</td>
-              <td class="p-2 font-bold">${escapeHtml(meta.name)}</td>
-              <td class="p-2 text-center font-mono">${(meta.weight * 100).toFixed(1)}%</td>
-              <td class="p-2 text-center font-bold font-mono text-sky-700">${rawScore} / 10</td>
-              <td class="p-2 text-center font-bold font-mono text-sky-700">${contrib}%</td>
-              <td class="p-2 text-slate-600">${formattedPdfEvidence}</td>
-            </tr>
-          `;
-        }
-
-        pageDiv.innerHTML = `
-          <div class="flex justify-between items-start border-b pb-4">
-            <div>
-              <h2 class="text-base font-black text-slate-900">LAPORAN EVALUASI & AUDIT KEAMANAN WEBAPP</h2>
-              <p class="text-xs text-slate-500">Hasil Analisis Otomatis CHATScorer</p>
-            </div>
-            <div class="text-right">
-              <span class="text-xs font-mono font-bold text-slate-400">${new Date().toLocaleDateString('id-ID')}</span>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-4 gap-3 p-3 bg-slate-50 rounded-xl border text-xs font-medium">
-            <div><span class="text-slate-400 block text-[10px]">Pengembang:</span><span class="font-extrabold text-slate-800">${escapeHtml(item.developer)}</span></div>
-            <div><span class="text-slate-400 block text-[10px]">URL WebApp:</span><span class="font-bold text-slate-800 font-mono break-all">${escapeHtml(item.url)}</span></div>
-            <div><span class="text-slate-400 block text-[10px]">Skor Total:</span><span class="font-black text-sky-700 font-mono text-sm">${calc.total.toFixed(1)}%</span></div>
-            <div><span class="text-slate-400 block text-[10px]">Predikat:</span><span class="font-extrabold text-emerald-700">${grade.badge}</span></div>
-          </div>
-
-          <div class="space-y-2">
-            <h4 class="text-xs font-bold text-slate-900 uppercase">Rincian Per Kriteria (C1–C10) & Bukti Pemindaian</h4>
-            <table class="w-full text-left border-collapse border border-slate-200">
-              <thead>
-                <tr class="bg-slate-100 text-[11px] font-bold border-b">
-                  <th class="p-2 text-center">Kode</th>
-                  <th class="p-2">Kriteria</th>
-                  <th class="p-2 text-center">Bobot</th>
-                  <th class="p-2 text-center">Skor (1-10)</th>
-                  <th class="p-2 text-center">Kontribusi</th>
-                  <th class="p-2">Bukti Temuan</th>
-                </tr>
-              </thead>
-              <tbody>${tableRows}</tbody>
-            </table>
-          </div>
-
-          <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl text-xs space-y-1">
-            <span class="font-bold text-sky-900 block">Analisis Eksekutif:</span>
-            <div class="text-sky-950 leading-relaxed">${formatExecutiveSummaryHtml(item.auditObj.executive_summary)}</div>
-          </div>
-        `;
-
-        printBody.appendChild(pageDiv);
-      });
-
-      document.getElementById('modal-pdf-selection')?.classList.add('hidden');
-      document.getElementById('print-report-modal')?.classList.remove('hidden');
-    }
-
-    function normalizeUrl(input) {
-      let url = input.trim();
-      if (!/^https?:\/\//i.test(url)) url = "https://" + url;
-      return url;
-    }
-
-    function showToast(title, message, isSuccess = true) {
-      const toast = document.getElementById('toast-notification');
-      const icon = document.getElementById('toast-icon');
-      if (!toast) return;
-      document.getElementById('toast-title').textContent = title;
-      document.getElementById('toast-message').textContent = message;
-
-      if (isSuccess) {
-        toast.className = "fixed top-24 right-6 z-50 bg-emerald-900 text-emerald-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-emerald-700";
-        if (icon) icon.className = "fa-solid fa-circle-check text-emerald-400 text-2xl";
-      } else {
-        toast.className = "fixed top-24 right-6 z-50 bg-amber-900 text-amber-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-amber-700";
-        if (icon) icon.className = "fa-solid fa-triangle-exclamation text-amber-400 text-2xl";
-      }
-
-      toast.classList.remove('hidden');
-      clearTimeout(toast._timer);
-      toast._timer = setTimeout(() => toast.classList.add('hidden'), 4500);
-    }
-
-    function initApp() {
-      updateApiKeyBadge();
-
-      const apiModal = document.getElementById('modal-api-key');
-      const apiInput = document.getElementById('input-api-key');
-      const proxyInput = document.getElementById('input-proxy-url');
-
-      document.getElementById('btn-open-api-modal')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        openApiModal();
-      });
-
-      document.getElementById('btn-close-api-modal')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeApiModal();
-      });
-
-      apiModal?.addEventListener('click', (e) => {
-        if (e.target === apiModal) closeApiModal();
-      });
-
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          closeApiModal();
-          document.getElementById('modal-tiebreaker-comparison')?.classList.add('hidden');
-          document.getElementById('modal-pdf-selection')?.classList.add('hidden');
-          document.getElementById('print-report-modal')?.classList.add('hidden');
-        }
-      });
-
-      document.getElementById('btn-toggle-api-visibility')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (!apiInput) return;
-        apiInput.type = apiInput.type === "password" ? "text" : "password";
-      });
-
-      document.getElementById('btn-save-api-key')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        const val = (apiInput?.value || "").trim();
-        const pVal = (proxyInput?.value || "").trim() || DEFAULT_PROXY_URL;
-        state.apiKey = val;
-        state.proxyUrl = pVal;
-
-        if (val) {
-          safeStorage.set(API_KEY_STORAGE, val);
-        } else {
-          safeStorage.remove(API_KEY_STORAGE);
-        }
-        safeStorage.set(PROXY_URL_STORAGE, pVal);
-
-        updateApiKeyBadge();
-        closeApiModal();
-        showToast("Konfigurasi Disimpan", val ? "Gemini 4 Hydrogen (utama) & Gemini 3.8 Flash (backup) aktif." : "Mode fallback aktif dengan inspeksi DOM & X-Headers.", true);
-      });
-
-      document.getElementById('btn-clear-api-key')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        state.apiKey = "";
-        state.proxyUrl = DEFAULT_PROXY_URL;
-        if (apiInput) apiInput.value = "";
-        if (proxyInput) proxyInput.value = DEFAULT_PROXY_URL;
-        safeStorage.remove(API_KEY_STORAGE);
-        safeStorage.remove(PROXY_URL_STORAGE);
-        updateApiKeyBadge();
-        showToast("Reset Selesai", "Konfigurasi dikembalikan ke default.", true);
-      });
-
-      document.getElementById('btn-audit-ai')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        runAIAuditBatch();
-      });
-
-      document.getElementById('input-url')?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && e.ctrlKey) {
-          e.preventDefault();
-          runAIAuditBatch();
-        }
-      });
-
-      document.getElementById('btn-reset-all')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        const devEl = document.getElementById('input-developer');
-        const urlEl = document.getElementById('input-url');
-        if (devEl) devEl.value = '';
-        if (urlEl) urlEl.value = '';
-        state.history = [];
-        document.getElementById('results-section')?.classList.add('hidden');
-        showToast("Bersih", "Seluruh form input telah dikosongkan.", true);
-      });
-
-      document.getElementById('btn-trigger-celebration')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (typeof confetti === 'function') {
-          confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        }
-      });
-
-      document.getElementById('btn-open-tiebreaker-banner')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        const tiedPairs = detectTiedScores();
-        if (tiedPairs.length > 0) showTieBreakerModal(tiedPairs[0].itemA, tiedPairs[0].itemB, tiedPairs[0].rankA, tiedPairs[0].rankB);
-      });
-
-      document.getElementById('btn-close-tiebreaker-modal')?.addEventListener('click', () => {
-        document.getElementById('modal-tiebreaker-comparison')?.classList.add('hidden');
-      });
-
-      document.getElementById('btn-dismiss-tiebreaker-modal')?.addEventListener('click', () => {
-        document.getElementById('modal-tiebreaker-comparison')?.classList.add('hidden');
-      });
-
-      document.getElementById('btn-export-csv')?.addEventListener('click', exportLeaderboardToCSV);
-      document.getElementById('btn-export-csv-top')?.addEventListener('click', exportLeaderboardToCSV);
-
-      document.getElementById('btn-open-pdf-modal')?.addEventListener('click', openPDFSelectionModal);
-      document.getElementById('btn-close-pdf-select')?.addEventListener('click', () => {
-        document.getElementById('modal-pdf-selection')?.classList.add('hidden');
-      });
-
-      document.getElementById('btn-select-all-pdf')?.addEventListener('click', () => {
-        document.querySelectorAll('.pdf-select-item').forEach(cb => cb.checked = true);
-      });
-
-      document.getElementById('btn-deselect-all-pdf')?.addEventListener('click', () => {
-        document.querySelectorAll('.pdf-select-item').forEach(cb => cb.checked = false);
-      });
-
-      document.getElementById('btn-generate-pdf-now')?.addEventListener('click', generatePDFReportForSelected);
-
-      document.getElementById('btn-print-action')?.addEventListener('click', () => { window.print(); });
-      document.getElementById('btn-close-print-modal')?.addEventListener('click', () => {
-        document.getElementById('print-report-modal')?.classList.add('hidden');
-      });
-    }
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initApp);
-    } else {
-      initApp();
-    }
-  </script>
-</body>
-</html>
