@@ -1578,17 +1578,16 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         const grade = calculateGrade(item.totalScore);
         const isTied = tiedUrls.has(item.url);
 
-        const card = document.createElement('a');
-        card.href = item.url;
-        card.target = "_blank";
-        card.rel = "noopener noreferrer";
-        card.title = `Buka WebApp ${item.developer} (${item.url})`;
+        const card = document.createElement('div');
+        card.title = `Klik untuk melihat detail penilaian ${item.developer}`;
         card.className = "group bg-slate-800/90 hover:bg-slate-800 border border-slate-700 hover:border-sky-400 rounded-2xl p-4 flex flex-col items-center text-center justify-between space-y-2 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-sky-950/50 cursor-pointer";
         card.innerHTML = `
           <div class="w-full flex items-center justify-between">
             <span class="w-4"></span>
             <span class="text-[10px] font-black font-mono bg-sky-950 text-sky-400 border border-sky-800 px-2 py-0.5 rounded-full">PERINGKAT #${rank}</span>
-            <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-500 group-hover:text-sky-400 transition"></i>
+            <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer" title="Buka URL WebApp di tab baru" class="p-1 text-slate-500 hover:text-sky-400 transition link-external-icon">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i>
+            </a>
           </div>
           <span class="text-xs font-bold text-white group-hover:text-sky-300 truncate w-full transition">${escapeHtml(item.developer)}</span>
           <span class="text-2xl font-black font-mono text-amber-400">${item.totalScore.toFixed(1)}%</span>
@@ -1599,6 +1598,26 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
           ` : ''}
           <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold border ${grade.color}">${grade.badge}</span>
         `;
+
+        // Event listener saat kotak kartu diklik -> memuat detail penilaian peserta ke dashboard
+        card.addEventListener('click', (e) => {
+          // Jika yang diklik adalah ikon panah atau tombol skor sama, jangan picu pemuatan dashboard utama
+          if (e.target.closest('.link-external-icon') || e.target.closest('.btn-tie-detail')) {
+            return;
+          }
+          state.url = item.url;
+          state.developer = item.developer;
+          state.auditData = item.auditObj;
+          
+          // Sinkronkan dropdown pemilih URL
+          const selectEl = document.getElementById('select-active-url');
+          if (selectEl) selectEl.value = item.url;
+
+          updateDashboardDisplays();
+          renderGranularMatrixCards();
+          document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' });
+        });
+
         container.appendChild(card);
       });
 
