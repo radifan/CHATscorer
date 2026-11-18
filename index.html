@@ -824,7 +824,7 @@
             reasons: "Skor responsivitas ditentukan langsung dari keberadaan konfigurasi viewport dan struktur layout fluid.",
             recommendations: inspection.c7_has_viewport
               ? "Pertahankan penggunaan unit relatif (%, rem, vw) dan media query/Tailwind breakpoints."
-              : "Tambahkan <meta name="viewport" content="width=device-width, initial-scale=1.0"> di dalam <head>."
+              : 'Tambahkan <meta name="viewport" content="width=device-width, initial-scale=1.0"> di dalam <head>.'
           };
         }
         case "c8": {
@@ -1322,12 +1322,22 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         }
 
         enrichedPairs.forEach((item, idx) => {
-          let itemObj = (aiResults && aiResults[idx])
-            ? aiResults[idx]
-            : generateFallbackDataForPair(item.developer, item.url, item.real_dom_and_security_inspection);
+          const scanBasedObj = generateFallbackDataForPair(item.developer, item.url, item.real_dom_and_security_inspection);
+          let itemObj = (aiResults && aiResults[idx]) ? aiResults[idx] : scanBasedObj;
           itemObj.developer = item.developer;
           itemObj.url = item.url;
           itemObj.inspection = item.real_dom_and_security_inspection;
+
+          // Pastikan bukti temuan scanning nyata selalu tampil di setiap kriteria (c1 - c10)
+          itemObj.evidence = itemObj.evidence || {};
+          for (let k = 1; k <= 10; k++) {
+            const cKey = `c${k}`;
+            const scanFact = scanBasedObj.evidence[cKey];
+            const aiEv = itemObj.evidence[cKey] || "";
+            itemObj.evidence[cKey] = aiEv && aiEv !== scanFact
+              ? `[Fakta Scan] ${scanFact} | [Analisis] ${aiEv}`
+              : scanFact;
+          }
 
           const calc = calculateScores(itemObj);
           state.history.push({
@@ -1622,12 +1632,13 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
               </div>
             </div>
 
-            <!-- Evidence Findings Card -->
-            <div class="bg-sky-50/70 p-3 rounded-2xl border border-sky-200 text-xs font-medium">
-              <span class="font-extrabold text-sky-900 block mb-0.5 flex items-center gap-1.5">
-                <i class="fa-solid fa-microscope text-sky-600"></i> Temuan & Bukti AI:
+            <!-- Evidence Findings Card (Hasil Scanning Nyata) -->
+            <div class="bg-sky-50/70 p-3 rounded-2xl border border-sky-200 text-xs font-medium space-y-1.5">
+              <span class="font-extrabold text-sky-900 block flex items-center justify-between gap-1.5">
+                <span><i class="fa-solid fa-satellite-dish text-sky-600 mr-1"></i> Bukti Hasil Scanning:</span>
+                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-sky-200/70 text-sky-900">DOM & X-HEADERS</span>
               </span>
-              <p class="text-slate-700 leading-relaxed text-[11px]">${evidence}</p>
+              <p class="text-slate-700 leading-relaxed text-[11px] font-mono bg-white/80 p-2 rounded-lg border border-sky-100">${evidence}</p>
             </div>
 
             <!-- Strengths & Weaknesses Detailed Cards -->
