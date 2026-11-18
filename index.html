@@ -155,7 +155,7 @@
         </div>
 
         <p class="text-[11px] text-slate-500 font-medium">
-          <i class="fa-solid fa-circle-info text-sky-600"></i> Tekan <kbd class="px-1.5 py-0.5 bg-slate-200 border rounded font-mono font-bold text-[10px]">Ctrl + Enter</kbd> atau klik tombol ikon magic wand untuk mulai menilai.
+          <i class="fa-solid fa-circle-info text-sky-600"></i> Tekan <kbd class="px-1.5 py-0.5 bg-slate-200 border rounded font-mono font-bold text-[10px]">Ctrl + Enter</kbd> atau klik tombol ikon magic wand untuk mulai menilai. (Model AI: <strong>gemini-4-hydrogen</strong> dengan cadangan otomatis <strong>gemini-3.8-flash</strong>).
         </p>
       </div>
     </section>
@@ -344,7 +344,7 @@
               <i class="fa-solid fa-eye"></i>
             </button>
           </div>
-          <p class="text-[11px] text-slate-500">Kosongkan jika ingin memakai Mode Fallback Deterministik.</p>
+          <p class="text-[11px] text-slate-500">Menggunakan <strong>gemini-4-hydrogen</strong> dengan cadangan otomatis <strong>gemini-3.8-flash</strong> jika 503 Unavailable. Kosongkan jika ingin memakai Mode Fallback Deterministik.</p>
         </div>
 
         <div class="space-y-1.5">
@@ -466,6 +466,12 @@
     const API_KEY_STORAGE = "chatscorer_gemini_api_key";
     const PROXY_URL_STORAGE = "chatscorer_cors_proxy_url";
     const DEFAULT_PROXY_URL = "https://api.allorigins.win/get?url=";
+
+    // Urutan prioritas model AI: Utama (gemini-4-hydrogen) -> Backup (gemini-3.8-flash)
+    const GEMINI_MODELS_PRIORITY = [
+      "gemini-4-hydrogen",
+      "gemini-3.8-flash"
+    ];
 
     const safeStorage = {
       _mem: {},
@@ -633,7 +639,7 @@
 
       if (hasKey) {
         icon.className = "fa-solid fa-shield-halved text-emerald-500 text-sm";
-        label.textContent = isCustomProxy ? "API Key & Worker Aktif" : "API Key Aktif";
+        label.textContent = isCustomProxy ? "Gemini 4 + Worker Aktif" : "Gemini 4 Hydrogen Aktif";
         btn.className = "px-3.5 py-2 rounded-xl border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100 text-emerald-900 text-xs font-bold flex items-center gap-2 transition shadow-sm cursor-pointer";
       } else {
         icon.className = "fa-solid fa-key text-amber-500 text-sm";
@@ -1366,6 +1372,57 @@
       modal.classList.remove('hidden');
     }
 
+    /* HELPER EKSEKUSI GEMINI API DENGAN FAILOVER MODEL OTOMATIS (503 / UNAVAILABLE) */
+    async function requestGeminiWithModelFailover(apiKey, systemPrompt, progressStatusEl) {
+      let lastErrorMsg = "";
+
+      for (let i = 0; i < GEMINI_MODELS_PRIORITY.length; i++) {
+        const modelName = GEMINI_MODELS_PRIORITY[i];
+        const isBackup = i > 0;
+
+        if (progressStatusEl) {
+          progressStatusEl.textContent = isBackup
+            ? `Model utama sibuk (503), beralih ke model backup ${modelName}...`
+            : `Mengevaluasi hasil inspeksi secara objektif dengan ${modelName}...`;
+        }
+
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+
+        try {
+          const response = await fetchWithTimeout(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ role: 'user', parts: [{ text: systemPrompt }] }],
+              generationConfig: { temperature: 0.0, responseMimeType: "application/json" }
+            })
+          }, 25000);
+
+          if (response.ok) {
+            const resJson = await response.json();
+            const textContent = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (textContent) {
+              const parsed = JSON.parse(textContent);
+              const resultsArray = Array.isArray(parsed) ? parsed : (parsed.data || parsed.results || null);
+              if (resultsArray) {
+                return { results: resultsArray, usedModel: modelName, usedBackup: isBackup };
+              }
+            }
+            lastErrorMsg = `Respons JSON kosong dari ${modelName}`;
+          } else {
+            // Tangkap status 503 Service Unavailable atau error HTTP lainnya dan lanjut ke model berikutnya
+            lastErrorMsg = `HTTP ${response.status} pada ${modelName}`;
+            console.warn(`[CHATScorer Failover] ${lastErrorMsg}. Mencoba model cadangan berikutnya...`);
+          }
+        } catch (err) {
+          lastErrorMsg = `${err.message} pada ${modelName}`;
+          console.warn(`[CHATScorer Failover] ${lastErrorMsg}. Mencoba model cadangan berikutnya...`);
+        }
+      }
+
+      return { results: null, error: lastErrorMsg };
+    }
+
     async function runAIAuditBatch() {
       const devRaw = (document.getElementById('input-developer')?.value || "").trim();
       const urlRaw = (document.getElementById('input-url')?.value || "").trim();
@@ -1413,8 +1470,6 @@
         let aiResults = null;
 
         if (apiKey) {
-          if (progressStatus) progressStatus.textContent = "Mengevaluasi hasil inspeksi secara objektif dengan Gemini AI...";
-
           const systemPrompt = `Anda adalah Auditor Kualitas & Keamanan Aplikasi Web (WebApp) Profesional.
 Tugas Anda: Lakukan audit menyeluruh dan objektif terhadap DAFTAR WEBAPP berikut berdasarkan DATA INSPEKSI DOM & KEAMANAN NYATA dalam SATU PROSES BATCH:
 ${JSON.stringify(enrichedPairs)}
@@ -1462,25 +1517,15 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
   }
 ]`;
 
-          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
-          const response = await fetchWithTimeout(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ role: 'user', parts: [{ text: systemPrompt }] }],
-              generationConfig: { temperature: 0.0, responseMimeType: "application/json" }
-            })
-          }, 25000);
+          const aiResponse = await requestGeminiWithModelFailover(apiKey, systemPrompt, progressStatus);
 
-          if (response.ok) {
-            const resJson = await response.json();
-            const textContent = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (textContent) {
-              const parsed = JSON.parse(textContent);
-              aiResults = Array.isArray(parsed) ? parsed : (parsed.data || parsed.results || null);
+          if (aiResponse.results) {
+            aiResults = aiResponse.results;
+            if (aiResponse.usedBackup) {
+              showToast("Backup Model Aktif", `gemini-4-hydrogen sedang padat (503). Evaluasi sukses menggunakan ${aiResponse.usedModel}.`, true);
             }
           } else {
-            showToast("API Fallback", `Gemini API merespons ${response.status}, beralih ke evaluasi berbasis hasil scan.`, false);
+            showToast("API Fallback", `Semua model API sedang sibuk (${aiResponse.error}), beralih ke evaluasi berbasis hasil scan.`, false);
           }
         } else {
           if (progressStatus) progressStatus.textContent = "Menjalankan evaluasi berbasis hasil scanning DOM & X-Headers...";
@@ -2265,7 +2310,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
 
       toast.classList.remove('hidden');
       clearTimeout(toast._timer);
-      toast._timer = setTimeout(() => toast.classList.add('hidden'), 3500);
+      toast._timer = setTimeout(() => toast.classList.add('hidden'), 4500);
     }
 
     function initApp() {
@@ -2321,7 +2366,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
 
         updateApiKeyBadge();
         closeApiModal();
-        showToast("Konfigurasi Disimpan", val ? "Gemini API Key & Proxy/Worker aktif." : "Mode fallback aktif dengan inspeksi DOM & X-Headers.", true);
+        showToast("Konfigurasi Disimpan", val ? "Gemini 4 Hydrogen (utama) & Gemini 3.8 Flash (backup) aktif." : "Mode fallback aktif dengan inspeksi DOM & X-Headers.", true);
       });
 
       document.getElementById('btn-clear-api-key')?.addEventListener('click', (e) => {
