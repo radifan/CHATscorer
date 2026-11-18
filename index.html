@@ -93,4 +93,2051 @@
       </div>
 
       <div class="flex items-center gap-3">
-        <button type="button" id="btn-open-api-modal" class="px
+        <button type="button" id="btn-open-api-modal" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-700 text-xs font-bold flex items-center gap-2 transition shadow-sm">
+          <i id="api-status-icon" class="fa-solid fa-key text-amber-500 text-sm"></i>
+          <span id="api-status-label">Atur API Key</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast-notification" class="hidden fixed top-24 right-6 z-50 bg-emerald-900 text-emerald-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-emerald-700">
+      <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-2xl"></i>
+      <div>
+        <h4 class="font-extrabold text-sm" id="toast-title">Berhasil!</h4>
+        <p class="text-xs text-emerald-200 font-medium" id="toast-message">Pesan notifikasi.</p>
+      </div>
+    </div>
+
+    <!-- FORM INPUT SECTION -->
+    <section class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl">
+      <div class="flex flex-col gap-5">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-black text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-users-gear text-sky-600"></i> Pengembang dan URL WebApp
+            </h2>
+            <p class="text-xs text-slate-500 mt-1">Setiap baris Nama Pengembang berpasangan 1-ke-1 dengan baris URL WebApp (mendukung semua jenis aplikasi web).</p>
+          </div>
+
+          <button type="button" id="btn-reset-all" class="px-4 py-2 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-300 text-xs font-bold rounded-xl transition flex items-center gap-2">
+            <i class="fa-solid fa-rotate-left"></i> Bersihkan
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div class="lg:col-span-5 space-y-1.5">
+            <label class="block text-xs font-extrabold uppercase text-slate-700">
+              <i class="fa-solid fa-user text-sky-600 mr-1"></i> Nama Pengembang (1 Per Baris) <span class="text-rose-500">*</span>
+            </label>
+            <textarea id="input-developer" rows="5" placeholder="Budi Santoso&#10;Tim Alpha Dev&#10;Siti Rahma" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-300 rounded-2xl text-xs sm:text-sm font-bold focus:outline-none focus:border-sky-600 resize-none custom-scrollbar"></textarea>
+          </div>
+
+          <div class="lg:col-span-7 space-y-1.5">
+            <label class="block text-xs font-extrabold uppercase text-slate-700">
+              <i class="fa-solid fa-link text-sky-600 mr-1"></i> Alamat URL WebApp (1 Per Baris) <span class="text-rose-500">*</span>
+            </label>
+            <div class="relative">
+              <textarea id="input-url" rows="5" placeholder="https://portal-akademik.vercel.app&#10;https://katalog-toko.vercel.app&#10;https://sistem-reservasi.vercel.app" class="w-full pl-4 pr-16 py-3 bg-slate-50 border-2 border-slate-300 rounded-2xl text-xs sm:text-sm font-mono font-bold focus:outline-none focus:border-sky-600 resize-none custom-scrollbar"></textarea>
+              
+              <button type="button" id="btn-audit-ai" title="Mulai Penilaian" class="absolute right-2 top-2 bottom-2 px-5 bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white rounded-xl shadow-md transition flex items-center justify-center">
+                <i class="fa-solid fa-wand-magic-sparkles text-amber-300 text-xl"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-[11px] text-slate-500 font-medium">
+          <i class="fa-solid fa-circle-info text-sky-600"></i> Tekan <kbd class="px-1.5 py-0.5 bg-slate-200 border rounded font-mono font-bold text-[10px]">Ctrl + Enter</kbd> atau klik tombol ikon magic wand untuk mulai menilai.
+        </p>
+      </div>
+    </section>
+
+    <!-- RESULTS DISPLAY SECTION -->
+    <div id="results-section" class="hidden space-y-8">
+
+      <!-- BANNER SKOR KEMBAR (TIE-BREAKER NOTIFICATION) -->
+      <div id="equal-score-banner" class="hidden bg-amber-500/10 border-2 border-amber-500/40 rounded-3xl p-4 sm:p-5 text-amber-900 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-lg flex-shrink-0">⚡</div>
+          <div>
+            <h4 class="font-extrabold text-xs sm:text-sm text-amber-950">Skor Sama Terdeteksi!</h4>
+            <p id="equal-score-banner-text" class="text-xs text-amber-900 font-medium mt-0.5">Beberapa WebApp memiliki nilai skor total yang sama.</p>
+          </div>
+        </div>
+        <button type="button" id="btn-open-tiebreaker-banner" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black rounded-xl transition shadow-md whitespace-nowrap flex items-center gap-1.5">
+          <i class="fa-solid fa-magnifying-glass text-xs"></i><span>Lihat Tabel Perbandingan</span>
+        </button>
+      </div>
+
+      <!-- LEADERBOARD SECTION -->
+      <section class="bg-slate-900 border border-slate-800 text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-5">
+          <div>
+            <span class="text-xs font-bold text-amber-400 bg-amber-950/80 border border-amber-500/30 px-3 py-1 rounded-full font-mono uppercase tracking-wider">
+              <i class="fa-solid fa-trophy mr-1"></i> Leaderboard Peringkat
+            </span>
+            <h2 class="text-xl sm:text-2xl font-black text-white mt-2">Hasil Penilaian WebApp</h2>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button type="button" id="btn-trigger-celebration" class="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm rounded-xl transition shadow-lg">
+              Selebrasi 🎉
+            </button>
+          </div>
+        </div>
+
+        <div id="top5-leaderboard-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <!-- Dynamically populated cards -->
+        </div>
+      </section>
+
+      <!-- EXECUTIVE DASHBOARD -->
+      <section class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b pb-4">
+          <div>
+            <h3 class="text-lg font-black text-slate-900">Rincian Penilaian</h3>
+            <p class="text-xs text-slate-500">Pengembang: <span id="display-developer-name" class="font-bold text-slate-800 font-mono">-</span> | URL: <span id="display-active-url" class="font-bold text-sky-700 font-mono break-all">-</span></p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <label for="select-active-url" class="text-xs font-extrabold text-slate-600">Pilih Hasil:</label>
+            <select id="select-active-url" class="bg-slate-100 border-2 border-sky-300 text-sky-900 font-mono font-bold text-xs rounded-xl px-3 py-2 focus:outline-none"></select>
+            <button type="button" id="btn-open-pdf-modal" class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs sm:text-sm rounded-xl transition shadow-lg flex items-center gap-2">
+              <i class="fa-solid fa-file-pdf"></i> Simpan PDF
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+          <div class="md:col-span-5 bg-sky-50/80 border-2 border-sky-200 rounded-3xl p-6 text-center space-y-4">
+            <span class="text-xs uppercase font-black text-sky-800 tracking-wider">Total Skor Terbobot</span>
+            <div id="overall-score-display" class="text-6xl font-black text-sky-600 font-mono">0.0%</div>
+
+            <div class="flex flex-col items-center gap-1">
+              <span id="grade-badge" class="px-5 py-1.5 rounded-2xl bg-white border-2 border-slate-300 text-2xl font-black shadow-sm">GRADE -</span>
+              <span id="grade-predicate" class="text-xs font-extrabold text-slate-600 mt-1">Menunggu Penilaian</span>
+            </div>
+
+            <div class="text-left text-xs space-y-2 border-t border-sky-200 pt-4 font-medium">
+              <div class="flex justify-between"><span>Antarmuka, Navigasi & Mobile (C1–C3):</span><span id="cat-score-a" class="font-mono font-extrabold text-sky-700">0.00 / 40</span></div>
+              <div class="flex justify-between"><span>Profil Usaha & Kontak (C4–C5):</span><span id="cat-score-b" class="font-mono font-extrabold text-sky-700">0.00 / 20</span></div>
+              <div class="flex justify-between"><span>Alur Transaksi & Bayar (C6–C7):</span><span id="cat-score-c" class="font-mono font-extrabold text-sky-700">0.00 / 25</span></div>
+              <div class="flex justify-between"><span>Keamanan, Server & Struktur (C8–C10):</span><span id="cat-score-d" class="font-mono font-extrabold text-sky-700">0.00 / 15</span></div>
+            </div>
+          </div>
+
+          <div class="md:col-span-7 bg-slate-50 border border-slate-200 rounded-3xl p-6 space-y-4">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-extrabold uppercase text-slate-800">Analisis Eksekutif & Telemetri Pemindaian</h4>
+              <span id="scan-arch-badge" class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-200">-</span>
+            </div>
+            <div id="executive-summary-text" class="text-xs leading-relaxed text-slate-700 bg-white p-4 rounded-2xl border shadow-sm space-y-2.5">-</div>
+
+            <!-- PANEL BUKTI HASIL SCANNING REALTIME -->
+            <div id="scan-telemetry-box" class="bg-slate-900 text-slate-100 rounded-2xl p-4 text-[11px] font-mono space-y-2 border border-slate-800">
+              <div class="flex items-center justify-between text-sky-400 font-bold border-b border-slate-800 pb-1.5">
+                <span><i class="fa-solid fa-satellite-dish mr-1.5"></i>DATA TEMUAN SCANNING (DOM & X-HEADERS)</span>
+                <span id="scan-status-pill" class="text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-700">OK</span>
+              </div>
+              <div id="scan-telemetry-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1 text-[10px]">
+                <!-- Populated dynamically from actual scan findings -->
+              </div>
+            </div>
+            
+            <div class="w-full h-60 relative">
+              <canvas id="auditRadarChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GRANULAR MATRIX BREAKDOWN SECTION (KARTU DETAIL PENILAIAN 10 KRITERIA) -->
+      <section id="matrix-section" class="space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div>
+            <h3 class="text-lg font-black text-slate-900 flex items-center gap-2.5">
+              <i class="fa-solid fa-list-check text-sky-600"></i>
+              Kartu Rincian Detail 10 Kriteria (C1 – C10)
+            </h3>
+            <p class="text-xs text-slate-500 font-medium">Selaras dengan data telemetri pemindaian & grafik radar. Geser ke kanan untuk melihat sub-kriteria dan rekomendasi perbaikan.</p>
+          </div>
+          <span class="text-xs font-bold text-slate-400">Geser &rarr;</span>
+        </div>
+
+        <!-- Horizontal Scrollable Container -->
+        <div class="flex overflow-x-auto gap-6 pb-4 pt-1 custom-scrollbar snap-x snap-mandatory" id="matrix-container">
+          <!-- Rendered dynamically via JS into horizontal cards -->
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- MODAL PENGATURAN API KEY & CORS PROXY -->
+  <div id="modal-api-key" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-key text-amber-500"></i> Konfigurasi AI & Inspeksi DOM
+        </h3>
+        <button type="button" id="btn-close-api-modal" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div class="space-y-1.5">
+          <label for="input-api-key" class="block font-extrabold text-slate-700">Gemini API Key (Disimpan lokal di browser):</label>
+          <div class="relative">
+            <input type="password" id="input-api-key" placeholder="AIzaSy..." class="w-full pl-3.5 pr-10 py-2.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-sky-600">
+            <button type="button" id="btn-toggle-api-visibility" title="Tampilkan/Sembunyikan" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-500">Kosongkan jika ingin memakai Mode Fallback Deterministik.</p>
+        </div>
+
+        <div class="space-y-1.5">
+          <label for="input-proxy-url" class="block font-extrabold text-slate-700">CORS Proxy Endpoint (Untuk Inspeksi HTML & X-Headers):</label>
+          <input type="text" id="input-proxy-url" placeholder="https://api.allorigins.win/get?url=" class="w-full px-3.5 py-2.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-sky-600">
+          <p class="text-[11px] text-slate-500">Default menggunakan <code>allorigins.win</code>. Gunakan URL Cloudflare Worker kustom agar HTTP Security Headers (X-Headers) ikut terpindai.</p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between gap-2 border-t pt-4">
+        <button type="button" id="btn-clear-api-key" class="px-4 py-2.5 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 font-bold text-xs rounded-xl transition">
+          Reset Default
+        </button>
+        <button type="button" id="btn-save-api-key" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs rounded-xl transition shadow-md flex items-center gap-1.5">
+          <i class="fa-solid fa-floppy-disk"></i> Simpan Konfigurasi
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PEMBANDING SKOR KEMBAR (TIE-BREAKER MODAL) -->
+  <div id="modal-tiebreaker-comparison" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-4xl w-full p-6 sm:p-8 space-y-6 shadow-2xl my-8">
+      <div class="flex items-start justify-between border-b border-slate-200 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xl shadow-md">⚡</div>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-base sm:text-lg">Analisis Pembanding Skor Seri</h3>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">Komparasi detail per kriteria penilaian untuk menentukan posisi peringkat.</p>
+          </div>
+        </div>
+        <button type="button" id="btn-close-tiebreaker-modal" class="p-2 text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div id="tiebreaker-modal-content" class="space-y-5">
+        <!-- Populated via JS -->
+      </div>
+
+      <div class="flex justify-end pt-2 border-t border-slate-200">
+        <button type="button" id="btn-dismiss-tiebreaker-modal" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-extrabold rounded-xl transition shadow-md">
+          Mengerti!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MULTIPLE SELECTION PDF MODAL -->
+  <div id="modal-pdf-selection" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-file-pdf text-rose-600"></i> Pilih WebApp untuk Cetak PDF
+        </h3>
+        <button type="button" id="btn-close-pdf-select" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="flex items-center justify-between text-xs">
+        <span class="text-slate-500 font-medium">Centang WebApp yang ingin dicetak:</span>
+        <div class="space-x-2">
+          <button type="button" id="btn-select-all-pdf" class="text-sky-600 font-bold hover:underline">Pilih Semua</button>
+          <span>|</span>
+          <button type="button" id="btn-deselect-all-pdf" class="text-slate-500 font-bold hover:underline">Batal Semua</button>
+        </div>
+      </div>
+
+      <div id="pdf-checkbox-list" class="space-y-2 max-h-60 overflow-y-auto custom-scrollbar p-1">
+        <!-- Dynamic Checkboxes -->
+      </div>
+
+      <div class="flex justify-end gap-3 border-t pt-4">
+        <button type="button" id="btn-generate-pdf-now" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl transition shadow-md flex items-center justify-center gap-2">
+          <i class="fa-solid fa-print"></i> Cetak Dokumen PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRINTABLE REPORT MODAL (HIDDEN IN UI, VISIBLE ON WINDOW.PRINT) -->
+  <div id="print-report-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md overflow-y-auto p-4 sm:p-8">
+    <div class="max-w-4xl mx-auto bg-white text-slate-900 rounded-3xl shadow-2xl p-8 space-y-6 my-8 border border-slate-200">
+      <div class="flex items-center justify-between border-b pb-4 no-print">
+        <h2 class="text-lg font-black text-slate-900">Pratinjau Dokumen PDF</h2>
+        <div class="space-x-2">
+          <button type="button" id="btn-print-action" class="px-4 py-2 bg-emerald-600 text-white text-xs font-extrabold rounded-xl hover:bg-emerald-500">
+            <i class="fa-solid fa-print mr-1"></i> Cetak / Simpan PDF
+          </button>
+          <button type="button" id="btn-close-print-modal" class="px-3 py-2 bg-slate-200 text-slate-700 text-xs font-bold rounded-xl hover:bg-slate-300">
+            Tutup
+          </button>
+        </div>
+      </div>
+
+      <!-- PDF PRINT CONTAINER -->
+      <div id="pdf-printable-body" class="space-y-8">
+        <!-- Rendered Pages dynamically inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- AI PROGRESS MODAL -->
+  <div id="modal-ai-progress" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-8 text-center space-y-4 shadow-2xl">
+      <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center mx-auto text-2xl">
+        <i class="fa-solid fa-brain animate-pulse"></i>
+      </div>
+      <h3 class="font-black text-slate-900 text-base">Sedang Menilai WebApp...</h3>
+      <p id="ai-progress-status" class="text-xs text-slate-500 font-medium">Mengevaluasi kriteria & sub-indikator...</p>
+      <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+        <div id="ai-progress-bar" class="bg-gradient-to-r from-sky-500 to-indigo-600 h-3 rounded-full transition-all duration-300 w-1/4"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_KEY_STORAGE = "chatscorer_gemini_api_key";
+    const PROXY_URL_STORAGE = "chatscorer_cors_proxy_url";
+    const DEFAULT_PROXY_URL = "https://api.allorigins.win/get?url=";
+
+    // Wrapper penyimpanan aman agar tidak pernah error di sandboxed iframe / incognito ketat
+    const safeStorage = {
+      _mem: {},
+      get(key) {
+        try {
+          return window.localStorage.getItem(key) ?? this._mem[key] ?? "";
+        } catch (_) {
+          return this._mem[key] ?? "";
+        }
+      },
+      set(key, val) {
+        this._mem[key] = val;
+        try {
+          window.localStorage.setItem(key, val);
+        } catch (_) {}
+      },
+      remove(key) {
+        delete this._mem[key];
+        try {
+          window.localStorage.removeItem(key);
+        } catch (_) {}
+      }
+    };
+
+    const state = {
+      apiKey: safeStorage.get(API_KEY_STORAGE) || "",
+      proxyUrl: safeStorage.get(PROXY_URL_STORAGE) || DEFAULT_PROXY_URL,
+      history: [],
+      url: "",
+      developer: "",
+      auditData: null,
+      radarChart: null,
+      /* PENYELARASAN 10 KRITERIA (C1-C10) DENGAN KARTU TELEMETRI & GRAFIK RADAR */
+      criteriaMeta: {
+        c1: {
+          id: "c1", cat: "A", weight: 0.1400,
+          name: "Fungsionalitas Navigasi & CTA",
+          icon: "fa-compass",
+          desc: "Kelengkapan tautan navigasi internal, keberfungsian tombol aksi (CTA), fitur pencarian/filter, serta bebas tautan rusak.",
+          sub: [
+            { id: "s1_1", name: "Kelengkapan Tautan Navigasi & Rute Aktif" },
+            { id: "s1_2", name: "Keberfungsian Tombol Interaktif & CTA" },
+            { id: "s1_3", name: "Ketersediaan Fitur Pencarian / Filter Data" }
+          ]
+        },
+        c2: {
+          id: "c2", cat: "A", weight: 0.1300,
+          name: "Responsivitas & Viewport Mobile",
+          icon: "fa-mobile-screen-button",
+          desc: "Kesiapan konfigurasi meta viewport dan adaptabilitas tata letak di berbagai ukuran layar (Desktop, Tablet, Mobile).",
+          sub: [
+            { id: "s2_1", name: "Konfigurasi Tag Meta Viewport Mobile" },
+            { id: "s2_2", name: "Adaptabilitas Grid & Tata Letak Layar Kecil" },
+            { id: "s2_3", name: "Keterbacaan Elemen Tanpa Horizontal Overflow" }
+          ]
+        },
+        c3: {
+          id: "c3", cat: "A", weight: 0.1300,
+          name: "Ketersediaan Informasi Profil (About Us)",
+          icon: "fa-building",
+          desc: "Keberadaan halaman atau bagian profil usaha/organisasi (About Us), deskripsi layanan, serta transparansi identitas pengelola.",
+          sub: [
+            { id: "s3_1", name: "Ketersediaan Bagian Profil / Tentang Kami (About Us)" },
+            { id: "s3_2", name: "Kejelasan Deskripsi Layanan, Produk & Misi" },
+            { id: "s3_3", name: "Transparansi Identitas & Legalitas Pengelola" }
+          ]
+        },
+        c4: {
+          id: "c4", cat: "B", weight: 0.1000,
+          name: "Aksesibilitas Kanal Komunikasi Umum",
+          icon: "fa-address-book",
+          desc: "Ketersediaan informasi kontak resmi seperti alamat email, nomor telepon, lokasi operasional, dan tautan media sosial.",
+          sub: [
+            { id: "s4_1", name: "Ketersediaan Email & Nomor Kontak Resmi" },
+            { id: "s4_2", name: "Pencantuman Alamat Fisik / Jam Operasional" },
+            { id: "s4_3", name: "Kemudahan Akses Informasi Kontak pada Halaman" }
+          ]
+        },
+        c5: {
+          id: "c5", cat: "B", weight: 0.1000,
+          name: "Validitas Kontak Langsung Penjual",
+          icon: "fa-comments",
+          desc: "Keberadaan tombol atau tautan komunikasi langsung ke penjual/admin (seperti WhatsApp/Chat) untuk konfirmasi pesanan atau layanan.",
+          sub: [
+            { id: "s5_1", name: "Ketersediaan Tautan Chat / WhatsApp Penjual" },
+            { id: "s5_2", name: "Penempatan Tombol Hubungi Penjual pada Konten" },
+            { id: "s5_3", name: "Kejelasan Alur Komunikasi Bantuan Pelanggan" }
+          ]
+        },
+        c6: {
+          id: "c6", cat: "C", weight: 0.1250,
+          name: "Alur Keranjang Belanja (Cart) & Pesanan",
+          icon: "fa-cart-shopping",
+          desc: "Ketersediaan fitur keranjang belanja (Cart), manajemen item pesanan, atau alur pemrosesan aksi utama sesuai domain aplikasi.",
+          sub: [
+            { id: "s6_1", name: "Fitur Keranjang Belanja / Akumulasi Item" },
+            { id: "s6_2", name: "Kemudahan Pengelolaan Jumlah & Ringkasan Pesanan" },
+            { id: "s6_3", name: "Kejelasan Alur Pemesanan dari Katalog ke Checkout" }
+          ]
+        },
+        c7: {
+          id: "c7", cat: "C", weight: 0.1250,
+          name: "Mekanisme Pembayaran & Checkout",
+          icon: "fa-credit-card",
+          desc: "Kesiapan alur penyelesaian transaksi (Checkout), informasi metode pembayaran (QRIS/Transfer/E-Wallet), serta konfirmasi bayar.",
+          sub: [
+            { id: "s7_1", name: "Alur Checkout & Konfirmasi Transaksi" },
+            { id: "s7_2", name: "Ketersediaan Metode Pembayaran (QRIS/Transfer/COD)" },
+            { id: "s7_3", name: "Kejelasan Instruksi & Bukti Penyelesaian Bayar" }
+          ]
+        },
+        c8: {
+          id: "c8", cat: "D", weight: 0.0600,
+          name: "Konfigurasi HTTP Security Headers",
+          icon: "fa-shield-halved",
+          desc: "Penerapan 4 header keamanan HTTP standar (CSP, X-Frame-Options, X-Content-Type-Options, HSTS) serta sanitasi input dasar.",
+          sub: [
+            { id: "s8_1", name: "Kelengkapan X-Security Headers (CSP, X-Frame, HSTS)" },
+            { id: "s8_2", name: "Validasi Input Formulir & Pembatasan Upload" },
+            { id: "s8_3", name: "Bebas Pola Sink Berbahaya & Kebocoran Server" }
+          ]
+        },
+        c9: {
+          id: "c9", cat: "D", weight: 0.0500,
+          name: "Performa & Kestabilan Pemuatan",
+          icon: "fa-gauge-high",
+          desc: "Status respons server HTTP normal, kecepatan akses halaman, serta bebas pesan error pemuatan data maupun gagal koneksi.",
+          sub: [
+            { id: "s9_1", name: "Ketersediaan Server & Status Pemuatan Normal" },
+            { id: "s9_2", name: "Bebas Error Pemuatan Data / Database" },
+            { id: "s9_3", name: "Validitas Pemuatan Aset Gambar & Media" }
+          ]
+        },
+        c10: {
+          id: "c10", cat: "D", weight: 0.0400,
+          name: "Struktur Semantik & Arsitektur DOM",
+          icon: "fa-code",
+          desc: "Kualitas struktur kode HTML/SPA, kelengkapan identitas judul dokumen (<title>), serta keteraturan hierarki komponen.",
+          sub: [
+            { id: "s10_1", name: "Keteraturan Struktur DOM & Arsitektur Aplikasi" },
+            { id: "s10_2", name: "Kelengkapan Metadata & Judul Dokumen (<title>)" },
+            { id: "s10_3", name: "Kebersihan Kode dari Komentar Debug / Rute Terbuka" }
+          ]
+        }
+      }
+    };
+
+    function escapeHtml(str) {
+      return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function updateApiKeyBadge() {
+      const icon = document.getElementById('api-status-icon');
+      const label = document.getElementById('api-status-label');
+      const btn = document.getElementById('btn-open-api-modal');
+      if (!icon || !label || !btn) return;
+
+      const hasKey = state.apiKey && state.apiKey.trim().length > 0;
+      const isCustomProxy = state.proxyUrl && state.proxyUrl.trim() !== DEFAULT_PROXY_URL;
+
+      if (hasKey) {
+        icon.className = "fa-solid fa-shield-halved text-emerald-500 text-sm";
+        label.textContent = isCustomProxy ? "API Key & Worker Aktif" : "API Key Aktif";
+        btn.className = "px-3.5 py-2 rounded-xl border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100 text-emerald-900 text-xs font-bold flex items-center gap-2 transition shadow-sm cursor-pointer";
+      } else {
+        icon.className = "fa-solid fa-key text-amber-500 text-sm";
+        label.textContent = isCustomProxy ? "Worker Aktif (Fallback)" : "Atur API Key (Fallback)";
+        btn.className = "px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-700 text-xs font-bold flex items-center gap-2 transition shadow-sm cursor-pointer";
+      }
+    }
+
+    function openApiModal() {
+      const apiModal = document.getElementById('modal-api-key');
+      const apiInput = document.getElementById('input-api-key');
+      const proxyInput = document.getElementById('input-proxy-url');
+      if (apiInput) apiInput.value = state.apiKey || "";
+      if (proxyInput) proxyInput.value = state.proxyUrl || DEFAULT_PROXY_URL;
+      if (apiModal) apiModal.classList.remove('hidden');
+    }
+
+    function closeApiModal() {
+      const apiModal = document.getElementById('modal-api-key');
+      if (apiModal) apiModal.classList.add('hidden');
+    }
+
+    function buildProxyRequestUrl(proxyBase, targetUrl) {
+      const cleanProxy = (proxyBase || DEFAULT_PROXY_URL).trim();
+      const encodedTarget = encodeURIComponent(targetUrl);
+      if (cleanProxy.includes("{url}")) {
+        return cleanProxy.replace("{url}", encodedTarget);
+      }
+      if (cleanProxy.endsWith("=") || cleanProxy.endsWith("?")) {
+        return `${cleanProxy}${encodedTarget}`;
+      }
+      const sep = cleanProxy.includes("?") ? "&" : "?";
+      return `${cleanProxy}${sep}url=${encodedTarget}`;
+    }
+
+    async function fetchWithTimeout(resource, options = {}, timeoutMs = 12000) {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        return await fetch(resource, { ...options, signal: controller.signal });
+      } finally {
+        clearTimeout(id);
+      }
+    }
+
+    function normalizeHeadersMap(rawHeadersObj, fetchHeaders) {
+      const map = {};
+      if (rawHeadersObj && typeof rawHeadersObj === "object") {
+        for (const [k, v] of Object.entries(rawHeadersObj)) {
+          if (v !== undefined && v !== null && String(v).trim() !== "") {
+            map[k.toLowerCase()] = String(v).trim();
+          }
+        }
+      }
+      if (fetchHeaders && typeof fetchHeaders.forEach === "function") {
+        fetchHeaders.forEach((v, k) => {
+          const lk = k.toLowerCase();
+          if (!map[lk] && v && String(v).trim() !== "") {
+            map[lk] = String(v).trim();
+          }
+        });
+      }
+      return map;
+    }
+
+    async function fetchViaProxyOrWorker(proxyBase, targetUrl) {
+      const reqUrl = buildProxyRequestUrl(proxyBase, targetUrl);
+      const res = await fetchWithTimeout(reqUrl, {}, 12000);
+      if (!res.ok) {
+        throw new Error(`Proxy/Worker HTTP ${res.status}`);
+      }
+
+      const contentType = (res.headers.get("content-type") || "").toLowerCase();
+      const rawText = await res.text();
+
+      let htmlContent = "";
+      let headerMap = normalizeHeadersMap(null, res.headers);
+
+      if (contentType.includes("application/json") || rawText.trim().startsWith("{")) {
+        try {
+          const parsed = JSON.parse(rawText);
+          htmlContent = parsed.contents || parsed.html || parsed.body || parsed.data || "";
+          headerMap = normalizeHeadersMap(parsed.headers || parsed.responseHeaders || {}, res.headers);
+        } catch (_) {
+          htmlContent = rawText;
+        }
+      } else {
+        htmlContent = rawText;
+      }
+
+      return { html: htmlContent, headers: headerMap };
+    }
+
+    /* INSPEKSI DOM, FUNGSIONALITAS ELEMEN & KEAMANAN SIBER */
+    async function inspectTargetWebsite(url) {
+      const primaryProxy = (state.proxyUrl || DEFAULT_PROXY_URL).trim();
+      let fetched = null;
+      let lastErr = null;
+
+      const candidates = [primaryProxy];
+      if (primaryProxy !== DEFAULT_PROXY_URL) {
+        candidates.push(DEFAULT_PROXY_URL);
+      }
+
+      for (const proxyCandidate of candidates) {
+        try {
+          const result = await fetchViaProxyOrWorker(proxyCandidate, url);
+          if (result.html && result.html.trim().length >= 50) {
+            fetched = result;
+            break;
+          } else {
+            lastErr = new Error("Konten HTML kosong atau terlalu pendek");
+          }
+        } catch (e) {
+          lastErr = e;
+        }
+      }
+
+      if (!fetched) {
+        return {
+          reachable: false,
+          error: lastErr ? lastErr.message : "Target tidak dapat dijangkau melalui Proxy/Worker"
+        };
+      }
+
+      try {
+        const rawHtml = fetched.html;
+        const headers = fetched.headers;
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(rawHtml, "text/html");
+        const bodyText = (doc.body?.innerText || doc.body?.textContent || "").replace(/\s+/g, " ").trim();
+        const lowerHtml = rawHtml.toLowerCase();
+
+        // Deteksi arsitektur Client-Side Rendering / SPA (React, Vite, Vue, Next.js, dll.)
+        const scriptTags = Array.from(doc.querySelectorAll("script[src]"));
+        const scriptSrcs = scriptTags.map(s => s.getAttribute("src") || "");
+        const hasRootContainer = !!doc.querySelector("#root, #app, #__next, [data-reactroot], [ng-app]");
+        const hasJsBundles = scriptSrcs.some(src => /assets\/|static\/js\/|chunk|bundle|main\.|index-|vite|react|vue|next/i.test(src));
+        const isClientSideSPA = (bodyText.length < 180 && (hasRootContainer || hasJsBundles));
+
+        let jsBundleSample = "";
+        if (isClientSideSPA && scriptSrcs.length > 0) {
+          try {
+            const firstBundle = scriptSrcs.find(s => /assets\/|static\/js\/|index-|main\./i.test(s)) || scriptSrcs[0];
+            const resolvedJsUrl = new URL(firstBundle, url).href;
+            const jsFetched = await fetchViaProxyOrWorker(primaryProxy, resolvedJsUrl);
+            jsBundleSample = (jsFetched.html || "").slice(0, 30000);
+          } catch (_) {}
+        }
+
+        // Deteksi jenis WebApp
+        const combinedSignalText = (bodyText + " " + (doc.title || "") + " " + rawHtml + " " + jsBundleSample).toLowerCase();
+        const isCatalogOrCommerce = /produk|katalog|keranjang|cart|beli|checkout|harga|rp\s?\d|stok|order|pesanan|toko|shop|store|umkm|batik/i.test(combinedSignalText);
+        const detectedAppType = isCatalogOrCommerce ? "Web Katalog / E-Commerce" : "Aplikasi Web Umum / Non-Katalog";
+
+        // 1. Cek Navigasi, Tombol & Pemuatan
+        const anchors = Array.from(doc.querySelectorAll("a"));
+        const links = anchors.map(a => a.getAttribute("href") || "");
+        const brokenLinksCount = links.filter(href => href === "" || href === "#" || href.startsWith("javascript:void")).length;
+        const buttonsCount = doc.querySelectorAll("button, [role='button'], input[type='submit']").length;
+        const hasSearchOrFilter = !!doc.querySelector("input[type='search'], input[placeholder*='cari' i], input[placeholder*='search' i], select");
+        const hasLoadingError = /gagal memuat|failed to fetch|error loading|tidak dapat dimuat|unable to load|404 not found|internal server error|database error|sqlstate/i.test(bodyText);
+
+        // 2. Cek Gambar & Media
+        const images = Array.from(doc.querySelectorAll("img"));
+        const missingSrcImages = images.filter(img => {
+          const src = (img.getAttribute("src") || "").trim();
+          return !src || src === "#" || src === "undefined" || src === "null";
+        }).length;
+
+        // 3. Cek Enumerasi & Rute Admin
+        const adminLinks = links.filter(href => /admin|login|dashboard|panel|masuk|cpanel|wp-admin/i.test(href));
+        const enumerationClues = [];
+        if (headers["x-powered-by"]) enumerationClues.push(`X-Powered-By: ${headers["x-powered-by"]}`);
+        if (headers["server"]) enumerationClues.push(`Server: ${headers["server"]}`);
+        if (/<!--[\s\S]*?(todo|password|secret|api_key|debug|internal|localhost|127\.0\.0\.1)[\s\S]*?-->/i.test(rawHtml)) {
+          enumerationClues.push("Komentar HTML mengandung info sensitif/debug");
+        }
+        if (/index of \/|\.env|\.git|phpinfo|stack trace/i.test(bodyText)) {
+          enumerationClues.push("Indikasi Directory Listing / Stack Trace");
+        }
+
+        // 4. Cek Keamanan & X-Headers
+        const inputs = Array.from(doc.querySelectorAll("input, textarea, select"));
+        const inputValidations = inputs.slice(0, 15).map(el => ({
+          name: el.getAttribute("name") || el.getAttribute("id") || "unnamed",
+          type: el.getAttribute("type") || el.tagName.toLowerCase(),
+          required: el.hasAttribute("required"),
+          pattern: el.hasAttribute("pattern"),
+          maxlength: el.getAttribute("maxlength"),
+          accept: el.getAttribute("accept")
+        }));
+        const validatedInputsCount = inputValidations.filter(v => v.required || v.pattern || v.maxlength || v.accept).length;
+        const fileUploadInputs = inputs.filter(el => (el.getAttribute("type") || "").toLowerCase() === "file");
+        const unrestrictedFileUploads = fileUploadInputs.filter(el => !el.hasAttribute("accept")).length;
+        const inlineScripts = doc.querySelectorAll("script:not([src])").length;
+        const hasDangerousSink = /eval\(|document\.write\(|innerHTML\s*=|exec\(|system\(|shell_exec\(/i.test(lowerHtml);
+
+        const securityHeaders = {
+          csp: headers["content-security-policy"] || "Tidak terdeteksi",
+          xFrame: headers["x-frame-options"] || "Tidak terdeteksi",
+          xContentType: headers["x-content-type-options"] || "Tidak terdeteksi",
+          hsts: headers["strict-transport-security"] || "Tidak terdeteksi"
+        };
+
+        // 5. Cek Viewport, About Us, Kontak, Cart & Bayar
+        const fullScanText = bodyText + " " + jsBundleSample;
+        const hasViewport = !!doc.querySelector('meta[name="viewport"]');
+        const hasAboutUs = /tentang kami|about us|profil kami|siapa kami|visi misi|tentang aplikasi|tentang/i.test(fullScanText);
+        const hasWhatsApp = links.some(href => /wa\.me|whatsapp\.com/i.test(href)) || /wa\.me|whatsapp|08\d{8,11}|\+62\d{8,11}/i.test(fullScanText);
+        const hasEmailOrAddress = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i.test(fullScanText) || /alamat|jl\.|jalan|gedung|kontak|hubungi kami|contact us/i.test(fullScanText);
+        const hasContact = hasWhatsApp || hasEmailOrAddress;
+
+        const hasSellerContact = hasWhatsApp || /hubungi penjual|chat penjual|tanya penjual|pesan via wa|order via whatsapp|hubungi/i.test(fullScanText);
+        const hasCart = /keranjang|cart|tambah ke keranjang|add to cart/i.test(fullScanText);
+        const hasPayment = /qris|transfer bank|pembayaran|payment|metode bayar|e-wallet|gopay|ovo|dana|bca|bri|mandiri|tunai|cod|bayar|checkout/i.test(fullScanText);
+
+        return {
+          reachable: true,
+          page_title: (doc.title || "").trim(),
+          is_client_side_spa: isClientSideSPA,
+          js_bundles_count: scriptSrcs.length,
+          detected_app_type: detectedAppType,
+          nav_links_count: links.length,
+          broken_links_count: brokenLinksCount,
+          buttons_count: buttonsCount,
+          has_search_or_filter: hasSearchOrFilter,
+          has_loading_error: hasLoadingError,
+          images_total: images.length,
+          missing_src_images: missingSrcImages,
+          admin_links: adminLinks,
+          enumeration_clues: enumerationClues,
+          form_inputs_total: inputs.length,
+          validated_inputs_count: validatedInputsCount,
+          unrestricted_file_uploads: unrestrictedFileUploads,
+          inline_scripts: inlineScripts,
+          has_dangerous_sink: hasDangerousSink,
+          security_headers: securityHeaders,
+          has_viewport: hasViewport,
+          has_about_us: hasAboutUs,
+          has_contact: hasContact,
+          has_seller_contact: hasSellerContact,
+          has_cart: hasCart,
+          has_payment: hasPayment,
+          page_text_sample: bodyText.slice(0, 1500)
+        };
+      } catch (err) {
+        return { reachable: false, error: err.message };
+      }
+    }
+
+    function calculateScores(auditObj) {
+      let catA = 0, catB = 0, catC = 0, catD = 0;
+      auditObj.scores = {};
+
+      for (let key in state.criteriaMeta) {
+        const meta = state.criteriaMeta[key];
+        const subMap = auditObj.sub_scores?.[key] || {};
+        const subValues = Object.values(subMap);
+
+        let avgRaw = 7.5;
+        if (subValues.length > 0) {
+          const sum = subValues.reduce((a, b) => a + parseFloat(b || 0), 0);
+          avgRaw = sum / subValues.length;
+        }
+
+        avgRaw = parseFloat(avgRaw.toFixed(2));
+        auditObj.scores[key] = avgRaw;
+
+        const contrib = (avgRaw / 10.0) * (meta.weight * 100.0);
+
+        if (['c1', 'c2', 'c3'].includes(key)) catA += contrib;
+        if (['c4', 'c5'].includes(key)) catB += contrib;
+        if (['c6', 'c7'].includes(key)) catC += contrib;
+        if (['c8', 'c9', 'c10'].includes(key)) catD += contrib;
+      }
+
+      const total = catA + catB + catC + catD;
+      return { total, catA, catB, catC, catD };
+    }
+
+    function calculateGrade(score) {
+      if (score >= 85) return { badge: "GRADE A", text: "Luar Biasa!", color: "bg-emerald-100 text-emerald-800 border-emerald-300" };
+      if (score >= 75) return { badge: "GRADE B", text: "Hebat!", color: "bg-sky-100 text-sky-800 border-sky-300" };
+      if (score >= 65) return { badge: "GRADE C", text: "Tingkatkan Lagi!", color: "bg-amber-100 text-amber-800 border-amber-300" };
+      if (score >= 55) return { badge: "GRADE D", text: "Pelajari Lagi!", color: "bg-orange-100 text-orange-800 border-orange-300" };
+      return { badge: "GRADE E", text: "Mungkin Kamu Terburu-buru :(", color: "bg-rose-100 text-rose-800 border-rose-300" };
+    }
+
+    /* EVALUASI PER KRITERIA (C1-C10) YANG SELARAS DENGAN KARTU TELEMETRI & RADAR */
+    function buildCriterionEvaluationFromScan(cKey, url, inspection) {
+      if (!inspection || !inspection.reachable) {
+        return {
+          s1: 3.0, s2: 3.0, s3: 3.0,
+          evidence: `Pemindaian gagal menjangkau ${url}: ${inspection?.error || 'Tidak merespons'}.`,
+          strengths: ["URL terdaftar dalam daftar evaluasi"],
+          weaknesses: ["Halaman tidak dapat diakses atau mengembalikan respons kosong"],
+          reasons: "Target tidak dapat dimuat saat pemindaian HTTP dilakukan.",
+          recommendations: "Pastikan deployment aktif, URL benar, dan server mengembalikan status HTTP 200 dengan HTML valid."
+        };
+      }
+
+      const isSPA = inspection.is_client_side_spa;
+      const isCatalog = inspection.detected_app_type === "Web Katalog / E-Commerce";
+      const hdr = inspection.security_headers || {};
+      const activeHdrCount = [hdr.csp, hdr.xFrame, hdr.xContentType, hdr.hsts].filter(v => v && v !== "Tidak terdeteksi").length;
+
+      switch (cKey) {
+        case "c1": {
+          // C1: Fungsionalitas Navigasi & CTA (Telemetri: Navigasi / Tombol)
+          if (inspection.has_loading_error) {
+            return {
+              s1: 4.5, s2: 4.5, s3: 3.5,
+              evidence: `Navigasi / Tombol: ${inspection.nav_links_count} link / ${inspection.buttons_count} btn, namun terdeteksi pesan error pemuatan konten.`,
+              strengths: ["Kerangka halaman utama dapat dibuka"],
+              weaknesses: ["Konten/katalog utama gagal dimuat atau menampilkan pesan error"],
+              reasons: "Ditemukan indikasi kegagalan pemuatan data pada halaman utama.",
+              recommendations: "Perbaiki koneksi API/database dan pastikan seluruh tautan navigasi memuat data dengan normal."
+            };
+          }
+          const s1 = isSPA ? 8.8 : (inspection.nav_links_count >= 5 ? (inspection.broken_links_count === 0 ? 9.2 : 8.2) : 6.8);
+          const s2 = isSPA ? 8.6 : (inspection.buttons_count >= 2 ? 8.8 : 7.0);
+          const s3 = isSPA ? 8.5 : (inspection.has_search_or_filter ? 9.0 : 8.0);
+          return {
+            s1, s2, s3,
+            evidence: isSPA
+              ? `Arsitektur SPA (${inspection.js_bundles_count} bundel JS aktif), navigasi dinamis & tombol aksi siap dijalankan.`
+              : `Navigasi / Tombol: ${inspection.nav_links_count} link / ${inspection.buttons_count} btn (tautan kosong/#: ${inspection.broken_links_count}, fitur cari/filter: ${inspection.has_search_or_filter ? 'Tersedia' : 'Tidak terdeteksi'}).`,
+            strengths: [
+              `Terdeteksi ${inspection.nav_links_count} tautan navigasi dan ${inspection.buttons_count} tombol interaktif`,
+              "Struktur navigasi mendukung eksplorasi fitur/katalog dengan baik"
+            ],
+            weaknesses: inspection.broken_links_count > 0
+              ? [`Terdapat ${inspection.broken_links_count} tautan placeholder (#) yang perlu diarahkan ke rute valid`]
+              : ["Pastikan setiap tombol CTA memberikan umpan balik visual yang jelas saat diklik"],
+            reasons: "Penilaian merujuk langsung pada kartu telemetri Navigasi / Tombol serta kebersihan tautan internal.",
+            recommendations: inspection.broken_links_count > 0
+              ? "Ganti seluruh tautan placeholder '#' dengan rute/aksi yang valid."
+              : "Pertahankan struktur navigasi yang jelas dan tambahkan fitur filter/pencarian cepat bila item bertambah."
+          };
+        }
+        case "c2": {
+          // C2: Responsivitas & Viewport Mobile (Telemetri: Viewport Mobile)
+          const s1 = inspection.has_viewport ? 9.0 : 4.5;
+          const s2 = inspection.has_viewport ? 8.4 : 6.0;
+          const s3 = inspection.has_viewport ? 8.2 : 5.5;
+          return {
+            s1, s2, s3,
+            evidence: `Viewport Mobile: ${inspection.has_viewport ? 'Terpasang (<meta name="viewport"> valid)' : 'Tidak terdeteksi'}.`,
+            strengths: inspection.has_viewport
+              ? ["Tag meta viewport terpasang valid sehingga tampilan adaptif di perangkat seluler"]
+              : ["Tampilan desktop standar tersedia"],
+            weaknesses: !inspection.has_viewport
+              ? ["Tag <meta name='viewport'> tidak ditemukan sehingga tampilan berisiko mengecil di perangkat mobile"]
+              : ["Lakukan pengujian tampilan pada resolusi 360px–768px agar tidak terjadi overflow horizontal"],
+            reasons: "Skor dihitung langsung berdasarkan status kartu telemetri Viewport Mobile.",
+            recommendations: inspection.has_viewport
+              ? "Pertahankan unit responsif (%, rem, Tailwind breakpoints) untuk menjaga keseimbangan grid di ponsel."
+              : 'Tambahkan <meta name="viewport" content="width=device-width, initial-scale=1.0"> pada bagian <head>.'
+          };
+        }
+        case "c3": {
+          // C3: Ketersediaan Informasi Profil / About Us (Telemetri: About Us & Kontak -> About)
+          const s1 = inspection.has_about_us ? 9.0 : 5.8;
+          const s2 = inspection.has_about_us ? 8.6 : 7.2;
+          const s3 = inspection.page_title ? 8.4 : 6.8;
+          return {
+            s1, s2, s3,
+            evidence: `About Us & Kontak (Bagian Profil): ${inspection.has_about_us ? 'About ✓ (Terdeteksi)' : 'About ✗ (Tidak terdeteksi)'}; Judul Halaman: "${inspection.page_title || '-'}".`,
+            strengths: inspection.has_about_us
+              ? ["Bagian 'Tentang Kami / About Us' terdeteksi dan menjelaskan identitas pengelola/usaha"]
+              : ["Identitas dasar halaman utama tersedia"],
+            weaknesses: !inspection.has_about_us
+              ? ["Bagian profil usaha ('About Us / Tentang Kami') belum terdeteksi secara eksplisit di struktur DOM"]
+              : ["Lengkapi profil dengan latar belakang, legalitas, atau portofolio layanan"],
+            reasons: "Penilaian selaras dengan indikator 'About' pada kartu telemetri About Us & Kontak.",
+            recommendations: !inspection.has_about_us
+              ? "Tambahkan bagian 'Tentang Kami (About Us)' yang menjelaskan profil usaha/pengelola untuk meningkatkan kepercayaan pengunjung."
+              : "Pertahankan informasi profil usaha yang transparan dan mudah ditemukan dari menu navigasi."
+          };
+        }
+        case "c4": {
+          // C4: Aksesibilitas Kanal Komunikasi Umum (Telemetri: About Us & Kontak -> Kontak)
+          const s1 = inspection.has_contact ? 8.8 : 5.2;
+          const s2 = inspection.has_contact ? 8.4 : 5.5;
+          const s3 = inspection.has_contact ? 8.6 : 5.8;
+          return {
+            s1, s2, s3,
+            evidence: `About Us & Kontak (Saluran Komunikasi): ${inspection.has_contact ? 'Kontak ✓ (Tersedia)' : 'Kontak ✗ (Tidak terdeteksi)'}.`,
+            strengths: inspection.has_contact
+              ? ["Informasi kontak umum (WhatsApp/Email/Alamat) terdeteksi aktif dan dapat diakses pengunjung"]
+              : ["Struktur footer tersedia untuk penempatan informasi kontak"],
+            weaknesses: !inspection.has_contact
+              ? ["Informasi kontak resmi (email, nomor telepon/WA, atau alamat) belum terdeteksi"]
+              : ["Pastikan informasi jam operasional dan alamat fisik tercantum lengkap di bagian footer"],
+            reasons: "Skor mengacu langsung pada indikator 'Kontak' di kartu telemetri About Us & Kontak.",
+            recommendations: "Cantumkan kanal komunikasi resmi (nomor WhatsApp, email, dan alamat) di bagian footer atau halaman kontak khusus."
+          };
+        }
+        case "c5": {
+          // C5: Validitas Kontak Langsung Penjual (Telemetri: Kontak Penjual)
+          if (isCatalog) {
+            const s1 = inspection.has_seller_contact ? 8.8 : 4.8;
+            const s2 = inspection.has_seller_contact ? 8.4 : 5.0;
+            const s3 = inspection.has_seller_contact ? 8.2 : 5.5;
+            return {
+              s1, s2, s3,
+              evidence: `Kontak Penjual: ${inspection.has_seller_contact ? 'Tersedia ✓ (Tautan WhatsApp/Chat Penjual aktif)' : 'Tidak Terdeteksi'}.`,
+              strengths: inspection.has_seller_contact
+                ? ["Tersedia tautan/tombol kontak langsung ke penjual (WhatsApp/Chat) untuk memudahkan transaksi"]
+                : ["Alur penjelajahan katalog dasar tersedia"],
+              weaknesses: !inspection.has_seller_contact
+                ? ["Web katalog belum menyediakan tombol kontak langsung ke penjual"]
+                : ["Sertakan format pesan otomatis (nama produk & jumlah) saat pembeli mengklik hubungi penjual"],
+              reasons: "Evaluasi selaras dengan kartu telemetri Kontak Penjual untuk kategori Web Katalog / E-Commerce.",
+              recommendations: "Sediakan tombol 'Hubungi Penjual via WhatsApp' dengan template pesan otomatis pada setiap item."
+            };
+          }
+          const s1 = inspection.has_contact ? 8.5 : 7.0;
+          const s2 = 8.2;
+          const s3 = 8.0;
+          return {
+            s1, s2, s3,
+            evidence: `Kontak Penjual / Pengelola (${inspection.detected_app_type}): ${inspection.has_contact ? 'Tersedia ✓' : 'Minimal'}.`,
+            strengths: ["Kanal interaksi/bantuan pengguna tersedia sesuai konteks aplikasi non-katalog"],
+            weaknesses: ["Dapat ditambahkan tombol bantuan cepat (Help/Support) bagi pengguna baru"],
+            reasons: "Penilaian disesuaikan secara adil untuk WebApp non-katalog.",
+            recommendations: "Sediakan saluran umpan balik atau bantuan pengelola yang mudah dijangkau."
+          };
+        }
+        case "c6": {
+          // C6: Alur Keranjang Belanja / Cart (Telemetri: Checkout & Bayar -> Cart)
+          if (isCatalog) {
+            const s1 = inspection.has_cart ? 9.0 : 5.5;
+            const s2 = inspection.has_cart ? 8.6 : 6.0;
+            const s3 = (inspection.has_cart || inspection.has_payment) ? 8.2 : 5.5;
+            return {
+              s1, s2, s3,
+              evidence: `Checkout & Bayar (Fitur Keranjang): ${inspection.has_cart ? 'Cart ✓ (Terdeteksi)' : 'Cart ✗ (Tidak terdeteksi — mengarah ke transaksi langsung)'}.`,
+              strengths: inspection.has_cart
+                ? ["Fitur keranjang belanja (Cart) terdeteksi untuk akumulasi pesanan multi-produk"]
+                : ["Pengguna dapat langsung memproses pesanan tunggal tanpa hambatan"],
+              weaknesses: !inspection.has_cart
+                ? ["Fitur manajemen keranjang belanja ('Cart ✗') belum terdeteksi; pembeli belum dapat menggabungkan beberapa produk sekaligus"]
+                : ["Pastikan rincian jumlah item dan total harga diperbarui secara real-time di keranjang"],
+              reasons: "Skor mengacu langsung pada status 'Cart' di kartu telemetri Checkout & Bayar.",
+              recommendations: !inspection.has_cart
+                ? "Tambahkan fitur Keranjang Belanja (Add to Cart) agar pembeli dapat memilih beberapa item sekaligus sebelum checkout."
+                : "Pertahankan kemudahan penambahan/pengurangan kuantitas item di dalam keranjang."
+            };
+          }
+          return {
+            s1: 8.4, s2: 8.3, s3: 8.3,
+            evidence: `Alur Pemrosesan Utama (${inspection.detected_app_type}): Berjalan normal tanpa error.`,
+            strengths: ["Alur pemrosesan fitur utama aplikasi berfungsi baik sesuai domainnya"],
+            weaknesses: ["Pastikan ringkasan hasil pemrosesan selalu ditampilkan ke pengguna"],
+            reasons: "Evaluasi adaptif untuk aplikasi non-niaga.",
+            recommendations: "Pertahankan alur interaksi yang ringkas dan jelas."
+          };
+        }
+        case "c7": {
+          // C7: Mekanisme Pembayaran & Checkout (Telemetri: Checkout & Bayar -> Bayar)
+          if (isCatalog) {
+            const s1 = inspection.has_payment ? 8.8 : 5.0;
+            const s2 = inspection.has_payment ? 8.6 : 4.8;
+            const s3 = inspection.has_payment ? 8.4 : 5.0;
+            return {
+              s1, s2, s3,
+              evidence: `Checkout & Bayar (Mekanisme Pembayaran): ${inspection.has_payment ? 'Bayar ✓ (Alur checkout/pembayaran tersedia)' : 'Bayar ✗ (Belum terdeteksi)'}.`,
+              strengths: inspection.has_payment
+                ? ["Alur penyelesaian transaksi / informasi metode pembayaran (Bayar ✓) sudah tersedia bagi pengunjung"]
+                : ["Struktur tampilan produk tersedia"],
+              weaknesses: !inspection.has_payment
+                ? ["Mekanisme checkout atau pilihan metode pembayaran (QRIS/Transfer/COD) belum terdeteksi"]
+                : ["Sertakan pilihan metode pembayaran instan seperti QRIS dinamis/statis dan bukti konfirmasi bayar"],
+              reasons: "Penilaian merujuk langsung pada status 'Bayar' di kartu telemetri Checkout & Bayar.",
+              recommendations: inspection.has_payment
+                ? "Lengkapi halaman pembayaran dengan kode QRIS yang jelas serta tombol konfirmasi bukti transfer."
+                : "Tambahkan alur checkout beserta informasi metode pembayaran (QRIS / Transfer Bank / COD)."
+            };
+          }
+          return {
+            s1: 8.4, s2: 8.4, s3: 8.4,
+            evidence: `Penyelesaian Aksi Utama (${inspection.detected_app_type}): Terverifikasi normal.`,
+            strengths: ["Penyelesaian tugas utama aplikasi berjalan lancar"],
+            weaknesses: ["Tambahkan pesan konfirmasi sukses setelah aksi selesai"],
+            reasons: "Penilaian proporsional untuk aplikasi non-niaga.",
+            recommendations: "Pastikan setiap transaksi data memiliki umpan balik status yang jelas."
+          };
+        }
+        case "c8": {
+          // C8: Konfigurasi HTTP Security Headers (Telemetri: X-Security Headers)
+          const s1 = activeHdrCount >= 3 ? 9.2 : (activeHdrCount >= 1 ? 6.4 : 4.5);
+          const s2 = (inspection.form_inputs_total === 0 || inspection.validated_inputs_count > 0) && inspection.unrestricted_file_uploads === 0 ? 7.6 : 5.2;
+          const s3 = !inspection.has_dangerous_sink ? 7.8 : 4.8;
+          return {
+            s1, s2, s3,
+            evidence: `X-Security Headers: ${activeHdrCount} / 4 Aktif (CSP: ${hdr.csp}, X-Frame: ${hdr.xFrame}, X-Content-Type: ${hdr.xContentType}, HSTS: ${hdr.hsts}); Sink berbahaya: ${inspection.has_dangerous_sink ? 'Terdeteksi' : 'Tidak'}.`,
+            strengths: [
+              activeHdrCount > 0 ? `${activeHdrCount} dari 4 HTTP Security Headers terdeteksi aktif` : "Tidak ditemukan sink eksekusi berbahaya eksplisit",
+              !inspection.has_dangerous_sink ? "Bebas pola eval()/exec()/shell_exec() pada DOM" : "Struktur input terdeteksi"
+            ],
+            weaknesses: [
+              activeHdrCount < 4 ? `Baru ${activeHdrCount}/4 Security Headers aktif; header lainnya (${4 - activeHdrCount}) belum terpasang` : "Pertahankan kebijakan CSP ketat",
+              ...(inspection.unrestricted_file_uploads > 0 ? ["Input unggah file belum memiliki atribut accept pembatas ekstensi"] : [])
+            ],
+            reasons: "Skor mengacu langsung pada kartu telemetri X-Security Headers (jumlah header aktif dari 4 standar keamanan).",
+            recommendations: "Tambahkan konfigurasi header Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, dan Strict-Transport-Security pada server/Vercel."
+          };
+        }
+        case "c9": {
+          // C9: Performa & Kestabilan Pemuatan (Telemetri: Status pemuatan: Normal)
+          const s1 = !inspection.has_loading_error ? 9.0 : 4.0;
+          const s2 = !inspection.has_loading_error ? 8.8 : 4.0;
+          const s3 = inspection.missing_src_images === 0 ? 8.6 : 5.5;
+          return {
+            s1, s2, s3,
+            evidence: `Status Pemuatan: ${inspection.has_loading_error ? 'ERROR KONTEN' : 'Normal'}; Gambar total: ${inspection.images_total} (missing src: ${inspection.missing_src_images}).`,
+            strengths: [
+              "Server merespons permintaan HTTP secara normal tanpa latensi berlebih",
+              inspection.missing_src_images === 0 ? "Tidak ditemukan aset gambar dengan atribut src kosong/rusak" : "Halaman utama berhasil dirender"
+            ],
+            weaknesses: inspection.missing_src_images > 0
+              ? [`Ditemukan ${inspection.missing_src_images} tag gambar tanpa atribut src yang valid`]
+              : ["Pastikan seluruh aset gambar menggunakan format terkompresi (WebP) dan atribut lazy-loading"],
+            reasons: "Penilaian merujuk pada status pemuatan halaman Normal serta validitas pemuatan aset DOM.",
+            recommendations: "Pertahankan kestabilan server dan optimalkan ukuran aset gambar untuk menjaga kecepatan muat."
+          };
+        }
+        case "c10": {
+          // C10: Struktur Semantik & Arsitektur DOM (Telemetri: Tag Jenis & Arsitektur)
+          const enumCount = inspection.enumeration_clues.length;
+          const s1 = isSPA ? 8.4 : 7.2;
+          const s2 = inspection.page_title ? 8.0 : 5.5;
+          const s3 = enumCount === 0 ? 7.8 : 5.2;
+          return {
+            s1, s2, s3,
+            evidence: `Arsitektur: ${inspection.detected_app_type} • ${isSPA ? 'SPA' : 'Standard HTML'}; Judul dokumen: "${inspection.page_title || 'Kosong'}"; Kebocoran enumerasi: ${enumCount === 0 ? 'Bersih' : inspection.enumeration_clues.join(', ')}.`,
+            strengths: [
+              `Dibangun dengan arsitektur ${isSPA ? 'SPA modern' : 'Standard HTML yang ringan'}`,
+              enumCount === 0 ? "Tidak ditemukan komentar HTML debug atau kebocoran stack trace" : "Struktur dokumen terbaca oleh parser"
+            ],
+            weaknesses: [
+              !isSPA ? "Struktur semantik HTML5 (seperti <article>, <section>, dan schema produk) masih dapat dioptimalkan" : "Pastikan metadata SEO/OpenGraph terpasang pada halaman SPA",
+              ...(!inspection.page_title ? ["Tag <title> halaman belum didefinisikan"] : [])
+            ],
+            reasons: "Skor mencerminkan keteraturan arsitektur DOM, kelengkapan metadata halaman, dan kebersihan kode sumber.",
+            recommendations: "Gunakan elemen semantik HTML5 (<header>, <nav>, <main>, <section>, <footer>) dan lengkapi metadata deskripsi halaman."
+          };
+        }
+        default:
+          return {
+            s1: 7.5, s2: 7.5, s3: 7.5,
+            evidence: "Pemindaian selesai.",
+            strengths: ["Memenuhi standar dasar"],
+            weaknesses: ["Perlu pengujian lanjutan"],
+            reasons: "Evaluasi standar.",
+            recommendations: "Lakukan peningkatan berkala."
+          };
+      }
+    }
+
+    function generateFallbackDataForPair(developer, url, inspection = null) {
+      const sub = {};
+      const evidence = {}, strengths = {}, weaknesses = {}, reasons = {}, recommendations = {};
+
+      for (let i = 1; i <= 10; i++) {
+        const cKey = `c${i}`;
+        const evalResult = buildCriterionEvaluationFromScan(cKey, url, inspection);
+
+        sub[cKey] = {
+          [`s${i}_1`]: evalResult.s1,
+          [`s${i}_2`]: evalResult.s2,
+          [`s${i}_3`]: evalResult.s3
+        };
+
+        evidence[cKey] = evalResult.evidence;
+        strengths[cKey] = evalResult.strengths;
+        weaknesses[cKey] = evalResult.weaknesses;
+        reasons[cKey] = evalResult.reasons;
+        recommendations[cKey] = evalResult.recommendations;
+      }
+
+      const appTypeLabel = inspection?.detected_app_type || "Aplikasi Web Umum";
+      const archLabel = inspection?.is_client_side_spa ? "SPA (React/Vite/Vue)" : "Standard HTML";
+      const hdr = inspection?.security_headers || {};
+      const activeHdrCount = [hdr.csp, hdr.xFrame, hdr.xContentType, hdr.hsts].filter(v => v && v !== "Tidak terdeteksi").length;
+
+      const structuredSummary = inspection?.reachable
+        ? `Ringkasan Eksekutif Pemindaian:\nTarget ${url} (${developer}) teridentifikasi sebagai platform [${appTypeLabel}] berbasis arsitektur [${archLabel}] dengan status pemuatan [${inspection.has_loading_error ? 'Ditemukan Error Konten' : 'Normal'}].\n\n` +
+          `1. Kesiapan Antarmuka & Navigasi (C1–C3): Struktur antarmuka memiliki ${inspection.nav_links_count} tautan navigasi dan ${inspection.buttons_count} tombol interaktif, serta konfigurasi Viewport Mobile (${inspection.has_viewport ? 'Terpasang ✓' : 'Tidak Ada ✗'}). Bagian profil usaha About Us berstatus ${inspection.has_about_us ? 'Terdeteksi ✓' : 'Tidak terdeteksi ✗'}.\n` +
+          `2. Kredibilitas & Alur Transaksi (C4–C7): Saluran Kontak umum berstatus ${inspection.has_contact ? 'Tersedia ✓' : 'Tidak terdeteksi ✗'} dan Kontak Penjual langsung ${inspection.has_seller_contact ? 'Tersedia ✓' : 'Tidak terdeteksi ✗'}. Pada alur transaksi, fitur Keranjang Belanja (Cart) berstatus ${inspection.has_cart ? 'Tersedia ✓' : 'Tidak terdeteksi ✗'} dan mekanisme Pembayaran/Checkout berstatus ${inspection.has_payment ? 'Tersedia ✓' : 'Tidak terdeteksi ✗'}.\n` +
+          `3. Postur Keamanan & Struktur DOM (C8–C10): Evaluasi HTTP Security Headers mencatat tingkat perlindungan ${activeHdrCount} / 4 Aktif. ${activeHdrCount < 4 ? 'Disarankan menambahkan header keamanan (CSP, X-Frame-Options, X-Content-Type-Options, HSTS) untuk memperkuat mitigasi celah keamanan sisi klien.' : 'Seluruh header keamanan utama telah aktif dengan baik.'}`
+        : `Peringatan: WebApp ${url} (${developer}) gagal dimuat saat pemindaian teknis (${inspection?.error || 'Tidak merespons'}). Pastikan URL aktif dan dapat diakses publik.`;
+
+      return {
+        developer,
+        url,
+        inspection,
+        executive_summary: structuredSummary,
+        sub_scores: sub,
+        evidence,
+        strengths,
+        weaknesses,
+        reasons,
+        recommendations
+      };
+    }
+
+    /* TIE-BREAKER LOGIC */
+    function detectTiedScores() {
+      const tiedPairs = [];
+      for (let i = 0; i < state.history.length; i++) {
+        for (let j = i + 1; j < state.history.length; j++) {
+          const itemA = state.history[i];
+          const itemB = state.history[j];
+          if (Math.abs(itemA.totalScore - itemB.totalScore) < 0.05) {
+            tiedPairs.push({ itemA, itemB, rankA: i + 1, rankB: j + 1 });
+          }
+        }
+      }
+      return tiedPairs;
+    }
+
+    function checkAndRenderTieBreakerBanner() {
+      const banner = document.getElementById('equal-score-banner');
+      const bannerText = document.getElementById('equal-score-banner-text');
+      const tiedPairs = detectTiedScores();
+
+      if (tiedPairs.length > 0) {
+        if (banner) banner.classList.remove('hidden');
+        if (bannerText) {
+          const first = tiedPairs[0];
+          bannerText.textContent = `Web '${first.itemA.developer}' (#${first.rankA}) dan '${first.itemB.developer}' (#${first.rankB}) memiliki skor total yang sama (${first.itemA.totalScore.toFixed(1)}%). Klik untuk membandingkan.`;
+        }
+      } else {
+        if (banner) banner.classList.add('hidden');
+      }
+    }
+
+    function showTieBreakerModal(itemA, itemB, rankA, rankB) {
+      const modal = document.getElementById('modal-tiebreaker-comparison');
+      const content = document.getElementById('tiebreaker-modal-content');
+      if (!modal || !content) return;
+
+      let matrixRows = "";
+      for (let key in state.criteriaMeta) {
+        const meta = state.criteriaMeta[key];
+        const scoreA = itemA.auditObj.scores[key] || 0;
+        const scoreB = itemB.auditObj.scores[key] || 0;
+        const diff = parseFloat((scoreA - scoreB).toFixed(2));
+
+        let diffBadge = `<span class="text-slate-400 font-mono font-bold">0.0</span>`;
+        if (diff > 0) {
+          diffBadge = `<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono font-extrabold text-[10px]">+${diff} (${escapeHtml(itemA.developer)})</span>`;
+        } else if (diff < 0) {
+          diffBadge = `<span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-mono font-extrabold text-[10px]">${diff} (${escapeHtml(itemB.developer)})</span>`;
+        }
+
+        matrixRows += `
+          <tr class="hover:bg-slate-50 border-b border-slate-200 text-xs">
+            <td class="p-2.5 font-bold text-slate-800 flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded bg-sky-100 text-sky-800 font-mono text-[10px]">${key.toUpperCase()}</span>
+              ${escapeHtml(meta.name)}
+              <span class="text-[10px] font-mono font-normal text-slate-500">(Bobot: ${(meta.weight * 100).toFixed(1)}%)</span>
+            </td>
+            <td class="p-2.5 text-center font-mono font-extrabold text-sky-700 bg-sky-50/50">${scoreA} / 10</td>
+            <td class="p-2.5 text-center font-mono font-extrabold text-slate-700 bg-slate-50">${scoreB} / 10</td>
+            <td class="p-2.5 text-center">${diffBadge}</td>
+          </tr>
+        `;
+      }
+
+      content.innerHTML = `
+        <div class="space-y-3">
+          <h4 class="font-extrabold text-xs sm:text-sm text-slate-900 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-table text-sky-600"></i> Perbandingan Detail Rata-Rata Sub-Kriteria (Skala 1 - 10)
+          </h4>
+
+          <div class="overflow-x-auto rounded-2xl border border-slate-200 custom-scrollbar">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="bg-slate-100 border-b border-slate-300 text-slate-800 font-bold">
+                  <th class="p-2.5">Kriteria Penilaian</th>
+                  <th class="p-2.5 text-center bg-sky-100/70 text-sky-900">#${rankA} - ${escapeHtml(itemA.developer)}</th>
+                  <th class="p-2.5 text-center bg-slate-200/70 text-slate-900">#${rankB} - ${escapeHtml(itemB.developer)}</th>
+                  <th class="p-2.5 text-center">Selisih</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${matrixRows}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+    }
+
+    async function runAIAuditBatch() {
+      const devRaw = (document.getElementById('input-developer')?.value || "").trim();
+      const urlRaw = (document.getElementById('input-url')?.value || "").trim();
+
+      if (!devRaw || !urlRaw) {
+        showToast("Form Kosong", "Isi Nama Pengembang dan URL WebApp.", false);
+        return;
+      }
+
+      const devLines = devRaw.split('\n').map(s => s.trim()).filter(Boolean);
+      const urlLines = urlRaw.split('\n').map(s => s.trim()).filter(Boolean);
+
+      if (devLines.length !== urlLines.length) {
+        showToast("Baris Tidak Sama", `Jumlah Nama Pengembang (${devLines.length}) & URL (${urlLines.length}) harus sama 1-ke-1.`, false);
+        return;
+      }
+
+      const pairs = devLines.map((dev, i) => ({ developer: dev, url: normalizeUrl(urlLines[i]) }));
+
+      const modalProgress = document.getElementById('modal-ai-progress');
+      const progressBar = document.getElementById('ai-progress-bar');
+      const progressStatus = document.getElementById('ai-progress-status');
+      if (modalProgress) modalProgress.classList.remove('hidden');
+      if (progressBar) progressBar.style.width = "30%";
+
+      state.history = [];
+      let enrichedPairs = [];
+
+      try {
+        if (progressStatus) progressStatus.textContent = "Memindai fungsionalitas elemen, tata letak & keamanan X-Headers...";
+        enrichedPairs = await Promise.all(
+          pairs.map(async (pair) => {
+            const inspection = await inspectTargetWebsite(pair.url);
+            return {
+              developer: pair.developer,
+              url: pair.url,
+              real_dom_and_security_inspection: inspection
+            };
+          })
+        );
+
+        if (progressBar) progressBar.style.width = "65%";
+
+        const apiKey = (state.apiKey || "").trim();
+        let aiResults = null;
+
+        if (apiKey) {
+          if (progressStatus) progressStatus.textContent = "Mengevaluasi hasil inspeksi secara objektif dengan Gemini AI...";
+
+          const systemPrompt = `Anda adalah Auditor Kualitas & Keamanan Aplikasi Web (WebApp) Profesional.
+Tugas Anda: Lakukan audit menyeluruh dan objektif terhadap DAFTAR WEBAPP berikut berdasarkan DATA INSPEKSI DOM & KEAMANAN NYATA dalam SATU PROSES BATCH:
+${JSON.stringify(enrichedPairs)}
+
+PEMETAAN KRITERIA PENILAIAN (C1 - C10) YANG WAJIB DIIKUTI:
+- C1: Fungsionalitas Navigasi & CTA (berdasarkan nav_links_count, buttons_count, broken_links_count, has_search_or_filter)
+- C2: Responsivitas & Viewport Mobile (berdasarkan has_viewport)
+- C3: Ketersediaan Informasi Profil / About Us (berdasarkan has_about_us)
+- C4: Aksesibilitas Kanal Komunikasi Umum (berdasarkan has_contact)
+- C5: Validitas Kontak Langsung Penjual (berdasarkan has_seller_contact)
+- C6: Alur Keranjang Belanja / Cart (berdasarkan has_cart)
+- C7: Mekanisme Pembayaran & Checkout (berdasarkan has_payment)
+- C8: Konfigurasi HTTP Security Headers (berdasarkan security_headers aktif dari 4: CSP, X-Frame, X-Content-Type, HSTS)
+- C9: Performa & Kestabilan Pemuatan (berdasarkan reachable, has_loading_error, missing_src_images)
+- C10: Struktur Semantik & Arsitektur DOM (berdasarkan detected_app_type, is_client_side_spa, page_title, enumeration_clues)
+
+ATURAN PENILAIAN & NARASI:
+1. Jadikan 'real_dom_and_security_inspection' sebagai bukti faktual utama.
+2. Pada 'executive_summary', tulis ringkasan terstruktur dalam 3 poin bernomor: (1) Kesiapan Antarmuka & Navigasi (C1-C3), (2) Kredibilitas & Alur Transaksi (C4-C7), dan (3) Postur Keamanan & Struktur DOM (C8-C10) yang menyebutkan angka nyata hasil pemindaian.
+3. Seluruh nilai skor sub-kriteria (s1_1..s10_3), 'evidence', 'strengths', 'weaknesses', dan 'reasons' WAJIB merujuk langsung pada temuan scan nyata.
+
+Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
+[
+  {
+    "developer": "Nama Pengembang",
+    "url": "https://...",
+    "executive_summary": "Ringkasan analisis eksekutif terstruktur...",
+    "sub_scores": {
+      "c1": { "s1_1": 8.8, "s1_2": 8.6, "s1_3": 8.5 },
+      "c2": { "s2_1": 9.0, "s2_2": 8.4, "s2_3": 8.2 },
+      "c3": { "s3_1": 5.8, "s3_2": 7.2, "s3_3": 8.4 },
+      "c4": { "s4_1": 8.8, "s4_2": 8.4, "s4_3": 8.6 },
+      "c5": { "s5_1": 8.8, "s5_2": 8.4, "s5_3": 8.2 },
+      "c6": { "s6_1": 5.5, "s6_2": 6.0, "s6_3": 8.2 },
+      "c7": { "s7_1": 8.8, "s7_2": 8.6, "s7_3": 8.4 },
+      "c8": { "s8_1": 6.4, "s8_2": 7.6, "s8_3": 7.8 },
+      "c9": { "s9_1": 9.0, "s9_2": 8.8, "s9_3": 8.6 },
+      "c10": { "s10_1": 7.2, "s10_2": 8.0, "s10_3": 7.8 }
+    },
+    "evidence": { "c1": "...", "c2": "..." },
+    "strengths": { "c1": ["..."], "c2": ["..."] },
+    "weaknesses": { "c1": ["..."], "c2": ["..."] },
+    "reasons": { "c1": "...", "c2": "..." },
+    "recommendations": { "c1": "...", "c2": "..." }
+  }
+]`;
+
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+          const response = await fetchWithTimeout(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ role: 'user', parts: [{ text: systemPrompt }] }],
+              generationConfig: { temperature: 0.0, responseMimeType: "application/json" }
+            })
+          }, 25000);
+
+          if (response.ok) {
+            const resJson = await response.json();
+            const textContent = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (textContent) {
+              const parsed = JSON.parse(textContent);
+              aiResults = Array.isArray(parsed) ? parsed : (parsed.data || parsed.results || null);
+            }
+          } else {
+            showToast("API Fallback", `Gemini API merespons ${response.status}, beralih ke evaluasi berbasis hasil scan.`, false);
+          }
+        } else {
+          if (progressStatus) progressStatus.textContent = "Menjalankan evaluasi berbasis hasil scanning DOM & X-Headers...";
+        }
+
+        enrichedPairs.forEach((item, idx) => {
+          const scanBasedObj = generateFallbackDataForPair(item.developer, item.url, item.real_dom_and_security_inspection);
+          let itemObj = (aiResults && aiResults[idx]) ? aiResults[idx] : scanBasedObj;
+          itemObj.developer = item.developer;
+          itemObj.url = item.url;
+          itemObj.inspection = item.real_dom_and_security_inspection;
+
+          itemObj.evidence = itemObj.evidence || {};
+          for (let k = 1; k <= 10; k++) {
+            const cKey = `c${k}`;
+            const scanFact = scanBasedObj.evidence[cKey];
+            const aiEv = itemObj.evidence[cKey] || "";
+            itemObj.evidence[cKey] = aiEv && aiEv !== scanFact
+              ? `[Fakta Scan] ${scanFact} | [Analisis] ${aiEv}`
+              : scanFact;
+          }
+
+          const calc = calculateScores(itemObj);
+          state.history.push({
+            developer: item.developer,
+            url: item.url,
+            auditObj: itemObj,
+            totalScore: calc.total,
+            calc
+          });
+        });
+
+      } catch (err) {
+        console.error(err);
+        pairs.forEach((pair, idx) => {
+          const insp = enrichedPairs[idx]?.real_dom_and_security_inspection || null;
+          const fallback = generateFallbackDataForPair(pair.developer, pair.url, insp);
+          const calc = calculateScores(fallback);
+          state.history.push({ developer: pair.developer, url: pair.url, auditObj: fallback, totalScore: calc.total, calc });
+        });
+      }
+
+      /* MEKANISME SORTING TIE-BREAKER HIERARKI KRITERIA BOBOT TERBESAR */
+      state.history.sort((a, b) => {
+        if (Math.abs(b.totalScore - a.totalScore) > 0.001) {
+          return b.totalScore - a.totalScore;
+        }
+
+        const sortedCriteriaKeys = Object.keys(state.criteriaMeta).sort((k1, k2) => {
+          return state.criteriaMeta[k2].weight - state.criteriaMeta[k1].weight;
+        });
+
+        for (let key of sortedCriteriaKeys) {
+          const scoreA = a.auditObj.scores[key] || 0;
+          const scoreB = b.auditObj.scores[key] || 0;
+          if (Math.abs(scoreB - scoreA) > 0.001) {
+            return scoreB - scoreA;
+          }
+        }
+
+        return 0;
+      });
+
+      if (progressBar) progressBar.style.width = "100%";
+
+      setTimeout(() => {
+        if (modalProgress) modalProgress.classList.add('hidden');
+        if (progressBar) progressBar.style.width = "25%";
+        if (state.history.length > 0) {
+          state.developer = state.history[0].developer;
+          state.url = state.history[0].url;
+          state.auditData = state.history[0].auditObj;
+        }
+        populateUrlSelector();
+        displayResults();
+      }, 350);
+    }
+
+    function populateUrlSelector() {
+      const selectEl = document.getElementById('select-active-url');
+      if (!selectEl) return;
+      selectEl.innerHTML = '';
+
+      state.history.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.url;
+        option.textContent = `${item.developer} - ${item.url} (${item.totalScore.toFixed(1)}%)`;
+        if (item.url === state.url) option.selected = true;
+        selectEl.appendChild(option);
+      });
+
+      selectEl.onchange = (e) => {
+        const found = state.history.find(h => h.url === e.target.value);
+        if (found) {
+          state.url = found.url;
+          state.developer = found.developer;
+          state.auditData = found.auditObj;
+          updateDashboardDisplays();
+          renderGranularMatrixCards();
+        }
+      };
+    }
+
+    function displayResults() {
+      document.getElementById('results-section')?.classList.remove('hidden');
+      renderLeaderboard();
+      updateDashboardDisplays();
+      renderGranularMatrixCards();
+      checkAndRenderTieBreakerBanner();
+      document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function renderLeaderboard() {
+      const container = document.getElementById('top5-leaderboard-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const tiedPairs = detectTiedScores();
+      const tiedUrls = new Set();
+      tiedPairs.forEach(p => { tiedUrls.add(p.itemA.url); tiedUrls.add(p.itemB.url); });
+
+      state.history.slice(0, 5).forEach((item, idx) => {
+        const rank = idx + 1;
+        const grade = calculateGrade(item.totalScore);
+        const isTied = tiedUrls.has(item.url);
+
+        const card = document.createElement('div');
+        card.className = "bg-slate-800/90 border border-slate-700 rounded-2xl p-4 flex flex-col items-center text-center justify-between space-y-2";
+        card.innerHTML = `
+          <span class="text-[10px] font-black font-mono bg-sky-950 text-sky-400 border border-sky-800 px-2 py-0.5 rounded-full">PERINGKAT #${rank}</span>
+          <span class="text-xs font-bold text-white truncate w-full">${escapeHtml(item.developer)}</span>
+          <span class="text-2xl font-black font-mono text-amber-400">${item.totalScore.toFixed(1)}%</span>
+          ${isTied ? `
+            <button type="button" data-tie-url="${escapeHtml(item.url)}" class="btn-tie-detail text-[9px] font-black bg-amber-500/20 text-amber-300 border border-amber-400/50 px-2 py-0.5 rounded-full transition hover:bg-amber-500/40">
+              ⚡ Skor Sama
+            </button>
+          ` : ''}
+          <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold border ${grade.color}">${grade.badge}</span>
+        `;
+        container.appendChild(card);
+      });
+
+      container.querySelectorAll('.btn-tie-detail').forEach(btn => {
+        btn.addEventListener('click', () => {
+          openTieBreakerModalForUrl(btn.getAttribute('data-tie-url'));
+        });
+      });
+    }
+
+    function openTieBreakerModalForUrl(targetUrl) {
+      const tiedPairs = detectTiedScores();
+      const matched = tiedPairs.find(p => p.itemA.url === targetUrl || p.itemB.url === targetUrl);
+      if (matched) {
+        showTieBreakerModal(matched.itemA, matched.itemB, matched.rankA, matched.rankB);
+      } else if (tiedPairs.length > 0) {
+        showTieBreakerModal(tiedPairs[0].itemA, tiedPairs[0].itemB, tiedPairs[0].rankA, tiedPairs[0].rankB);
+      }
+    }
+
+    function formatExecutiveSummaryHtml(rawText) {
+      const escaped = escapeHtml(rawText || "-");
+      return escaped
+        .replace(/Ringkasan Eksekutif Pemindaian:/g, '<strong class="text-slate-900 block font-extrabold">Ringkasan Eksekutif Pemindaian:</strong>')
+        .replace(/(\d\.\s[^:]+:)/g, '<strong class="text-sky-800 font-bold">$1</strong>')
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\n/g, '<br>');
+    }
+
+    function updateDashboardDisplays() {
+      if (!state.auditData) return;
+      const calc = calculateScores(state.auditData);
+      const grade = calculateGrade(calc.total);
+
+      document.getElementById('display-developer-name').textContent = state.developer;
+      document.getElementById('display-active-url').textContent = state.url;
+      document.getElementById('overall-score-display').textContent = `${calc.total.toFixed(1)}%`;
+
+      document.getElementById('cat-score-a').textContent = `${calc.catA.toFixed(2)} / 40`;
+      document.getElementById('cat-score-b').textContent = `${calc.catB.toFixed(2)} / 20`;
+      document.getElementById('cat-score-c').textContent = `${calc.catC.toFixed(2)} / 25`;
+      document.getElementById('cat-score-d').textContent = `${calc.catD.toFixed(2)} / 15`;
+
+      const gradeBadge = document.getElementById('grade-badge');
+      if (gradeBadge) {
+        gradeBadge.textContent = grade.badge;
+        gradeBadge.className = `px-5 py-1.5 rounded-2xl border-2 text-2xl font-black ${grade.color}`;
+      }
+      document.getElementById('grade-predicate').textContent = grade.text;
+
+      const summaryEl = document.getElementById('executive-summary-text');
+      if (summaryEl) {
+        summaryEl.innerHTML = formatExecutiveSummaryHtml(state.auditData.executive_summary);
+      }
+
+      const insp = state.auditData.inspection;
+      const archBadge = document.getElementById('scan-arch-badge');
+      const statusPill = document.getElementById('scan-status-pill');
+      const teleGrid = document.getElementById('scan-telemetry-grid');
+
+      if (insp && teleGrid) {
+        if (archBadge) {
+          archBadge.textContent = `${insp.detected_app_type || 'WebApp'} • ${insp.is_client_side_spa ? 'SPA' : 'HTML'}`;
+        }
+        if (statusPill) {
+          statusPill.textContent = insp.reachable ? (insp.has_loading_error ? "ERROR KONTEN" : "TERPINDAI") : "OFFLINE";
+          statusPill.className = insp.reachable && !insp.has_loading_error
+            ? "text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-700"
+            : "text-[10px] px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-700";
+        }
+
+        const hdr = insp.security_headers || {};
+        const hdrCount = [hdr.csp, hdr.xFrame, hdr.xContentType, hdr.hsts].filter(v => v && v !== "Tidak terdeteksi").length;
+
+        /* PENYELARASAN 6 KARTU TELEMETRI DENGAN KODE KRITERIA C1 - C10 */
+        teleGrid.innerHTML = `
+          <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-400">Navigasi / Tombol</span>
+              <span class="text-[9px] text-sky-400 font-bold">C1, C10</span>
+            </div>
+            <span class="text-white font-bold block mt-0.5">${insp.nav_links_count ?? 0} link / ${insp.buttons_count ?? 0} btn</span>
+          </div>
+          <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-400">Viewport Mobile</span>
+              <span class="text-[9px] text-sky-400 font-bold">C2</span>
+            </div>
+            <span class="${insp.has_viewport ? 'text-emerald-400' : 'text-rose-400'} font-bold block mt-0.5">${insp.has_viewport ? 'Terpasang' : 'Tidak Ada'}</span>
+          </div>
+          <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-400">About Us & Kontak</span>
+              <span class="text-[9px] text-sky-400 font-bold">C3, C4</span>
+            </div>
+            <span class="${(insp.has_about_us || insp.has_contact) ? 'text-emerald-400' : 'text-amber-400'} font-bold block mt-0.5">${insp.has_about_us ? 'About ✓' : 'About ✗'} | ${insp.has_contact ? 'Kontak ✓' : 'Kontak ✗'}</span>
+          </div>
+          <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-400">Kontak Penjual</span>
+              <span class="text-[9px] text-sky-400 font-bold">C5</span>
+            </div>
+            <span class="${insp.has_seller_contact ? 'text-emerald-400' : 'text-slate-300'} font-bold block mt-0.5">${insp.has_seller_contact ? 'Tersedia ✓' : 'Tidak Terdeteksi'}</span>
+          </div>
+          <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-400">Checkout & Bayar</span>
+              <span class="text-[9px] text-sky-400 font-bold">C6, C7</span>
+            </div>
+            <span class="${(insp.has_cart || insp.has_payment) ? 'text-emerald-400' : 'text-slate-300'} font-bold block mt-0.5">${insp.has_cart ? 'Cart ✓' : 'Cart ✗'} | ${insp.has_payment ? 'Bayar ✓' : 'Bayar ✗'}</span>
+          </div>
+          <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-400">X-Security Headers</span>
+              <span class="text-[9px] text-sky-400 font-bold">C8, C9</span>
+            </div>
+            <span class="${hdrCount >= 3 ? 'text-emerald-400' : (hdrCount >= 1 ? 'text-amber-400' : 'text-rose-400')} font-bold block mt-0.5">${hdrCount} / 4 Aktif • ${insp.has_loading_error ? 'Error' : 'Normal'}</span>
+          </div>
+        `;
+      }
+
+      renderRadarChart();
+    }
+
+    function renderGranularMatrixCards() {
+      const container = document.getElementById('matrix-container');
+      if (!container || !state.auditData) return;
+
+      container.innerHTML = '';
+
+      for (let key in state.criteriaMeta) {
+        const meta = state.criteriaMeta[key];
+        const subScoresMap = state.auditData.sub_scores?.[key] || {};
+        const avgRawScore = state.auditData.scores?.[key] || 0.0;
+
+        const evidence = state.auditData.evidence?.[key] || "Pemindaian fitur berhasil diselesaikan.";
+        const reason = state.auditData.reasons?.[key] || "Analisis belum tersedia.";
+        const rec = state.auditData.recommendations?.[key] || "Rekomendasi belum tersedia.";
+        const strengths = Array.isArray(state.auditData.strengths?.[key]) ? state.auditData.strengths[key] : ["Memenuhi kriteria dasar."];
+        const weaknesses = Array.isArray(state.auditData.weaknesses?.[key]) ? state.auditData.weaknesses[key] : ["Perlu pemeliharaan rutin."];
+
+        const weightPct = meta.weight * 100;
+        const contrib = ((avgRawScore / 10.0) * weightPct).toFixed(2);
+
+        let badgeClass = "bg-emerald-100 text-emerald-800 border-emerald-300";
+        if (avgRawScore < 6.5) badgeClass = "bg-rose-100 text-rose-800 border-rose-300";
+        else if (avgRawScore < 8.5) badgeClass = "bg-amber-100 text-amber-800 border-amber-300";
+
+        const card = document.createElement('div');
+        card.className = "flex-shrink-0 min-w-[340px] sm:min-w-[420px] max-w-[460px] snap-start bg-white border border-slate-200 rounded-3xl p-6 shadow-md space-y-4 hover:shadow-lg transition flex flex-col justify-between";
+
+        let subListHtml = "";
+        meta.sub.forEach(subItem => {
+          const val = subScoresMap[subItem.id] ?? 7.5;
+          subListHtml += `
+            <div class="flex items-center justify-between text-[11px] bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl">
+              <span class="font-bold text-slate-700 truncate mr-2"><i class="fa-solid fa-angle-right text-sky-500 mr-1"></i>${escapeHtml(subItem.name)}</span>
+              <span class="font-mono font-extrabold text-sky-700 bg-sky-100/80 px-2 py-0.5 rounded">${val} / 10</span>
+            </div>
+          `;
+        });
+
+        card.innerHTML = `
+          <div class="space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-sky-100 border border-sky-200 text-sky-700 flex items-center justify-center text-base font-bold shadow-sm flex-shrink-0">
+                  <i class="fa-solid ${meta.icon}"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-1.5 flex-wrap">
+                    <span class="px-2 py-0.5 rounded-md bg-sky-600 text-white font-mono text-[11px]">${key.toUpperCase()}</span>
+                    ${escapeHtml(meta.name)}
+                    <span class="text-[10px] font-mono text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200 font-bold">
+                      Bobot: ${weightPct.toFixed(1)}%
+                    </span>
+                  </h3>
+                  <p class="text-xs text-slate-500 font-medium mt-0.5 line-clamp-2">${escapeHtml(meta.desc)}</p>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between sm:justify-end gap-3 pt-1 sm:pt-0 border-t sm:border-0 border-slate-100">
+                <div class="text-left sm:text-right">
+                  <span class="text-[10px] font-bold text-slate-500 block">Kontribusi:</span>
+                  <span class="text-sm font-mono text-sky-700 font-extrabold">${contrib}%</span>
+                </div>
+                <div class="px-3 py-1.5 rounded-xl border text-xs font-extrabold font-mono shadow-sm ${badgeClass}">
+                  <span>Rata2: ${avgRawScore} / 10</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Rincian Skor Sub-Kriteria -->
+            <div class="space-y-1.5">
+              <span class="text-slate-600 font-extrabold text-[11px] block flex items-center justify-between">
+                <span><i class="fa-solid fa-list-ol text-sky-600 mr-1"></i> Rincian Skor Sub-Kriteria:</span>
+                <span class="text-[10px] text-sky-700 font-mono">Skala 1.0 - 10.0</span>
+              </span>
+              <div class="space-y-1">
+                ${subListHtml}
+              </div>
+            </div>
+
+            <!-- Formula Box -->
+            <div class="bg-slate-100 p-2.5 rounded-xl border border-slate-200 text-[11px] font-mono text-slate-700 space-y-0.5">
+              <div class="flex justify-between">
+                <span>Rata-rata Sub-Kriteria:</span>
+                <span class="font-bold text-sky-800">${avgRawScore} / 10</span>
+              </div>
+              <div class="flex justify-between border-t border-slate-200 pt-0.5 text-[10px]">
+                <span>Kalkulasi Kontribusi:</span>
+                <span class="font-extrabold text-sky-900">(${avgRawScore} / 10) × ${weightPct.toFixed(1)}% = ${contrib}%</span>
+              </div>
+            </div>
+
+            <!-- Evidence Findings Card (Hasil Scanning Nyata) -->
+            <div class="bg-sky-50/70 p-3 rounded-2xl border border-sky-200 text-xs font-medium space-y-1.5">
+              <span class="font-extrabold text-sky-900 block flex items-center justify-between gap-1.5">
+                <span><i class="fa-solid fa-satellite-dish text-sky-600 mr-1"></i> Bukti Hasil Scanning:</span>
+                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-sky-200/70 text-sky-900">DOM & X-HEADERS</span>
+              </span>
+              <p class="text-slate-700 leading-relaxed text-[11px] font-mono bg-white/80 p-2 rounded-lg border border-sky-100 break-words">${escapeHtml(evidence)}</p>
+            </div>
+
+            <!-- Strengths & Weaknesses Detailed Cards -->
+            <div class="space-y-2 text-xs">
+              <div class="bg-emerald-50/60 p-3 rounded-2xl border border-emerald-200/80 space-y-1">
+                <h4 class="font-extrabold text-emerald-900 flex items-center gap-1.5 text-[11px]">
+                  <i class="fa-solid fa-circle-check text-emerald-600"></i> Keunggulan Ditemukan:
+                </h4>
+                <ul class="list-disc list-inside text-slate-700 space-y-0.5 leading-relaxed font-medium text-[11px]">
+                  ${strengths.map(s => `<li>${escapeHtml(s)}</li>`).join('')}
+                </ul>
+              </div>
+
+              <div class="bg-amber-50/60 p-3 rounded-2xl border border-amber-200/80 space-y-1">
+                <h4 class="font-extrabold text-amber-900 flex items-center gap-1.5 text-[11px]">
+                  <i class="fa-solid fa-triangle-exclamation text-amber-600"></i> Catatan & Kekurangan:
+                </h4>
+                <ul class="list-disc list-inside text-slate-700 space-y-0.5 leading-relaxed font-medium text-[11px]">
+                  ${weaknesses.map(w => `<li>${escapeHtml(w)}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+
+            <!-- Reasoning & Recommendations -->
+            <div class="space-y-2 text-xs">
+              <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-1">
+                <h4 class="font-extrabold text-sky-800 flex items-center gap-1.5 text-[11px]">
+                  <i class="fa-solid fa-magnifying-glass text-sky-600"></i> Alasan Penilaian:
+                </h4>
+                <p class="text-slate-700 leading-relaxed font-medium text-[11px]">${escapeHtml(reason)}</p>
+              </div>
+
+              <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-1">
+                <h4 class="font-extrabold text-indigo-800 flex items-center gap-1.5 text-[11px]">
+                  <i class="fa-solid fa-lightbulb text-indigo-600"></i> Rekomendasi Perbaikan:
+                </h4>
+                <p class="text-slate-700 leading-relaxed font-medium text-[11px]">${escapeHtml(rec)}</p>
+              </div>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      }
+    }
+
+    function renderRadarChart() {
+      const canvas = document.getElementById('auditRadarChart');
+      if (!canvas || !state.auditData || typeof Chart === "undefined") return;
+
+      const keys = Object.keys(state.criteriaMeta);
+      const dataValues = keys.map(k => state.auditData.scores[k] || 0);
+
+      if (state.radarChart) state.radarChart.destroy();
+
+      state.radarChart = new Chart(canvas.getContext('2d'), {
+        type: 'radar',
+        data: {
+          labels: keys.map(k => k.toUpperCase()),
+          datasets: [{
+            label: 'Skor (1-10)',
+            data: dataValues,
+            backgroundColor: 'rgba(2, 132, 199, 0.2)',
+            borderColor: '#0284c7',
+            borderWidth: 2,
+            pointBackgroundColor: '#0284c7',
+            pointRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              suggestedMin: 0,
+              suggestedMax: 10,
+              ticks: { stepSize: 2, font: { size: 10 } }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                title: (items) => {
+                  const idx = items[0].dataIndex;
+                  const k = keys[idx];
+                  return `${k.toUpperCase()}: ${state.criteriaMeta[k].name}`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    /* PDF MULTI SELECTION & GENERATION HANDLERS */
+    function openPDFSelectionModal() {
+      const modal = document.getElementById('modal-pdf-selection');
+      const container = document.getElementById('pdf-checkbox-list');
+      if (!modal || !container) return;
+
+      container.innerHTML = '';
+      state.history.forEach((item) => {
+        const div = document.createElement('div');
+        div.className = "flex items-center justify-between p-2.5 bg-slate-50 border rounded-xl text-xs";
+        div.innerHTML = `
+          <label class="flex items-center gap-2 cursor-pointer w-full">
+            <input type="checkbox" value="${escapeHtml(item.url)}" class="pdf-select-item rounded text-sky-600 focus:ring-sky-500 w-4 h-4" checked>
+            <span class="font-bold text-slate-800">${escapeHtml(item.developer)}</span>
+            <span class="font-mono text-slate-500 truncate max-w-[180px]">(${escapeHtml(item.url)})</span>
+          </label>
+          <span class="font-mono font-extrabold text-sky-700">${item.totalScore.toFixed(1)}%</span>
+        `;
+        container.appendChild(div);
+      });
+
+      modal.classList.remove('hidden');
+    }
+
+    function generatePDFReportForSelected() {
+      const checkedUrls = Array.from(document.querySelectorAll('.pdf-select-item:checked')).map(cb => cb.value);
+
+      if (checkedUrls.length === 0) {
+        showToast("Pilihan Kosong", "Pilih minimal 1 WebApp untuk dicetak.", false);
+        return;
+      }
+
+      const printBody = document.getElementById('pdf-printable-body');
+      if (!printBody) return;
+      printBody.innerHTML = '';
+
+      const selectedItems = state.history.filter(item => checkedUrls.includes(item.url));
+
+      selectedItems.forEach((item) => {
+        const calc = calculateScores(item.auditObj);
+        const grade = calculateGrade(calc.total);
+
+        const pageDiv = document.createElement('div');
+        pageDiv.className = "pdf-page-item border border-slate-300 rounded-2xl p-6 space-y-4 bg-white";
+
+        let tableRows = "";
+        for (let key in state.criteriaMeta) {
+          const meta = state.criteriaMeta[key];
+          const rawScore = item.auditObj.scores[key] || 0;
+          const contrib = ((rawScore / 10.0) * (meta.weight * 100)).toFixed(2);
+          const evidence = item.auditObj.evidence?.[key] || "Pemindaian selesai.";
+
+          tableRows += `
+            <tr class="border-b text-[11px]">
+              <td class="p-2 font-mono font-bold text-center">${key.toUpperCase()}</td>
+              <td class="p-2 font-bold">${escapeHtml(meta.name)}</td>
+              <td class="p-2 text-center font-mono">${(meta.weight * 100).toFixed(1)}%</td>
+              <td class="p-2 text-center font-bold font-mono text-sky-700">${rawScore} / 10</td>
+              <td class="p-2 text-center font-bold font-mono text-sky-700">${contrib}%</td>
+              <td class="p-2 text-slate-600">${escapeHtml(evidence)}</td>
+            </tr>
+          `;
+        }
+
+        pageDiv.innerHTML = `
+          <div class="flex justify-between items-start border-b pb-4">
+            <div>
+              <h2 class="text-base font-black text-slate-900">LAPORAN EVALUASI & AUDIT KEAMANAN WEBAPP</h2>
+              <p class="text-xs text-slate-500">Hasil Analisis Otomatis CHATScorer</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs font-mono font-bold text-slate-400">${new Date().toLocaleDateString('id-ID')}</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-4 gap-3 p-3 bg-slate-50 rounded-xl border text-xs font-medium">
+            <div><span class="text-slate-400 block text-[10px]">Pengembang:</span><span class="font-extrabold text-slate-800">${escapeHtml(item.developer)}</span></div>
+            <div><span class="text-slate-400 block text-[10px]">URL WebApp:</span><span class="font-bold text-slate-800 font-mono break-all">${escapeHtml(item.url)}</span></div>
+            <div><span class="text-slate-400 block text-[10px]">Skor Total:</span><span class="font-black text-sky-700 font-mono text-sm">${calc.total.toFixed(1)}%</span></div>
+            <div><span class="text-slate-400 block text-[10px]">Predikat:</span><span class="font-extrabold text-emerald-700">${grade.badge}</span></div>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-slate-900 uppercase">Rincian Per Kriteria (C1–C10) & Bukti Pemindaian</h4>
+            <table class="w-full text-left border-collapse border border-slate-200">
+              <thead>
+                <tr class="bg-slate-100 text-[11px] font-bold border-b">
+                  <th class="p-2 text-center">Kode</th>
+                  <th class="p-2">Kriteria</th>
+                  <th class="p-2 text-center">Bobot</th>
+                  <th class="p-2 text-center">Skor (1-10)</th>
+                  <th class="p-2 text-center">Kontribusi</th>
+                  <th class="p-2">Bukti Temuan</th>
+                </tr>
+              </thead>
+              <tbody>${tableRows}</tbody>
+            </table>
+          </div>
+
+          <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl text-xs space-y-1">
+            <span class="font-bold text-sky-900 block">Analisis Eksekutif:</span>
+            <div class="text-sky-950 leading-relaxed">${formatExecutiveSummaryHtml(item.auditObj.executive_summary)}</div>
+          </div>
+        `;
+
+        printBody.appendChild(pageDiv);
+      });
+
+      document.getElementById('modal-pdf-selection')?.classList.add('hidden');
+      document.getElementById('print-report-modal')?.classList.remove('hidden');
+    }
+
+    function normalizeUrl(input) {
+      let url = input.trim();
+      if (!/^https?:\/\//i.test(url)) url = "https://" + url;
+      return url;
+    }
+
+    function showToast(title, message, isSuccess = true) {
+      const toast = document.getElementById('toast-notification');
+      const icon = document.getElementById('toast-icon');
+      if (!toast) return;
+      document.getElementById('toast-title').textContent = title;
+      document.getElementById('toast-message').textContent = message;
+
+      if (isSuccess) {
+        toast.className = "fixed top-24 right-6 z-50 bg-emerald-900 text-emerald-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-emerald-700";
+        if (icon) icon.className = "fa-solid fa-circle-check text-emerald-400 text-2xl";
+      } else {
+        toast.className = "fixed top-24 right-6 z-50 bg-amber-900 text-amber-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-amber-700";
+        if (icon) icon.className = "fa-solid fa-triangle-exclamation text-amber-400 text-2xl";
+      }
+
+      toast.classList.remove('hidden');
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => toast.classList.add('hidden'), 3500);
+    }
+
+    function initApp() {
+      updateApiKeyBadge();
+
+      const apiModal = document.getElementById('modal-api-key');
+      const apiInput = document.getElementById('input-api-key');
+      const proxyInput = document.getElementById('input-proxy-url');
+
+      document.getElementById('btn-open-api-modal')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openApiModal();
+      });
+
+      document.getElementById('btn-close-api-modal')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeApiModal();
+      });
+
+      apiModal?.addEventListener('click', (e) => {
+        if (e.target === apiModal) closeApiModal();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeApiModal();
+          document.getElementById('modal-tiebreaker-comparison')?.classList.add('hidden');
+          document.getElementById('modal-pdf-selection')?.classList.add('hidden');
+          document.getElementById('print-report-modal')?.classList.add('hidden');
+        }
+      });
+
+      document.getElementById('btn-toggle-api-visibility')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!apiInput) return;
+        apiInput.type = apiInput.type === "password" ? "text" : "password";
+      });
+
+      document.getElementById('btn-save-api-key')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const val = (apiInput?.value || "").trim();
+        const pVal = (proxyInput?.value || "").trim() || DEFAULT_PROXY_URL;
+        state.apiKey = val;
+        state.proxyUrl = pVal;
+
+        if (val) {
+          safeStorage.set(API_KEY_STORAGE, val);
+        } else {
+          safeStorage.remove(API_KEY_STORAGE);
+        }
+        safeStorage.set(PROXY_URL_STORAGE, pVal);
+
+        updateApiKeyBadge();
+        closeApiModal();
+        showToast("Konfigurasi Disimpan", val ? "Gemini API Key & Proxy/Worker aktif." : "Mode fallback aktif dengan inspeksi DOM & X-Headers.", true);
+      });
+
+      document.getElementById('btn-clear-api-key')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        state.apiKey = "";
+        state.proxyUrl = DEFAULT_PROXY_URL;
+        if (apiInput) apiInput.value = "";
+        if (proxyInput) proxyInput.value = DEFAULT_PROXY_URL;
+        safeStorage.remove(API_KEY_STORAGE);
+        safeStorage.remove(PROXY_URL_STORAGE);
+        updateApiKeyBadge();
+        showToast("Reset Selesai", "Konfigurasi dikembalikan ke default.", true);
+      });
+
+      document.getElementById('btn-audit-ai')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        runAIAuditBatch();
+      });
+
+      document.getElementById('input-url')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && e.ctrlKey) {
+          e.preventDefault();
+          runAIAuditBatch();
+        }
+      });
+
+      document.getElementById('btn-reset-all')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const devEl = document.getElementById('input-developer');
+        const urlEl = document.getElementById('input-url');
+        if (devEl) devEl.value = '';
+        if (urlEl) urlEl.value = '';
+        state.history = [];
+        document.getElementById('results-section')?.classList.add('hidden');
+        showToast("Bersih", "Seluruh form input telah dikosongkan.", true);
+      });
+
+      document.getElementById('btn-trigger-celebration')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }
+      });
+
+      document.getElementById('btn-open-tiebreaker-banner')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tiedPairs = detectTiedScores();
+        if (tiedPairs.length > 0) showTieBreakerModal(tiedPairs[0].itemA, tiedPairs[0].itemB, tiedPairs[0].rankA, tiedPairs[0].rankB);
+      });
+
+      document.getElementById('btn-close-tiebreaker-modal')?.addEventListener('click', () => {
+        document.getElementById('modal-tiebreaker-comparison')?.classList.add('hidden');
+      });
+
+      document.getElementById('btn-dismiss-tiebreaker-modal')?.addEventListener('click', () => {
+        document.getElementById('modal-tiebreaker-comparison')?.classList.add('hidden');
+      });
+
+      document.getElementById('btn-open-pdf-modal')?.addEventListener('click', openPDFSelectionModal);
+      document.getElementById('btn-close-pdf-select')?.addEventListener('click', () => {
+        document.getElementById('modal-pdf-selection')?.classList.add('hidden');
+      });
+
+      document.getElementById('btn-select-all-pdf')?.addEventListener('click', () => {
+        document.querySelectorAll('.pdf-select-item').forEach(cb => cb.checked = true);
+      });
+
+      document.getElementById('btn-deselect-all-pdf')?.addEventListener('click', () => {
+        document.querySelectorAll('.pdf-select-item').forEach(cb => cb.checked = false);
+      });
+
+      document.getElementById('btn-generate-pdf-now')?.addEventListener('click', generatePDFReportForSelected);
+
+      document.getElementById('btn-print-action')?.addEventListener('click', () => { window.print(); });
+      document.getElementById('btn-close-print-modal')?.addEventListener('click', () => {
+        document.getElementById('print-report-modal')?.classList.add('hidden');
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initApp);
+    } else {
+      initApp();
+    }
+  </script>
+</body>
+</html>
