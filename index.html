@@ -1506,29 +1506,31 @@
       }
 
       try {
-        const response = await fetchWithTimeout("https://openrouter.ai/api/v1/chat/completions", {
+        const requestBody = {
+          model: targetModel,
+          temperature: 0.0,
+          messages: [
+            {
+              role: "system",
+              content: "Anda adalah Auditor Kualitas & Keamanan WebApp. Keluarkan HANYA valid JSON Array tanpa teks pengantar maupun blok markdown."
+            },
+            {
+              role: "user",
+              content: systemPrompt
+            }
+          ]
+        };
+
+        // Tambahkan pembatasan reasoning khusus jika menggunakan OpenRouter
+        if (provider === "openrouter" || targetEndpoint.includes("openrouter.ai")) {
+          requestBody.reasoning = { effort: "low" };
+        }
+
+        const response = await fetchWithTimeout(targetEndpoint, {
           method: "POST",
-          headers: {
-            "Authorization": `Bearer ${openRouterKey}`,
-            "Content-Type": "application/json",
-            "HTTP-Referer": window.location.origin || "https://chatscorer.app",
-            "X-Title": "CHATScorer WebApp Auditor"
-          },
-          body: JSON.stringify({
-            model: targetModel,
-            temperature: 0.0,
-            messages: [
-              {
-                role: "system",
-                content: "Anda adalah Auditor Kualitas & Keamanan WebApp. Keluarkan HANYA valid JSON Array tanpa teks pengantar maupun markdown."
-              },
-              {
-                role: "user",
-                content: systemPrompt
-              }
-            ]
-          })
-        }, 30000);
+          headers,
+          body: JSON.stringify(requestBody)
+        }, 45000);
 
         if (!response.ok) {
           let errDetail = `HTTP ${response.status}`;
