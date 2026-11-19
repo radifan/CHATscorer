@@ -155,7 +155,7 @@
         </div>
 
         <p class="text-[11px] text-slate-500 font-medium">
-          <i class="fa-solid fa-circle-info text-sky-600"></i> Tekan <kbd class="px-1.5 py-0.5 bg-slate-200 border rounded font-mono font-bold text-[10px]">Ctrl + Enter</kbd> atau klik tombol ikon magic wand untuk mulai menilai. (Model AI: <strong>gemini-4-hydrogen</strong> dengan cadangan otomatis <strong>gemini-3.8-flash</strong>).
+          <i class="fa-solid fa-circle-info text-sky-600"></i> Tekan <kbd class="px-1.5 py-0.5 bg-slate-200 border rounded font-mono font-bold text-[10px]">Ctrl + Enter</kbd> atau klik tombol ikon magic wand untuk mulai menilai. (Utama: <strong>Gemini API</strong> &bull; Cadangan Otomatis: <strong>OpenRouter API</strong>).
         </p>
       </div>
     </section>
@@ -323,12 +323,12 @@
 
   </main>
 
-  <!-- MODAL PENGATURAN API KEY & CORS PROXY -->
-  <div id="modal-api-key" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl">
+  <!-- MODAL PENGATURAN API KEY (GEMINI + OPENROUTER BACKUP) & CORS PROXY -->
+  <div id="modal-api-key" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl my-8">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-key text-amber-500"></i> Konfigurasi AI & Inspeksi DOM
+          <i class="fa-solid fa-key text-amber-500"></i> Konfigurasi AI (Utama & Backup) & Proxy
         </h3>
         <button type="button" id="btn-close-api-modal" class="text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
@@ -336,19 +336,51 @@
       </div>
 
       <div class="space-y-4 text-xs">
-        <div class="space-y-1.5">
-          <label for="input-api-key" class="block font-extrabold text-slate-700">Gemini API Key (Disimpan lokal di browser):</label>
+        <!-- GEMINI PRIMARY -->
+        <div class="p-3.5 bg-sky-50/70 border border-sky-200 rounded-2xl space-y-2">
+          <div class="flex items-center justify-between">
+            <label for="input-api-key" class="block font-extrabold text-sky-950">1. Gemini API Key (Utama):</label>
+            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-sky-600 text-white">PRIMARY</span>
+          </div>
           <div class="relative">
-            <input type="password" id="input-api-key" placeholder="AIzaSy..." class="w-full pl-3.5 pr-10 py-2.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-sky-600">
+            <input type="password" id="input-api-key" placeholder="AIzaSy..." class="w-full pl-3.5 pr-10 py-2.5 bg-white border-2 border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-sky-600">
             <button type="button" id="btn-toggle-api-visibility" title="Tampilkan/Sembunyikan" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
               <i class="fa-solid fa-eye"></i>
             </button>
           </div>
-          <p class="text-[11px] text-slate-500">Menggunakan <strong>gemini-4-hydrogen</strong> dengan cadangan otomatis <strong>gemini-3.8-flash</strong> jika 503 Unavailable. Kosongkan jika ingin memakai Mode Fallback Deterministik.</p>
+          <p class="text-[11px] text-slate-600">Mencoba <strong>gemini-4-hydrogen</strong> lalu <strong>gemini-3.8-flash</strong> secara otomatis.</p>
         </div>
 
+        <!-- OPENROUTER BACKUP -->
+        <div class="p-3.5 bg-indigo-50/70 border border-indigo-200 rounded-2xl space-y-2.5">
+          <div class="flex items-center justify-between">
+            <label for="input-openrouter-key" class="block font-extrabold text-indigo-950">2. OpenRouter API Key (Backup / Failover):</label>
+            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-600 text-white">BACKUP</span>
+          </div>
+          <div class="relative">
+            <input type="password" id="input-openrouter-key" placeholder="sk-or-v1-..." class="w-full pl-3.5 pr-10 py-2.5 bg-white border-2 border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-indigo-600">
+            <button type="button" id="btn-toggle-openrouter-visibility" title="Tampilkan/Sembunyikan" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+
+          <div class="space-y-1">
+            <label for="input-openrouter-model" class="block font-bold text-indigo-900 text-[11px]">Model OpenRouter Backup:</label>
+            <input type="text" id="input-openrouter-model" list="openrouter-model-presets" placeholder="google/gemini-2.5-flash" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-indigo-600">
+            <datalist id="openrouter-model-presets">
+              <option value="google/gemini-2.5-flash">
+              <option value="google/gemini-2.5-pro">
+              <option value="openai/gpt-4o-mini">
+              <option value="anthropic/claude-3.5-sonnet">
+              <option value="deepseek/deepseek-chat">
+            </datalist>
+          </div>
+          <p class="text-[11px] text-slate-600">Otomatis dipakai jika Gemini API kosong, limit (429), atau server sibuk (503). Kosongkan keduanya untuk Mode Fallback Deterministik.</p>
+        </div>
+
+        <!-- CORS PROXY -->
         <div class="space-y-1.5">
-          <label for="input-proxy-url" class="block font-extrabold text-slate-700">CORS Proxy Endpoint (Untuk Inspeksi HTML & X-Headers):</label>
+          <label for="input-proxy-url" class="block font-extrabold text-slate-700">3. CORS Proxy Endpoint (Untuk Inspeksi HTML & X-Headers):</label>
           <input type="text" id="input-proxy-url" placeholder="https://api.allorigins.win/get?url=" class="w-full px-3.5 py-2.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-sky-600">
           <p class="text-[11px] text-slate-500">Default menggunakan <code>allorigins.win</code>. Gunakan URL Cloudflare Worker kustom agar HTTP Security Headers (X-Headers) ikut terpindai.</p>
         </div>
@@ -464,10 +496,14 @@
 
   <script>
     const API_KEY_STORAGE = "chatscorer_gemini_api_key";
+    const OPENROUTER_KEY_STORAGE = "chatscorer_openrouter_api_key";
+    const OPENROUTER_MODEL_STORAGE = "chatscorer_openrouter_model";
     const PROXY_URL_STORAGE = "chatscorer_cors_proxy_url";
-    const DEFAULT_PROXY_URL = "https://api.allorigins.win/get?url=";
 
-    // Urutan prioritas model AI: Utama (gemini-4-hydrogen) -> Backup (gemini-3.8-flash)
+    const DEFAULT_PROXY_URL = "https://api.allorigins.win/get?url=";
+    const DEFAULT_OPENROUTER_MODEL = "google/gemini-2.5-flash";
+
+    // Urutan prioritas model Gemini: Utama (gemini-4-hydrogen) -> Backup (gemini-3.8-flash)
     const GEMINI_MODELS_PRIORITY = [
       "gemini-4-hydrogen",
       "gemini-3.8-flash"
@@ -498,6 +534,8 @@
 
     const state = {
       apiKey: safeStorage.get(API_KEY_STORAGE) || "",
+      openRouterKey: safeStorage.get(OPENROUTER_KEY_STORAGE) || "",
+      openRouterModel: safeStorage.get(OPENROUTER_MODEL_STORAGE) || DEFAULT_OPENROUTER_MODEL,
       proxyUrl: safeStorage.get(PROXY_URL_STORAGE) || DEFAULT_PROXY_URL,
       history: [],
       url: "",
@@ -634,13 +672,22 @@
       const btn = document.getElementById('btn-open-api-modal');
       if (!icon || !label || !btn) return;
 
-      const hasKey = state.apiKey && state.apiKey.trim().length > 0;
+      const hasGemini = state.apiKey && state.apiKey.trim().length > 0;
+      const hasOpenRouter = state.openRouterKey && state.openRouterKey.trim().length > 0;
       const isCustomProxy = state.proxyUrl && state.proxyUrl.trim() !== DEFAULT_PROXY_URL;
 
-      if (hasKey) {
+      if (hasGemini && hasOpenRouter) {
         icon.className = "fa-solid fa-shield-halved text-emerald-500 text-sm";
-        label.textContent = isCustomProxy ? "Gemini 4 + Worker Aktif" : "Gemini 4 Hydrogen Aktif";
+        label.textContent = "Gemini + OpenRouter Backup";
         btn.className = "px-3.5 py-2 rounded-xl border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100 text-emerald-900 text-xs font-bold flex items-center gap-2 transition shadow-sm cursor-pointer";
+      } else if (hasGemini) {
+        icon.className = "fa-solid fa-shield-halved text-emerald-500 text-sm";
+        label.textContent = isCustomProxy ? "Gemini + Worker Aktif" : "Gemini API Aktif";
+        btn.className = "px-3.5 py-2 rounded-xl border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100 text-emerald-900 text-xs font-bold flex items-center gap-2 transition shadow-sm cursor-pointer";
+      } else if (hasOpenRouter) {
+        icon.className = "fa-solid fa-route text-indigo-600 text-sm";
+        label.textContent = "OpenRouter API Aktif";
+        btn.className = "px-3.5 py-2 rounded-xl border border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 text-xs font-bold flex items-center gap-2 transition shadow-sm cursor-pointer";
       } else {
         icon.className = "fa-solid fa-key text-amber-500 text-sm";
         label.textContent = isCustomProxy ? "Worker Aktif (Fallback)" : "Atur API Key (Fallback)";
@@ -651,8 +698,13 @@
     function openApiModal() {
       const apiModal = document.getElementById('modal-api-key');
       const apiInput = document.getElementById('input-api-key');
+      const openRouterInput = document.getElementById('input-openrouter-key');
+      const openRouterModelInput = document.getElementById('input-openrouter-model');
       const proxyInput = document.getElementById('input-proxy-url');
+
       if (apiInput) apiInput.value = state.apiKey || "";
+      if (openRouterInput) openRouterInput.value = state.openRouterKey || "";
+      if (openRouterModelInput) openRouterModelInput.value = state.openRouterModel || DEFAULT_OPENROUTER_MODEL;
       if (proxyInput) proxyInput.value = state.proxyUrl || DEFAULT_PROXY_URL;
       if (apiModal) apiModal.classList.remove('hidden');
     }
@@ -1372,8 +1424,32 @@
       modal.classList.remove('hidden');
     }
 
-    /* HELPER EKSEKUSI GEMINI API DENGAN FAILOVER MODEL OTOMATIS (503 / UNAVAILABLE) */
-    async function requestGeminiWithModelFailover(apiKey, systemPrompt, progressStatusEl) {
+    function extractJsonArrayFromText(rawText) {
+      if (!rawText) return null;
+      let cleaned = String(rawText).trim();
+      // Bersihkan markdown code fence jika ada (misal ```json ... ```)
+      cleaned = cleaned.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
+
+      try {
+        const parsed = JSON.parse(cleaned);
+        if (Array.isArray(parsed)) return parsed;
+        if (parsed && Array.isArray(parsed.data)) return parsed.data;
+        if (parsed && Array.isArray(parsed.results)) return parsed.results;
+      } catch (_) {
+        const startIdx = cleaned.indexOf("[");
+        const endIdx = cleaned.lastIndexOf("]");
+        if (startIdx !== -1 && endIdx > startIdx) {
+          try {
+            const subArr = JSON.parse(cleaned.slice(startIdx, endIdx + 1));
+            if (Array.isArray(subArr)) return subArr;
+          } catch (_) {}
+        }
+      }
+      return null;
+    }
+
+    /* HELPER EKSEKUSI GEMINI API DENGAN FAILOVER MODEL OTOMATIS */
+    async function requestGeminiModels(apiKey, systemPrompt, progressStatusEl) {
       let lastErrorMsg = "";
 
       for (let i = 0; i < GEMINI_MODELS_PRIORITY.length; i++) {
@@ -1382,7 +1458,7 @@
 
         if (progressStatusEl) {
           progressStatusEl.textContent = isBackup
-            ? `Model utama sibuk (503), beralih ke model backup ${modelName}...`
+            ? `Model Gemini utama sibuk, beralih ke ${modelName}...`
             : `Mengevaluasi hasil inspeksi secara objektif dengan ${modelName}...`;
         }
 
@@ -1401,26 +1477,123 @@
           if (response.ok) {
             const resJson = await response.json();
             const textContent = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (textContent) {
-              const parsed = JSON.parse(textContent);
-              const resultsArray = Array.isArray(parsed) ? parsed : (parsed.data || parsed.results || null);
-              if (resultsArray) {
-                return { results: resultsArray, usedModel: modelName, usedBackup: isBackup };
-              }
+            const resultsArray = extractJsonArrayFromText(textContent);
+            if (resultsArray) {
+              return { results: resultsArray, usedModel: modelName, usedBackup: isBackup };
             }
             lastErrorMsg = `Respons JSON kosong dari ${modelName}`;
           } else {
-            // Tangkap status 503 Service Unavailable atau error HTTP lainnya dan lanjut ke model berikutnya
             lastErrorMsg = `HTTP ${response.status} pada ${modelName}`;
-            console.warn(`[CHATScorer Failover] ${lastErrorMsg}. Mencoba model cadangan berikutnya...`);
+            console.warn(`[CHATScorer Gemini Failover] ${lastErrorMsg}`);
           }
         } catch (err) {
           lastErrorMsg = `${err.message} pada ${modelName}`;
-          console.warn(`[CHATScorer Failover] ${lastErrorMsg}. Mencoba model cadangan berikutnya...`);
+          console.warn(`[CHATScorer Gemini Failover] ${lastErrorMsg}`);
         }
       }
 
       return { results: null, error: lastErrorMsg };
+    }
+
+    /* HELPER EKSEKUSI BACKUP API MENGGUNAKAN OPENROUTER */
+    async function requestOpenRouterBackup(openRouterKey, modelName, systemPrompt, progressStatusEl, isFallbackFromGemini = false) {
+      const targetModel = (modelName || DEFAULT_OPENROUTER_MODEL).trim();
+
+      if (progressStatusEl) {
+        progressStatusEl.textContent = isFallbackFromGemini
+          ? `Gemini API gagal/sibuk, beralih ke Backup OpenRouter (${targetModel})...`
+          : `Mengevaluasi hasil inspeksi menggunakan OpenRouter (${targetModel})...`;
+      }
+
+      try {
+        const response = await fetchWithTimeout("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${openRouterKey}`,
+            "Content-Type": "application/json",
+            "HTTP-Referer": window.location.origin || "https://chatscorer.app",
+            "X-Title": "CHATScorer WebApp Auditor"
+          },
+          body: JSON.stringify({
+            model: targetModel,
+            temperature: 0.0,
+            messages: [
+              {
+                role: "system",
+                content: "Anda adalah Auditor Kualitas & Keamanan WebApp. Keluarkan HANYA valid JSON Array tanpa teks pengantar maupun markdown."
+              },
+              {
+                role: "user",
+                content: systemPrompt
+              }
+            ]
+          })
+        }, 30000);
+
+        if (!response.ok) {
+          let errDetail = `HTTP ${response.status}`;
+          try {
+            const errJson = await response.json();
+            if (errJson?.error?.message) errDetail += ` (${errJson.error.message})`;
+          } catch (_) {}
+          return { results: null, error: `OpenRouter ${errDetail}` };
+        }
+
+        const resJson = await response.json();
+        const textContent = resJson.choices?.[0]?.message?.content;
+        const resultsArray = extractJsonArrayFromText(textContent);
+
+        if (resultsArray) {
+          return { results: resultsArray, usedModel: `OpenRouter: ${targetModel}` };
+        }
+        return { results: null, error: `Format JSON tidak valid dari OpenRouter (${targetModel})` };
+      } catch (err) {
+        return { results: null, error: `OpenRouter error: ${err.message}` };
+      }
+    }
+
+    /* ORKESTRATOR FAILOVER: GEMINI UTAMA -> OPENROUTER BACKUP -> DETERMINISTIK SCAN */
+    async function requestAIWithMultiProviderFailover(geminiKey, openRouterKey, openRouterModel, systemPrompt, progressStatusEl) {
+      let geminiError = "";
+
+      // 1. Coba Gemini API Utama jika tersedia
+      if (geminiKey) {
+        const geminiRes = await requestGeminiModels(geminiKey, systemPrompt, progressStatusEl);
+        if (geminiRes.results) {
+          return {
+            results: geminiRes.results,
+            provider: "gemini",
+            usedModel: geminiRes.usedModel,
+            switchedProvider: false,
+            usedGeminiInternalBackup: geminiRes.usedBackup
+          };
+        }
+        geminiError = geminiRes.error || "Gemini API tidak merespons";
+      }
+
+      // 2. Beralih ke OpenRouter API Backup jika tersedia
+      if (openRouterKey) {
+        const orRes = await requestOpenRouterBackup(
+          openRouterKey,
+          openRouterModel,
+          systemPrompt,
+          progressStatusEl,
+          Boolean(geminiKey)
+        );
+        if (orRes.results) {
+          return {
+            results: orRes.results,
+            provider: "openrouter",
+            usedModel: orRes.usedModel,
+            switchedProvider: Boolean(geminiKey),
+            geminiError
+          };
+        }
+        const combinedErr = geminiError ? `${geminiError} | ${orRes.error}` : orRes.error;
+        return { results: null, error: combinedErr };
+      }
+
+      return { results: null, error: geminiError || "API Key belum dikonfigurasi" };
     }
 
     async function runAIAuditBatch() {
@@ -1466,10 +1639,12 @@
 
         if (progressBar) progressBar.style.width = "65%";
 
-        const apiKey = (state.apiKey || "").trim();
+        const geminiKey = (state.apiKey || "").trim();
+        const openRouterKey = (state.openRouterKey || "").trim();
+        const openRouterModel = (state.openRouterModel || DEFAULT_OPENROUTER_MODEL).trim();
         let aiResults = null;
 
-        if (apiKey) {
+        if (geminiKey || openRouterKey) {
           const systemPrompt = `Anda adalah Auditor Kualitas & Keamanan Aplikasi Web (WebApp) Profesional.
 Tugas Anda: Lakukan audit menyeluruh dan objektif terhadap DAFTAR WEBAPP berikut berdasarkan DATA INSPEKSI DOM & KEAMANAN NYATA dalam SATU PROSES BATCH:
 ${JSON.stringify(enrichedPairs)}
@@ -1517,15 +1692,35 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
   }
 ]`;
 
-          const aiResponse = await requestGeminiWithModelFailover(apiKey, systemPrompt, progressStatus);
+          const aiResponse = await requestAIWithMultiProviderFailover(
+            geminiKey,
+            openRouterKey,
+            openRouterModel,
+            systemPrompt,
+            progressStatus
+          );
 
           if (aiResponse.results) {
             aiResults = aiResponse.results;
-            if (aiResponse.usedBackup) {
-              showToast("Backup Model Aktif", `gemini-4-hydrogen sedang padat (503). Evaluasi sukses menggunakan ${aiResponse.usedModel}.`, true);
+            if (aiResponse.switchedProvider) {
+              showToast(
+                "Backup OpenRouter Aktif",
+                `Gemini API gagal (${aiResponse.geminiError}). Evaluasi sukses via ${aiResponse.usedModel}.`,
+                true
+              );
+            } else if (aiResponse.usedGeminiInternalBackup) {
+              showToast(
+                "Backup Model Gemini Aktif",
+                `Model utama padat. Evaluasi sukses menggunakan ${aiResponse.usedModel}.`,
+                true
+              );
             }
           } else {
-            showToast("API Fallback", `Semua model API sedang sibuk (${aiResponse.error}), beralih ke evaluasi berbasis hasil scan.`, false);
+            showToast(
+              "Mode Fallback Scan",
+              `API tidak merespons (${aiResponse.error}), beralih ke evaluasi berbasis hasil scan.`,
+              false
+            );
           }
         } else {
           if (progressStatus) progressStatus.textContent = "Menjalankan evaluasi berbasis hasil scanning DOM & X-Headers...";
@@ -2318,6 +2513,8 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
 
       const apiModal = document.getElementById('modal-api-key');
       const apiInput = document.getElementById('input-api-key');
+      const openRouterInput = document.getElementById('input-openrouter-key');
+      const openRouterModelInput = document.getElementById('input-openrouter-model');
       const proxyInput = document.getElementById('input-proxy-url');
 
       document.getElementById('btn-open-api-modal')?.addEventListener('click', (e) => {
@@ -2350,33 +2547,70 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         apiInput.type = apiInput.type === "password" ? "text" : "password";
       });
 
+      document.getElementById('btn-toggle-openrouter-visibility')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!openRouterInput) return;
+        openRouterInput.type = openRouterInput.type === "password" ? "text" : "password";
+      });
+
       document.getElementById('btn-save-api-key')?.addEventListener('click', (e) => {
         e.preventDefault();
-        const val = (apiInput?.value || "").trim();
+        const geminiVal = (apiInput?.value || "").trim();
+        const openRouterVal = (openRouterInput?.value || "").trim();
+        const openRouterModelVal = (openRouterModelInput?.value || "").trim() || DEFAULT_OPENROUTER_MODEL;
         const pVal = (proxyInput?.value || "").trim() || DEFAULT_PROXY_URL;
-        state.apiKey = val;
+
+        state.apiKey = geminiVal;
+        state.openRouterKey = openRouterVal;
+        state.openRouterModel = openRouterModelVal;
         state.proxyUrl = pVal;
 
-        if (val) {
-          safeStorage.set(API_KEY_STORAGE, val);
+        if (geminiVal) {
+          safeStorage.set(API_KEY_STORAGE, geminiVal);
         } else {
           safeStorage.remove(API_KEY_STORAGE);
         }
+
+        if (openRouterVal) {
+          safeStorage.set(OPENROUTER_KEY_STORAGE, openRouterVal);
+        } else {
+          safeStorage.remove(OPENROUTER_KEY_STORAGE);
+        }
+
+        safeStorage.set(OPENROUTER_MODEL_STORAGE, openRouterModelVal);
         safeStorage.set(PROXY_URL_STORAGE, pVal);
 
         updateApiKeyBadge();
         closeApiModal();
-        showToast("Konfigurasi Disimpan", val ? "Gemini 4 Hydrogen (utama) & Gemini 3.8 Flash (backup) aktif." : "Mode fallback aktif dengan inspeksi DOM & X-Headers.", true);
+
+        let statusMsg = "Mode fallback aktif dengan inspeksi DOM & X-Headers.";
+        if (geminiVal && openRouterVal) {
+          statusMsg = `Gemini API (utama) & OpenRouter (${openRouterModelVal}) sebagai backup aktif.`;
+        } else if (geminiVal) {
+          statusMsg = "Gemini API aktif sebagai penyedia AI utama.";
+        } else if (openRouterVal) {
+          statusMsg = `OpenRouter API (${openRouterModelVal}) aktif.`;
+        }
+        showToast("Konfigurasi Disimpan", statusMsg, true);
       });
 
       document.getElementById('btn-clear-api-key')?.addEventListener('click', (e) => {
         e.preventDefault();
         state.apiKey = "";
+        state.openRouterKey = "";
+        state.openRouterModel = DEFAULT_OPENROUTER_MODEL;
         state.proxyUrl = DEFAULT_PROXY_URL;
+
         if (apiInput) apiInput.value = "";
+        if (openRouterInput) openRouterInput.value = "";
+        if (openRouterModelInput) openRouterModelInput.value = DEFAULT_OPENROUTER_MODEL;
         if (proxyInput) proxyInput.value = DEFAULT_PROXY_URL;
+
         safeStorage.remove(API_KEY_STORAGE);
+        safeStorage.remove(OPENROUTER_KEY_STORAGE);
+        safeStorage.remove(OPENROUTER_MODEL_STORAGE);
         safeStorage.remove(PROXY_URL_STORAGE);
+
         updateApiKeyBadge();
         showToast("Reset Selesai", "Konfigurasi dikembalikan ke default.", true);
       });
