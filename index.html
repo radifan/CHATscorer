@@ -108,8 +108,8 @@
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
     <!-- TOAST NOTIFICATION -->
-    <div id="toast-notification" class="hidden fixed top-24 right-6 z-50 bg-emerald-900 text-emerald-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-emerald-700">
-      <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-2xl"></i>
+    <div id="toast-notification" class="hidden fixed top-24 right-6 z-50 bg-emerald-900 text-emerald-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-emerald-700 max-w-md">
+      <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-2xl flex-shrink-0"></i>
       <div>
         <h4 class="font-extrabold text-sm" id="toast-title">Berhasil!</h4>
         <p class="text-xs text-emerald-200 font-medium" id="toast-message">Pesan notifikasi.</p>
@@ -155,7 +155,7 @@
         </div>
 
         <p class="text-[11px] text-slate-500 font-medium">
-          <i class="fa-solid fa-circle-info text-sky-600"></i> Tekan <kbd class="px-1.5 py-0.5 bg-slate-200 border rounded font-mono font-bold text-[10px]">Ctrl + Enter</kbd> atau klik tombol ikon magic wand untuk mulai menilai. (Model AI: <strong>gemini-4-hydrogen</strong> dengan cadangan otomatis <strong>gemini-3.8-flash</strong>).
+          <i class="fa-solid fa-circle-info text-sky-600"></i> Tekan <kbd class="px-1.5 py-0.5 bg-slate-200 border rounded font-mono font-bold text-[10px]">Ctrl + Enter</kbd> atau klik tombol ikon magic wand untuk mulai menilai. (Model AI: <strong>Gemini</strong> dengan backup otomatis <strong>Qwen API</strong> &amp; cadangan deterministik).
         </p>
       </div>
     </section>
@@ -276,9 +276,12 @@
           </div>
 
           <div class="md:col-span-7 bg-slate-50 border border-slate-200 rounded-3xl p-6 space-y-4">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-wrap items-center justify-between gap-2">
               <h4 class="text-xs font-extrabold uppercase text-slate-800">Analisis Eksekutif & Telemetri Pemindaian</h4>
-              <span id="scan-arch-badge" class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-200">-</span>
+              <div class="flex items-center gap-1.5">
+                <span id="scan-ai-engine-badge" class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 border border-indigo-200">-</span>
+                <span id="scan-arch-badge" class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-200">-</span>
+              </div>
             </div>
             <div id="executive-summary-text" class="text-xs leading-relaxed text-slate-700 bg-white p-4 rounded-2xl border shadow-sm space-y-2.5">-</div>
 
@@ -323,12 +326,12 @@
 
   </main>
 
-  <!-- MODAL PENGATURAN API KEY & CORS PROXY -->
+  <!-- MODAL PENGATURAN API KEY (GEMINI + QWEN BACKUP) & CORS PROXY -->
   <div id="modal-api-key" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-key text-amber-500"></i> Konfigurasi AI & Inspeksi DOM
+          <i class="fa-solid fa-key text-amber-500"></i> Konfigurasi AI (Gemini &amp; Qwen) &amp; Proxy
         </h3>
         <button type="button" id="btn-close-api-modal" class="text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
@@ -336,19 +339,78 @@
       </div>
 
       <div class="space-y-4 text-xs">
-        <div class="space-y-1.5">
-          <label for="input-api-key" class="block font-extrabold text-slate-700">Gemini API Key (Disimpan lokal di browser):</label>
+        <!-- STRATEGI PROVIDER AI -->
+        <div class="space-y-1.5 bg-sky-50/70 border border-sky-200 rounded-2xl p-3.5">
+          <label for="select-ai-provider-mode" class="block font-extrabold text-sky-950">
+            <i class="fa-solid fa-route text-sky-600 mr-1"></i> Strategi Urutan Provider AI:
+          </label>
+          <select id="select-ai-provider-mode" class="w-full px-3 py-2 bg-white border-2 border-sky-300 rounded-xl font-bold text-xs text-slate-800 focus:outline-none focus:border-sky-600">
+            <option value="gemini-then-qwen">Otomatis: Gemini Utama → Qwen API Backup (Direkomendasikan)</option>
+            <option value="qwen-then-gemini">Otomatis: Qwen API Utama → Gemini Backup</option>
+            <option value="qwen-only">Hanya Qwen API</option>
+            <option value="gemini-only">Hanya Gemini API</option>
+          </select>
+          <p class="text-[11px] text-sky-800">Jika provider utama terkena <strong>503 / Limit / Timeout</strong>, aplikasi langsung beralih ke provider cadangan secara otomatis.</p>
+        </div>
+
+        <!-- GEMINI API -->
+        <div class="space-y-1.5 border border-slate-200 rounded-2xl p-3.5 bg-slate-50/60">
+          <label for="input-api-key" class="block font-extrabold text-slate-800">
+            <i class="fa-solid fa-sparkles text-indigo-600 mr-1"></i> Gemini API Key (Google AI Studio):
+          </label>
           <div class="relative">
-            <input type="password" id="input-api-key" placeholder="AIzaSy..." class="w-full pl-3.5 pr-10 py-2.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-sky-600">
+            <input type="password" id="input-api-key" placeholder="AIzaSy..." class="w-full pl-3.5 pr-10 py-2.5 bg-white border-2 border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-sky-600">
             <button type="button" id="btn-toggle-api-visibility" title="Tampilkan/Sembunyikan" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
               <i class="fa-solid fa-eye"></i>
             </button>
           </div>
-          <p class="text-[11px] text-slate-500">Menggunakan <strong>gemini-4-hydrogen</strong> dengan cadangan otomatis <strong>gemini-3.8-flash</strong> jika 503 Unavailable. Kosongkan jika ingin memakai Mode Fallback Deterministik.</p>
+          <p class="text-[11px] text-slate-500">Mencoba <strong>gemini-4-hydrogen</strong> lalu <strong>gemini-3.8-flash</strong> sebelum beralih ke Qwen.</p>
         </div>
 
+        <!-- QWEN API (BACKUP / ALTERNATIF) -->
+        <div class="space-y-3 border border-violet-200 rounded-2xl p-3.5 bg-violet-50/40">
+          <div class="flex items-center justify-between">
+            <span class="font-extrabold text-violet-950 flex items-center gap-1.5">
+              <i class="fa-solid fa-microchip text-violet-600"></i> Qwen API (Alibaba Cloud Model Studio / DashScope)
+            </span>
+            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-violet-100 text-violet-800 border border-violet-200">OpenAI-Compatible</span>
+          </div>
+
+          <div class="space-y-1">
+            <label for="input-qwen-api-key" class="block font-bold text-slate-700">Qwen / DashScope API Key:</label>
+            <div class="relative">
+              <input type="password" id="input-qwen-api-key" placeholder="sk-..." class="w-full pl-3.5 pr-10 py-2.5 bg-white border-2 border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-violet-600">
+              <button type="button" id="btn-toggle-qwen-api-visibility" title="Tampilkan/Sembunyikan" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div class="space-y-1">
+              <label for="input-qwen-model" class="block font-bold text-slate-700">Model Qwen:</label>
+              <input type="text" id="input-qwen-model" list="qwen-model-presets" placeholder="qwen-plus" class="w-full px-3 py-2 bg-white border-2 border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-violet-600">
+              <datalist id="qwen-model-presets">
+                <option value="qwen-plus"></option>
+                <option value="qwen3.6-plus"></option>
+                <option value="qwen3.8-flash"></option>
+                <option value="qwen3.8-max"></option>
+                <option value="qwen4-max"></option>
+                <option value="qwen-turbo"></option>
+              </datalist>
+            </div>
+
+            <div class="space-y-1">
+              <label for="input-qwen-endpoint" class="block font-bold text-slate-700">Endpoint Chat Completions:</label>
+              <input type="text" id="input-qwen-endpoint" placeholder="https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions" class="w-full px-3 py-2 bg-white border-2 border-slate-300 rounded-xl font-mono text-[11px] focus:outline-none focus:border-violet-600">
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-500">Default internasional (Singapura): <code>dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions</code>. Sesuaikan jika memakai Workspace URL atau endpoint proxy.</p>
+        </div>
+
+        <!-- CORS PROXY -->
         <div class="space-y-1.5">
-          <label for="input-proxy-url" class="block font-extrabold text-slate-700">CORS Proxy Endpoint (Untuk Inspeksi HTML & X-Headers):</label>
+          <label for="input-proxy-url" class="block font-extrabold text-slate-700">CORS Proxy Endpoint (Untuk Inspeksi HTML &amp; X-Headers):</label>
           <input type="text" id="input-proxy-url" placeholder="https://api.allorigins.win/get?url=" class="w-full px-3.5 py-2.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-sky-600">
           <p class="text-[11px] text-slate-500">Default menggunakan <code>allorigins.win</code>. Gunakan URL Cloudflare Worker kustom agar HTTP Security Headers (X-Headers) ikut terpindai.</p>
         </div>
@@ -464,13 +526,28 @@
 
   <script>
     const API_KEY_STORAGE = "chatscorer_gemini_api_key";
+    const QWEN_API_KEY_STORAGE = "chatscorer_qwen_api_key";
+    const QWEN_MODEL_STORAGE = "chatscorer_qwen_model";
+    const QWEN_ENDPOINT_STORAGE = "chatscorer_qwen_endpoint";
+    const AI_PROVIDER_MODE_STORAGE = "chatscorer_ai_provider_mode";
     const PROXY_URL_STORAGE = "chatscorer_cors_proxy_url";
-    const DEFAULT_PROXY_URL = "https://api.allorigins.win/get?url=";
 
-    // Urutan prioritas model AI: Utama (gemini-4-hydrogen) -> Backup (gemini-3.8-flash)
+    const DEFAULT_PROXY_URL = "https://api.allorigins.win/get?url=";
+    const DEFAULT_QWEN_MODEL = "qwen-plus";
+    const DEFAULT_QWEN_ENDPOINT = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions";
+    const DEFAULT_AI_PROVIDER_MODE = "gemini-then-qwen";
+
+    // Urutan prioritas model Gemini: Utama (gemini-4-hydrogen) -> Backup (gemini-3.8-flash)
     const GEMINI_MODELS_PRIORITY = [
       "gemini-4-hydrogen",
       "gemini-3.8-flash"
+    ];
+
+    // Daftar cadangan model Qwen jika model utama gagal/tidak tersedia pada workspace
+    const QWEN_FALLBACK_MODELS = [
+      "qwen-plus",
+      "qwen3.8-flash",
+      "qwen-turbo"
     ];
 
     const safeStorage = {
@@ -498,7 +575,12 @@
 
     const state = {
       apiKey: safeStorage.get(API_KEY_STORAGE) || "",
+      qwenApiKey: safeStorage.get(QWEN_API_KEY_STORAGE) || "",
+      qwenModel: safeStorage.get(QWEN_MODEL_STORAGE) || DEFAULT_QWEN_MODEL,
+      qwenEndpoint: safeStorage.get(QWEN_ENDPOINT_STORAGE) || DEFAULT_QWEN_ENDPOINT,
+      aiProviderMode: safeStorage.get(AI_PROVIDER_MODE_STORAGE) || DEFAULT_AI_PROVIDER_MODE,
       proxyUrl: safeStorage.get(PROXY_URL_STORAGE) || DEFAULT_PROXY_URL,
+      lastAiEngineUsed: "-",
       history: [],
       url: "",
       developer: "",
@@ -634,16 +716,26 @@
       const btn = document.getElementById('btn-open-api-modal');
       if (!icon || !label || !btn) return;
 
-      const hasKey = state.apiKey && state.apiKey.trim().length > 0;
-      const isCustomProxy = state.proxyUrl && state.proxyUrl.trim() !== DEFAULT_PROXY_URL;
+      const hasGemini = Boolean(state.apiKey && state.apiKey.trim().length > 0);
+      const hasQwen = Boolean(state.qwenApiKey && state.qwenApiKey.trim().length > 0);
 
-      if (hasKey) {
+      if (hasGemini && hasQwen) {
         icon.className = "fa-solid fa-shield-halved text-emerald-500 text-sm";
-        label.textContent = isCustomProxy ? "Gemini 4 + Worker Aktif" : "Gemini 4 Hydrogen Aktif";
+        label.textContent = state.aiProviderMode === "qwen-then-gemini"
+          ? "Qwen + Gemini Backup"
+          : "Gemini + Qwen Backup";
         btn.className = "px-3.5 py-2 rounded-xl border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100 text-emerald-900 text-xs font-bold flex items-center gap-2 transition shadow-sm cursor-pointer";
+      } else if (hasQwen) {
+        icon.className = "fa-solid fa-microchip text-violet-600 text-sm";
+        label.textContent = `Qwen Aktif (${state.qwenModel || DEFAULT_QWEN_MODEL})`;
+        btn.className = "px-3.5 py-2 rounded-xl border border-violet-200 bg-violet-50/70 hover:bg-violet-100 text-violet-900 text-xs font-bold flex items-center gap-2 transition shadow-sm cursor-pointer";
+      } else if (hasGemini) {
+        icon.className = "fa-solid fa-shield-halved text-sky-600 text-sm";
+        label.textContent = "Gemini Aktif (Tanpa Qwen)";
+        btn.className = "px-3.5 py-2 rounded-xl border border-sky-200 bg-sky-50/70 hover:bg-sky-100 text-sky-900 text-xs font-bold flex items-center gap-2 transition shadow-sm cursor-pointer";
       } else {
         icon.className = "fa-solid fa-key text-amber-500 text-sm";
-        label.textContent = isCustomProxy ? "Worker Aktif (Fallback)" : "Atur API Key (Fallback)";
+        label.textContent = "Atur API Key (Fallback)";
         btn.className = "px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-700 text-xs font-bold flex items-center gap-2 transition shadow-sm cursor-pointer";
       }
     }
@@ -651,8 +743,17 @@
     function openApiModal() {
       const apiModal = document.getElementById('modal-api-key');
       const apiInput = document.getElementById('input-api-key');
+      const qwenKeyInput = document.getElementById('input-qwen-api-key');
+      const qwenModelInput = document.getElementById('input-qwen-model');
+      const qwenEndpointInput = document.getElementById('input-qwen-endpoint');
+      const providerModeSelect = document.getElementById('select-ai-provider-mode');
       const proxyInput = document.getElementById('input-proxy-url');
+
       if (apiInput) apiInput.value = state.apiKey || "";
+      if (qwenKeyInput) qwenKeyInput.value = state.qwenApiKey || "";
+      if (qwenModelInput) qwenModelInput.value = state.qwenModel || DEFAULT_QWEN_MODEL;
+      if (qwenEndpointInput) qwenEndpointInput.value = state.qwenEndpoint || DEFAULT_QWEN_ENDPOINT;
+      if (providerModeSelect) providerModeSelect.value = state.aiProviderMode || DEFAULT_AI_PROVIDER_MODE;
       if (proxyInput) proxyInput.value = state.proxyUrl || DEFAULT_PROXY_URL;
       if (apiModal) apiModal.classList.remove('hidden');
     }
@@ -1272,6 +1373,7 @@
         developer,
         url,
         inspection,
+        ai_engine: "Mode Deterministik (Scan DOM)",
         executive_summary: structuredSummary,
         sub_scores: sub,
         evidence,
@@ -1372,6 +1474,49 @@
       modal.classList.remove('hidden');
     }
 
+    /* PARSER JSON TOLERAN UNTUK BERBAGAI OUTPUT LLM (ARRAY / OBJECT / MARKDOWN FENCE) */
+    function parseAiResultsJson(textContent) {
+      if (!textContent || typeof textContent !== "string") return null;
+      let cleaned = textContent.trim();
+
+      const fenceMatch = cleaned.match(/```(?:json)?\s*([\s\S]*?)```/i);
+      if (fenceMatch && fenceMatch[1]) {
+        cleaned = fenceMatch[1].trim();
+      }
+
+      const tryExtractArray = (jsonStr) => {
+        try {
+          const parsed = JSON.parse(jsonStr);
+          if (Array.isArray(parsed)) return parsed;
+          if (parsed && typeof parsed === "object") {
+            const arr = parsed.results || parsed.data || parsed.evaluations || parsed.items;
+            if (Array.isArray(arr)) return arr;
+            if (parsed.sub_scores && (parsed.url || parsed.developer)) return [parsed];
+          }
+        } catch (_) {}
+        return null;
+      };
+
+      let result = tryExtractArray(cleaned);
+      if (result) return result;
+
+      const firstBrace = cleaned.indexOf("{");
+      const lastBrace = cleaned.lastIndexOf("}");
+      if (firstBrace !== -1 && lastBrace > firstBrace) {
+        result = tryExtractArray(cleaned.slice(firstBrace, lastBrace + 1));
+        if (result) return result;
+      }
+
+      const firstBracket = cleaned.indexOf("[");
+      const lastBracket = cleaned.lastIndexOf("]");
+      if (firstBracket !== -1 && lastBracket > firstBracket) {
+        result = tryExtractArray(cleaned.slice(firstBracket, lastBracket + 1));
+        if (result) return result;
+      }
+
+      return null;
+    }
+
     /* HELPER EKSEKUSI GEMINI API DENGAN FAILOVER MODEL OTOMATIS (503 / UNAVAILABLE) */
     async function requestGeminiWithModelFailover(apiKey, systemPrompt, progressStatusEl) {
       let lastErrorMsg = "";
@@ -1382,7 +1527,7 @@
 
         if (progressStatusEl) {
           progressStatusEl.textContent = isBackup
-            ? `Model utama sibuk (503), beralih ke model backup ${modelName}...`
+            ? `Model Gemini utama sibuk (503), mencoba model Gemini backup ${modelName}...`
             : `Mengevaluasi hasil inspeksi secara objektif dengan ${modelName}...`;
         }
 
@@ -1401,26 +1546,174 @@
           if (response.ok) {
             const resJson = await response.json();
             const textContent = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (textContent) {
-              const parsed = JSON.parse(textContent);
-              const resultsArray = Array.isArray(parsed) ? parsed : (parsed.data || parsed.results || null);
-              if (resultsArray) {
-                return { results: resultsArray, usedModel: modelName, usedBackup: isBackup };
-              }
+            const resultsArray = parseAiResultsJson(textContent);
+            if (resultsArray) {
+              return { results: resultsArray, provider: "Gemini", usedModel: modelName, usedBackupModel: isBackup };
             }
-            lastErrorMsg = `Respons JSON kosong dari ${modelName}`;
+            lastErrorMsg = `Respons JSON kosong/tidak valid dari ${modelName}`;
           } else {
-            // Tangkap status 503 Service Unavailable atau error HTTP lainnya dan lanjut ke model berikutnya
             lastErrorMsg = `HTTP ${response.status} pada ${modelName}`;
-            console.warn(`[CHATScorer Failover] ${lastErrorMsg}. Mencoba model cadangan berikutnya...`);
+            console.warn(`[CHATScorer Gemini Failover] ${lastErrorMsg}.`);
+            if (response.status === 401 || response.status === 403) {
+              break; // Key ditolak, hentikan retry model Gemini lain agar cepat pindah ke Qwen
+            }
           }
         } catch (err) {
           lastErrorMsg = `${err.message} pada ${modelName}`;
-          console.warn(`[CHATScorer Failover] ${lastErrorMsg}. Mencoba model cadangan berikutnya...`);
+          console.warn(`[CHATScorer Gemini Failover] ${lastErrorMsg}.`);
         }
       }
 
       return { results: null, error: lastErrorMsg };
+    }
+
+    /* HELPER EKSEKUSI QWEN API (OPENAI-COMPATIBLE DASHSCOPE) DENGAN RETRY & MODEL FAILOVER */
+    async function requestQwenWithFailover(qwenApiKey, qwenEndpoint, preferredModel, systemPrompt, progressStatusEl, isBackupProvider = false) {
+      const endpoint = (qwenEndpoint || DEFAULT_QWEN_ENDPOINT).trim();
+      const modelCandidates = Array.from(new Set([
+        (preferredModel || DEFAULT_QWEN_MODEL).trim(),
+        ...QWEN_FALLBACK_MODELS
+      ].filter(Boolean)));
+
+      let lastErrorMsg = "";
+
+      for (let i = 0; i < modelCandidates.length; i++) {
+        const modelName = modelCandidates[i];
+        if (progressStatusEl) {
+          progressStatusEl.textContent = isBackupProvider
+            ? `Gemini tidak merespons/503 — mengevaluasi via Qwen API (${modelName})...`
+            : `Mengevaluasi hasil inspeksi menggunakan Qwen API (${modelName})...`;
+        }
+
+        const attemptCall = async (useJsonResponseFormat) => {
+          const bodyPayload = {
+            model: modelName,
+            temperature: 0.0,
+            messages: [
+              {
+                role: "system",
+                content: "Anda adalah Auditor Kualitas & Keamanan Aplikasi Web profesional. Jawab HANYA dalam format JSON object yang valid dengan properti \"results\"."
+              },
+              {
+                role: "user",
+                content: systemPrompt
+              }
+            ]
+          };
+          if (useJsonResponseFormat) {
+            bodyPayload.response_format = { type: "json_object" };
+          }
+
+          return await fetchWithTimeout(endpoint, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${qwenApiKey}`
+            },
+            body: JSON.stringify(bodyPayload)
+          }, 45000);
+        };
+
+        try {
+          let response = await attemptCall(true);
+
+          // Jika HTTP 400 (mis. beberapa model/plan menolak response_format json_object), coba ulang tanpa response_format
+          if (response.status === 400) {
+            console.warn(`[CHATScorer Qwen] HTTP 400 dengan response_format pada ${modelName}, mencoba ulang tanpa response_format...`);
+            response = await attemptCall(false);
+          }
+
+          if (response.ok) {
+            const resJson = await response.json();
+            const msgContent = resJson.choices?.[0]?.message?.content;
+            const textContent = Array.isArray(msgContent)
+              ? msgContent.map(p => p?.text || "").join("")
+              : (msgContent || "");
+            const resultsArray = parseAiResultsJson(textContent);
+
+            if (resultsArray) {
+              return {
+                results: resultsArray,
+                provider: "Qwen",
+                usedModel: modelName,
+                usedBackupModel: i > 0
+              };
+            }
+            lastErrorMsg = `Respons JSON Qwen tidak valid pada ${modelName}`;
+          } else {
+            let errDetail = "";
+            try {
+              const errBody = await response.json();
+              errDetail = errBody?.error?.message ? ` (${errBody.error.message})` : "";
+            } catch (_) {}
+            lastErrorMsg = `HTTP ${response.status} pada Qwen ${modelName}${errDetail}`;
+            console.warn(`[CHATScorer Qwen Failover] ${lastErrorMsg}`);
+
+            if (response.status === 401 || response.status === 403) {
+              break; // API key Qwen invalid / region tidak cocok
+            }
+          }
+        } catch (err) {
+          lastErrorMsg = `${err.message} pada Qwen ${modelName}`;
+          console.warn(`[CHATScorer Qwen Failover] ${lastErrorMsg}`);
+        }
+      }
+
+      return { results: null, error: lastErrorMsg };
+    }
+
+    /* ORKESTRATOR MULTI-PROVIDER AI (GEMINI <-> QWEN) */
+    async function evaluateBatchWithAIProviders(systemPrompt, progressStatusEl) {
+      const geminiKey = (state.apiKey || "").trim();
+      const qwenKey = (state.qwenApiKey || "").trim();
+      const qwenModel = (state.qwenModel || DEFAULT_QWEN_MODEL).trim();
+      const qwenEndpoint = (state.qwenEndpoint || DEFAULT_QWEN_ENDPOINT).trim();
+      const mode = state.aiProviderMode || DEFAULT_AI_PROVIDER_MODE;
+
+      const errors = [];
+
+      const runGemini = async (isBackup) => {
+        if (!geminiKey) return null;
+        if (isBackup && progressStatusEl) {
+          progressStatusEl.textContent = "Qwen gagal merespons, beralih ke backup Gemini API...";
+        }
+        const res = await requestGeminiWithModelFailover(geminiKey, systemPrompt, progressStatusEl);
+        if (res.results) return { ...res, switchedProvider: isBackup };
+        if (res.error) errors.push(`Gemini: ${res.error}`);
+        return null;
+      };
+
+      const runQwen = async (isBackup) => {
+        if (!qwenKey) return null;
+        const res = await requestQwenWithFailover(qwenKey, qwenEndpoint, qwenModel, systemPrompt, progressStatusEl, isBackup);
+        if (res.results) return { ...res, switchedProvider: isBackup };
+        if (res.error) errors.push(`Qwen: ${res.error}`);
+        return null;
+      };
+
+      if (mode === "qwen-only") {
+        const res = await runQwen(false);
+        if (res) return res;
+      } else if (mode === "gemini-only") {
+        const res = await runGemini(false);
+        if (res) return res;
+      } else if (mode === "qwen-then-gemini") {
+        const qRes = await runQwen(false);
+        if (qRes) return qRes;
+        const gRes = await runGemini(Boolean(qwenKey));
+        if (gRes) return gRes;
+      } else {
+        // Default: "gemini-then-qwen"
+        const gRes = await runGemini(false);
+        if (gRes) return gRes;
+        const qRes = await runQwen(Boolean(geminiKey));
+        if (qRes) return qRes;
+      }
+
+      return {
+        results: null,
+        error: errors.join(" | ") || "Tidak ada API Key yang aktif"
+      };
     }
 
     async function runAIAuditBatch() {
@@ -1449,6 +1742,7 @@
       if (progressBar) progressBar.style.width = "30%";
 
       state.history = [];
+      state.lastAiEngineUsed = "Mode Deterministik (Scan DOM)";
       let enrichedPairs = [];
 
       try {
@@ -1466,10 +1760,10 @@
 
         if (progressBar) progressBar.style.width = "65%";
 
-        const apiKey = (state.apiKey || "").trim();
+        const hasAnyKey = Boolean((state.apiKey || "").trim() || (state.qwenApiKey || "").trim());
         let aiResults = null;
 
-        if (apiKey) {
+        if (hasAnyKey) {
           const systemPrompt = `Anda adalah Auditor Kualitas & Keamanan Aplikasi Web (WebApp) Profesional.
 Tugas Anda: Lakukan audit menyeluruh dan objektif terhadap DAFTAR WEBAPP berikut berdasarkan DATA INSPEKSI DOM & KEAMANAN NYATA dalam SATU PROSES BATCH:
 ${JSON.stringify(enrichedPairs)}
@@ -1491,41 +1785,57 @@ ATURAN PENILAIAN & NARASI:
 2. Pada 'executive_summary', tulis ringkasan terstruktur dalam 3 poin bernomor: (1) Kesiapan Antarmuka & Navigasi (C1-C3), (2) Kredibilitas & Alur Transaksi (C4-C7), dan (3) Postur Keamanan & Struktur DOM (C8-C10) yang menyebutkan angka nyata hasil pemindaian serta tanda ✓ atau ✗.
 3. Seluruh nilai skor sub-kriteria (s1_1..s10_3), 'evidence', 'strengths', 'weaknesses', dan 'reasons' WAJIB merujuk langsung pada temuan scan nyata.
 
-Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
-[
-  {
-    "developer": "Nama Pengembang",
-    "url": "https://...",
-    "executive_summary": "Ringkasan analisis eksekutif terstruktur...",
-    "sub_scores": {
-      "c1": { "s1_1": 8.5, "s1_2": 8.5, "s1_3": 8.0 },
-      "c2": { "s2_1": 9.0, "s2_2": 8.4, "s2_3": 8.2 },
-      "c3": { "s3_1": 9.0, "s3_2": 8.6, "s3_3": 8.4 },
-      "c4": { "s4_1": 8.8, "s4_2": 8.4, "s4_3": 8.6 },
-      "c5": { "s5_1": 9.2, "s5_2": 9.0, "s5_3": 8.8 },
-      "c6": { "s6_1": 9.0, "s6_2": 8.8, "s6_3": 8.6 },
-      "c7": { "s7_1": 8.8, "s7_2": 8.6, "s7_3": 8.4 },
-      "c8": { "s8_1": 9.5, "s8_2": 9.0, "s8_3": 9.0 },
-      "c9": { "s9_1": 9.0, "s9_2": 8.8, "s9_3": 8.6 },
-      "c10": { "s10_1": 8.2, "s10_2": 8.4, "s10_3": 8.4 }
-    },
-    "evidence": { "c1": "...", "c2": "..." },
-    "strengths": { "c1": ["..."], "c2": ["..."] },
-    "weaknesses": { "c1": ["..."], "c2": ["..."] },
-    "reasons": { "c1": "...", "c2": "..." },
-    "recommendations": { "c1": "...", "c2": "..." }
-  }
-]`;
+Format output WAJIB berupa JSON OBJECT yang valid dengan properti "results" berisi array evaluasi berurutan persis seperti input:
+{
+  "results": [
+    {
+      "developer": "Nama Pengembang",
+      "url": "https://...",
+      "executive_summary": "Ringkasan analisis eksekutif terstruktur...",
+      "sub_scores": {
+        "c1": { "s1_1": 8.5, "s1_2": 8.5, "s1_3": 8.0 },
+        "c2": { "s2_1": 9.0, "s2_2": 8.4, "s2_3": 8.2 },
+        "c3": { "s3_1": 9.0, "s3_2": 8.6, "s3_3": 8.4 },
+        "c4": { "s4_1": 8.8, "s4_2": 8.4, "s4_3": 8.6 },
+        "c5": { "s5_1": 9.2, "s5_2": 9.0, "s5_3": 8.8 },
+        "c6": { "s6_1": 9.0, "s6_2": 8.8, "s6_3": 8.6 },
+        "c7": { "s7_1": 8.8, "s7_2": 8.6, "s7_3": 8.4 },
+        "c8": { "s8_1": 9.5, "s8_2": 9.0, "s8_3": 9.0 },
+        "c9": { "s9_1": 9.0, "s9_2": 8.8, "s9_3": 8.6 },
+        "c10": { "s10_1": 8.2, "s10_2": 8.4, "s10_3": 8.4 }
+      },
+      "evidence": { "c1": "...", "c2": "..." },
+      "strengths": { "c1": ["..."], "c2": ["..."] },
+      "weaknesses": { "c1": ["..."], "c2": ["..."] },
+      "reasons": { "c1": "...", "c2": "..." },
+      "recommendations": { "c1": "...", "c2": "..." }
+    }
+  ]
+}`;
 
-          const aiResponse = await requestGeminiWithModelFailover(apiKey, systemPrompt, progressStatus);
+          const aiResponse = await evaluateBatchWithAIProviders(systemPrompt, progressStatus);
 
           if (aiResponse.results) {
             aiResults = aiResponse.results;
-            if (aiResponse.usedBackup) {
-              showToast("Backup Model Aktif", `gemini-4-hydrogen sedang padat (503). Evaluasi sukses menggunakan ${aiResponse.usedModel}.`, true);
+            state.lastAiEngineUsed = `${aiResponse.provider}: ${aiResponse.usedModel}`;
+
+            if (aiResponse.switchedProvider) {
+              showToast(
+                `Backup ${aiResponse.provider} Aktif`,
+                `Provider utama gagal/503. Evaluasi sukses diselesaikan menggunakan ${aiResponse.provider} (${aiResponse.usedModel}).`,
+                true
+              );
+            } else if (aiResponse.usedBackupModel) {
+              showToast(
+                `Model Backup ${aiResponse.provider} Aktif`,
+                `Model utama sibuk. Evaluasi sukses menggunakan ${aiResponse.usedModel}.`,
+                true
+              );
+            } else if (aiResponse.provider === "Qwen") {
+              showToast("Evaluasi Qwen Selesai", `Penilaian selesai menggunakan Qwen (${aiResponse.usedModel}).`, true);
             }
           } else {
-            showToast("API Fallback", `Semua model API sedang sibuk (${aiResponse.error}), beralih ke evaluasi berbasis hasil scan.`, false);
+            showToast("API Fallback", `Semua provider API gagal (${aiResponse.error}), beralih ke evaluasi deterministik berbasis scan DOM.`, false);
           }
         } else {
           if (progressStatus) progressStatus.textContent = "Menjalankan evaluasi berbasis hasil scanning DOM & X-Headers...";
@@ -1537,6 +1847,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
           itemObj.developer = item.developer;
           itemObj.url = item.url;
           itemObj.inspection = item.real_dom_and_security_inspection;
+          itemObj.ai_engine = (aiResults && aiResults[idx]) ? state.lastAiEngineUsed : "Mode Deterministik (Scan DOM)";
 
           itemObj.evidence = itemObj.evidence || {};
           for (let k = 1; k <= 10; k++) {
@@ -1836,6 +2147,11 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
       const summaryEl = document.getElementById('executive-summary-text');
       if (summaryEl) {
         summaryEl.innerHTML = formatExecutiveSummaryHtml(state.auditData.executive_summary);
+      }
+
+      const engineBadge = document.getElementById('scan-ai-engine-badge');
+      if (engineBadge) {
+        engineBadge.textContent = state.auditData.ai_engine || state.lastAiEngineUsed || "-";
       }
 
       const insp = state.auditData.inspection;
@@ -2243,7 +2559,7 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
           <div class="flex justify-between items-start border-b pb-4">
             <div>
               <h2 class="text-base font-black text-slate-900">LAPORAN EVALUASI & AUDIT KEAMANAN WEBAPP</h2>
-              <p class="text-xs text-slate-500">Hasil Analisis Otomatis CHATScorer</p>
+              <p class="text-xs text-slate-500">Hasil Analisis Otomatis CHATScorer (${escapeHtml(item.auditObj.ai_engine || 'Scan DOM')})</p>
             </div>
             <div class="text-right">
               <span class="text-xs font-mono font-bold text-slate-400">${new Date().toLocaleDateString('id-ID')}</span>
@@ -2301,16 +2617,16 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
       document.getElementById('toast-message').textContent = message;
 
       if (isSuccess) {
-        toast.className = "fixed top-24 right-6 z-50 bg-emerald-900 text-emerald-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-emerald-700";
-        if (icon) icon.className = "fa-solid fa-circle-check text-emerald-400 text-2xl";
+        toast.className = "fixed top-24 right-6 z-50 bg-emerald-900 text-emerald-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-emerald-700 max-w-md";
+        if (icon) icon.className = "fa-solid fa-circle-check text-emerald-400 text-2xl flex-shrink-0";
       } else {
-        toast.className = "fixed top-24 right-6 z-50 bg-amber-900 text-amber-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-amber-700";
-        if (icon) icon.className = "fa-solid fa-triangle-exclamation text-amber-400 text-2xl";
+        toast.className = "fixed top-24 right-6 z-50 bg-amber-900 text-amber-50 px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-amber-700 max-w-md";
+        if (icon) icon.className = "fa-solid fa-triangle-exclamation text-amber-400 text-2xl flex-shrink-0";
       }
 
       toast.classList.remove('hidden');
       clearTimeout(toast._timer);
-      toast._timer = setTimeout(() => toast.classList.add('hidden'), 4500);
+      toast._timer = setTimeout(() => toast.classList.add('hidden'), 5000);
     }
 
     function initApp() {
@@ -2318,6 +2634,10 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
 
       const apiModal = document.getElementById('modal-api-key');
       const apiInput = document.getElementById('input-api-key');
+      const qwenKeyInput = document.getElementById('input-qwen-api-key');
+      const qwenModelInput = document.getElementById('input-qwen-model');
+      const qwenEndpointInput = document.getElementById('input-qwen-endpoint');
+      const providerModeSelect = document.getElementById('select-ai-provider-mode');
       const proxyInput = document.getElementById('input-proxy-url');
 
       document.getElementById('btn-open-api-modal')?.addEventListener('click', (e) => {
@@ -2350,35 +2670,78 @@ Format output WAJIB JSON ARRAY dengan urutan persis seperti input:
         apiInput.type = apiInput.type === "password" ? "text" : "password";
       });
 
+      document.getElementById('btn-toggle-qwen-api-visibility')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!qwenKeyInput) return;
+        qwenKeyInput.type = qwenKeyInput.type === "password" ? "text" : "password";
+      });
+
       document.getElementById('btn-save-api-key')?.addEventListener('click', (e) => {
         e.preventDefault();
-        const val = (apiInput?.value || "").trim();
+        const geminiVal = (apiInput?.value || "").trim();
+        const qwenVal = (qwenKeyInput?.value || "").trim();
+        const qwenModelVal = (qwenModelInput?.value || "").trim() || DEFAULT_QWEN_MODEL;
+        const qwenEndpointVal = (qwenEndpointInput?.value || "").trim() || DEFAULT_QWEN_ENDPOINT;
+        const modeVal = providerModeSelect?.value || DEFAULT_AI_PROVIDER_MODE;
         const pVal = (proxyInput?.value || "").trim() || DEFAULT_PROXY_URL;
-        state.apiKey = val;
+
+        state.apiKey = geminiVal;
+        state.qwenApiKey = qwenVal;
+        state.qwenModel = qwenModelVal;
+        state.qwenEndpoint = qwenEndpointVal;
+        state.aiProviderMode = modeVal;
         state.proxyUrl = pVal;
 
-        if (val) {
-          safeStorage.set(API_KEY_STORAGE, val);
-        } else {
-          safeStorage.remove(API_KEY_STORAGE);
-        }
+        if (geminiVal) safeStorage.set(API_KEY_STORAGE, geminiVal);
+        else safeStorage.remove(API_KEY_STORAGE);
+
+        if (qwenVal) safeStorage.set(QWEN_API_KEY_STORAGE, qwenVal);
+        else safeStorage.remove(QWEN_API_KEY_STORAGE);
+
+        safeStorage.set(QWEN_MODEL_STORAGE, qwenModelVal);
+        safeStorage.set(QWEN_ENDPOINT_STORAGE, qwenEndpointVal);
+        safeStorage.set(AI_PROVIDER_MODE_STORAGE, modeVal);
         safeStorage.set(PROXY_URL_STORAGE, pVal);
 
         updateApiKeyBadge();
         closeApiModal();
-        showToast("Konfigurasi Disimpan", val ? "Gemini 4 Hydrogen (utama) & Gemini 3.8 Flash (backup) aktif." : "Mode fallback aktif dengan inspeksi DOM & X-Headers.", true);
+
+        let statusMsg = "Mode fallback deterministik aktif.";
+        if (geminiVal && qwenVal) {
+          statusMsg = `Konfigurasi aktif (${modeVal === "qwen-then-gemini" ? "Qwen Utama → Gemini Backup" : "Gemini Utama → Qwen Backup"}).`;
+        } else if (qwenVal) {
+          statusMsg = `Qwen API (${qwenModelVal}) siap digunakan.`;
+        } else if (geminiVal) {
+          statusMsg = "Gemini API aktif (tambahkan Qwen Key jika ingin backup otomatis).";
+        }
+        showToast("Konfigurasi Disimpan", statusMsg, true);
       });
 
       document.getElementById('btn-clear-api-key')?.addEventListener('click', (e) => {
         e.preventDefault();
         state.apiKey = "";
+        state.qwenApiKey = "";
+        state.qwenModel = DEFAULT_QWEN_MODEL;
+        state.qwenEndpoint = DEFAULT_QWEN_ENDPOINT;
+        state.aiProviderMode = DEFAULT_AI_PROVIDER_MODE;
         state.proxyUrl = DEFAULT_PROXY_URL;
+
         if (apiInput) apiInput.value = "";
+        if (qwenKeyInput) qwenKeyInput.value = "";
+        if (qwenModelInput) qwenModelInput.value = DEFAULT_QWEN_MODEL;
+        if (qwenEndpointInput) qwenEndpointInput.value = DEFAULT_QWEN_ENDPOINT;
+        if (providerModeSelect) providerModeSelect.value = DEFAULT_AI_PROVIDER_MODE;
         if (proxyInput) proxyInput.value = DEFAULT_PROXY_URL;
+
         safeStorage.remove(API_KEY_STORAGE);
+        safeStorage.remove(QWEN_API_KEY_STORAGE);
+        safeStorage.remove(QWEN_MODEL_STORAGE);
+        safeStorage.remove(QWEN_ENDPOINT_STORAGE);
+        safeStorage.remove(AI_PROVIDER_MODE_STORAGE);
         safeStorage.remove(PROXY_URL_STORAGE);
+
         updateApiKeyBadge();
-        showToast("Reset Selesai", "Konfigurasi dikembalikan ke default.", true);
+        showToast("Reset Selesai", "Konfigurasi AI dan Proxy dikembalikan ke default.", true);
       });
 
       document.getElementById('btn-audit-ai')?.addEventListener('click', (e) => {
