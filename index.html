@@ -542,32 +542,30 @@
     /* ==========================================================================
        4. PEMINDAIAN DOM & HTTP SECURITY HEADERS NYATA
        ========================================================================== */
-    function parseInputLines(rawText) {
-      return rawText
-        .split(/
-?
-/)
-        .map(line => line.trim())
-        .filter(Boolean)
-        .map((line, idx) => {
-          let developer = `Peserta #${idx + 1}`;
-          let url = line;
-          if (line.includes("|")) {
-            const parts = line.split("|").map(p => p.trim());
-            developer = parts[0] || developer;
-            url = parts[1] || "";
-          } else if (line.includes("	")) {
-            const parts = line.split("	").map(p => p.trim());
-            developer = parts[0] || developer;
-            url = parts[1] || "";
-          }
-          if (url && !/^https?:\/\//i.test(url)) {
-            url = "https://" + url;
-          }
-          return { developer, url };
-        })
-        .filter(item => item.url);
-    }
+   function parseInputLines(rawText) {
+  return rawText
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(Boolean)
+    .map((line, idx) => {
+      let developer = `Peserta #${idx + 1}`;
+      let url = line;
+      if (line.includes("|")) {
+        const parts = line.split("|").map(p => p.trim());
+        developer = parts[0] || developer;
+        url = parts[1] || "";
+      } else if (line.includes("\t")) {
+        const parts = line.split("\t").map(p => p.trim());
+        developer = parts[0] || developer;
+        url = parts[1] || "";
+      }
+      if (url && !/^https?:\/\//i.test(url)) {
+        url = "https://" + url;
+      }
+      return { developer, url };
+    })
+    .filter(item => item.url);
+}
 
     async function inspectTargetWebsite(targetUrl) {
       const baseReport = {
@@ -1500,11 +1498,10 @@ Format JSON Array Wajib:
 
       document.getElementById("btn-load-sample")?.addEventListener("click", () => {
         document.getElementById("input-urls").value = [
-          "Dhini | https://teyvat-bites.vercel.app/",
-          "Raido Octaviandy | https://toko-mama-three.vercel.app/",
-          "Muhammad Rakha Widya Ardhana | https://vibegadgetku.vercel.app"
+          "Nama1 | https://url1.domain/",
+          "Nama2 | https://url2.domain"
         ].join("\n");
-      });
+      });;
 
       document.getElementById("btn-clear-input")?.addEventListener("click", () => {
         document.getElementById("input-urls").value = "";
