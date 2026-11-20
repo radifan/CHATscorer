@@ -63,7 +63,7 @@
         </div>
       </div>
 
-      <textarea id="input-urls" rows="4" placeholder="Nama1 | https://alamat.url1.app/&#10;Nama2 | https://alamat.url2.app/&#10;" class="w-full p-3.5 bg-slate-50 border-2 border-slate-200 rounded-2xl font-mono text-xs focus:outline-none focus:border-sky-600 focus:bg-white transition"></textarea>
+      <textarea id="input-urls" rows="4" placeholder="Nama1 https://alamat.url1.app/&#10;Nama2 https://alamat.url2.app/&#10;" class="w-full p-3.5 bg-slate-50 border-2 border-slate-200 rounded-2xl font-mono text-xs focus:outline-none focus:border-sky-600 focus:bg-white transition"></textarea>
 
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         <div class="text-[11px] text-slate-500 flex items-center gap-2">
@@ -1523,8 +1523,8 @@ Format JSON Array Wajib:
 
       document.getElementById("btn-load-sample")?.addEventListener("click", () => {
         document.getElementById("input-urls").value = [
-          "Nama1 | https://url1.domain/",
-          "Nama2 | https://url2.domain"
+          "Nama1  https://url1.domain/",
+          "Nama2  https://url2.domain"
         ].join("\n");
       });;
 
