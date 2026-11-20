@@ -1597,11 +1597,30 @@ Format JSON Array Wajib:
         showToast("Reset Selesai", "Konfigurasi dikembalikan ke default.", true);
       });
 
-      document.getElementById("btn-load-sample")?.addEventListener("click", () => {
-        document.getElementById("input-urls").value = [
-          "Nama1  https://url1.domain/",
-          "Nama2  https://url2.domain"
-        ].join("\n");
+      document.getElementById("btn-clear-input")?.addEventListener("click", () => {
+        // 1. Kosongkan field input URL
+        const inputEl = document.getElementById("input-urls");
+        if (inputEl) inputEl.value = "";
+
+        // 2. Kosongkan state hasil evaluasi & hancurkan grafik radar jika ada
+        state.evaluatedItems = [];
+        if (state.radarChartInstance) {
+          state.radarChartInstance.destroy();
+          state.radarChartInstance = null;
+        }
+
+        // 3. Bersihkan isi tabel leaderboard & wadah lampiran PDF
+        const tbody = document.getElementById("leaderboard-tbody");
+        if (tbody) tbody.innerHTML = "";
+
+        const printContainer = document.getElementById("print-details-section");
+        if (printContainer) printContainer.innerHTML = "";
+
+        // 4. Sembunyikan kembali section leaderboard & modal detail jika terbuka
+        document.getElementById("results-section")?.classList.add("hidden");
+        document.getElementById("modal-detail")?.classList.add("hidden");
+
+        showToast("Dibersihkan", "Input URL dan hasil leaderboard telah dikosongkan.", true);
       });;
 
       document.getElementById("btn-clear-input")?.addEventListener("click", () => {
