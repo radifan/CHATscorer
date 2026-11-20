@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CHATScorer — AI WebApp Quality & Security Auditor</title>
+  <title>CHATScorer</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -29,16 +29,16 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">CHATScorer</h1>
-            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-sky-100 text-sky-800">v12 Single-Request</span>
+            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-sky-100 text-sky-800">by Radifan</span>
           </div>
-          <p class="text-[11px] text-slate-500 hidden sm:block">AI WebApp Quality & Security Auditor (C1–C10)</p>
+          <p class="text-[11px] text-slate-500 hidden sm:block">Build with AI</p>
         </div>
       </div>
 
       <div class="flex items-center gap-2.5">
         <button type="button" id="btn-open-api-modal" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-700 text-xs font-bold flex items-center gap-2 transition shadow-sm cursor-pointer">
           <i id="api-status-icon" class="fa-solid fa-key text-amber-500 text-sm"></i>
-          <span id="api-status-label">Atur API Key (Fallback)</span>
+          <span id="api-status-label">Atur API Key</span>
         </button>
       </div>
     </div>
@@ -52,36 +52,33 @@
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
         <div>
           <h2 class="font-extrabold text-slate-900 text-sm sm:text-base flex items-center gap-2">
-            <i class="fa-solid fa-list-check text-sky-600"></i> Input Daftar Peserta & URL WebApp
+            <i class="fa-solid fa-list-check text-sky-600"></i>Daftar URL WebApp
           </h2>
-          <p class="text-xs text-slate-500 mt-0.5">Format per baris: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">Nama Pengembang | https://url-aplikasi.vercel.app</code> (atau cukup URL saja).</p>
+          <p class="text-xs text-slate-500 mt-0.5">Format input perbaris: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">Nama Pengembang | https://alamat.url.app</code> (atau cukup URL saja).</p>
         </div>
         <div class="flex items-center gap-2">
-          <button type="button" id="btn-load-sample" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
-            <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Muat Contoh
-          </button>
           <button type="button" id="btn-clear-input" class="px-3 py-1.5 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 font-bold text-xs rounded-xl transition">
             Bersihkan
           </button>
         </div>
       </div>
 
-      <textarea id="input-urls" rows="4" placeholder="Dhini | https://teyvat-bites.vercel.app/&#10;Raido Octaviandy | https://toko-mama-three.vercel.app/&#10;Muhammad Rakha Widya Ardhana | https://vibegadgetku.vercel.app" class="w-full p-3.5 bg-slate-50 border-2 border-slate-200 rounded-2xl font-mono text-xs focus:outline-none focus:border-sky-600 focus:bg-white transition"></textarea>
+      <textarea id="input-urls" rows="4" placeholder="Nama1 | https://alamat.url1.app/&#10;Nama2 | https://alamat.url2.app/&#10;" class="w-full p-3.5 bg-slate-50 border-2 border-slate-200 rounded-2xl font-mono text-xs focus:outline-none focus:border-sky-600 focus:bg-white transition"></textarea>
 
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         <div class="text-[11px] text-slate-500 flex items-center gap-2">
           <i class="fa-solid fa-bolt text-amber-500"></i>
-          <span>Mode Hemat Token: Seluruh URL & kriteria C1–C10 dievaluasi sekaligus dalam <strong>1 kali request API</strong>.</span>
+          <span>Penalaran dilakukan dalam <strong>1 kali request API</strong>.</span>
         </div>
         <button type="button" id="btn-run-audit" class="px-6 py-3 bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-extrabold text-xs sm:text-sm rounded-2xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
-          <i class="fa-solid fa-play"></i> Mulai Audit & Penilaian (1x Request)
+          <i class="fa-solid fa-play"></i> mulai
         </button>
       </div>
 
       <!-- PROGRESS BAR -->
       <div id="progress-container" class="hidden space-y-2 pt-2">
         <div class="flex items-center justify-between text-xs font-bold">
-          <span id="progress-status" class="text-sky-700">Mempersiapkan pemindaian...</span>
+          <span id="progress-status" class="text-sky-700">Persiapan pemindaian...</span>
           <span id="progress-percent" class="font-mono text-slate-600">0%</span>
         </div>
         <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
@@ -96,16 +93,16 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
           <div>
             <h2 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
-              <i class="fa-solid fa-trophy text-amber-500"></i> Leaderboard Hasil Audit WebApp
+              <i class="fa-solid fa-trophy text-amber-500"></i> Leaderboard 
             </h2>
-            <p id="audit-meta-info" class="text-xs text-slate-500 mt-0.5">Menampilkan skor terintegrasi C1–C10.</p>
+            <p id="audit-meta-info" class="text-xs text-slate-500 mt-0.5">Menampilkan skor</p>
           </div>
           <div class="flex flex-wrap items-center gap-2 no-print">
             <button type="button" id="btn-export-csv" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs rounded-xl transition flex items-center gap-1.5">
               <i class="fa-solid fa-file-csv"></i> Export CSV
             </button>
             <button type="button" id="btn-print-pdf" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition flex items-center gap-1.5">
-              <i class="fa-solid fa-print"></i> Cetak / PDF
+              <i class="fa-solid fa-print"></i> Export PDF
             </button>
           </div>
         </div>
@@ -144,7 +141,7 @@
     <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl my-8 max-h-[92vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-key text-amber-500"></i> Konfigurasi AI (Failover 3 Lapis)
+          <i class="fa-solid fa-key text-amber-500"></i> Konfigurasi API (Failover 3 Layer)
         </h3>
         <button type="button" id="btn-close-api-modal" class="text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
@@ -155,8 +152,8 @@
         <!-- 1. GEMINI PRIMARY -->
         <div class="p-3.5 bg-sky-50/70 border border-sky-200 rounded-2xl space-y-2">
           <div class="flex items-center justify-between">
-            <label for="input-api-key" class="block font-extrabold text-sky-950">1. Gemini API Key (Utama):</label>
-            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-sky-600 text-white">PRIMARY</span>
+            <label for="input-api-key" class="block font-extrabold text-sky-950">1. Gemini API Key:</label>
+            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-sky-600 text-white">UTAMA</span>
           </div>
           <div class="relative">
             <input type="password" id="input-api-key" placeholder="AIzaSy..." class="w-full pl-3.5 pr-10 py-2 bg-white border border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-sky-600">
@@ -164,14 +161,14 @@
               <i class="fa-solid fa-eye"></i>
             </button>
           </div>
-          <p class="text-[11px] text-slate-600">Auto-retry 503 & fallback <strong>gemini-4-hydrogen</strong> &rarr; <strong>gemini-3.8-flash</strong>.</p>
+          <p class="text-[11px] text-slate-600">Auto-retry 429/503 & fallback <strong>gemini-4-hydrogen</strong> &rarr; <strong>gemini-3.8-flash</strong>.</p>
         </div>
 
         <!-- 2. GROQ CLOUD (BACKUP #1 - ULTRA FAST) -->
         <div class="p-3.5 bg-orange-50/70 border border-orange-200 rounded-2xl space-y-2">
           <div class="flex items-center justify-between">
-            <label for="input-groq-key" class="block font-extrabold text-orange-950">2. Groq API Key (Backup #1 - Ultra Fast):</label>
-            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-orange-600 text-white">GROQ</span>
+            <label for="input-groq-key" class="block font-extrabold text-orange-950">2. Groq API Key:</label>
+            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-orange-600 text-white">Backup #1</span>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div class="relative">
@@ -196,8 +193,8 @@
         <!-- 3. MULTI-ENGINE BACKUP #2 -->
         <div class="p-3.5 bg-indigo-50/70 border border-indigo-200 rounded-2xl space-y-2">
           <div class="flex items-center justify-between">
-            <label for="select-backup-provider" class="block font-extrabold text-indigo-950">3. Mesin AI Backup #2 (OpenRouter / Lainnya):</label>
-            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-600 text-white">BACKUP #2</span>
+            <label for="select-backup-provider" class="block font-extrabold text-indigo-950">3. Mesin AI lainnya:</label>
+            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-600 text-white">Backup #2</span>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -235,7 +232,7 @@
 
         <!-- 4. CORS PROXY -->
         <div class="space-y-1">
-          <label for="input-proxy-url" class="block font-extrabold text-slate-700">4. CORS Proxy Endpoint (Untuk Inspeksi HTML & X-Headers):</label>
+          <label for="input-proxy-url" class="block font-extrabold text-slate-700">4. CORS Proxy Endpoint (untuk Inspeksi HTML & X-Headers):</label>
           <input type="text" id="input-proxy-url" placeholder="https://api.allorigins.win/get?url=" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:border-sky-600">
         </div>
       </div>
@@ -267,7 +264,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="md:col-span-2 p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
-          <h4 class="font-extrabold text-xs uppercase tracking-wider text-slate-600">Ringkasan Eksekutif</h4>
+          <h4 class="font-extrabold text-xs uppercase tracking-wider text-slate-600">Ringkasan</h4>
           <p id="detail-summary" class="text-xs text-slate-700 leading-relaxed whitespace-pre-line"></p>
         </div>
         <div class="p-4 bg-white border border-slate-200 rounded-2xl flex items-center justify-center">
@@ -295,9 +292,9 @@
     const BACKUP_MODEL_STORAGE = "chatscorer_backup_model";
     const PROXY_URL_STORAGE = "chatscorer_cors_proxy_url";
 
-    const DEFAULT_PROXY_URL = "https://api.allorigins.win/get?url=";
+    const DEFAULT_PROXY_URL = "https://chatscorer.radifan-02.workers.dev/?url=";
     const GROQ_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions";
-    const DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile";
+    const DEFAULT_GROQ_MODEL = "openai/gpt-oss-120b";
 
     const BACKUP_PROVIDER_PRESETS = {
       openrouter: {
@@ -346,7 +343,9 @@
 
     const GEMINI_MODELS_PRIORITY = [
       "gemini-4-hydrogen",
-      "gemini-3.8-flash"
+      "gemini-3.8-flash",
+      "gemini-3.6-flash",
+      "gemini-3.5-flash-lite"
     ];
 
     const CRITERIA_META = [
@@ -672,13 +671,13 @@
         }
 
         baseReport.has_cart = /keranjang|cart|troli|tambah ke keranjang|add to cart/i.test(bodyText);
-        baseReport.has_payment = /pembayaran|payment|checkout|bayar|qris|transfer bank|e-wallet/i.test(bodyText);
+        baseReport.has_payment = /pembayaran|payment|checkout|bayar|qris|transfer bank|e-wallet|cod/i.test(bodyText);
 
         const imgs = Array.from(doc.querySelectorAll("img"));
         baseReport.missing_src_images = imgs.filter(img => !(img.getAttribute("src") || "").trim()).length;
 
         if (html.includes("<!--") && /password|secret|api_key|token|debug/i.test(html)) {
-          baseReport.enumeration_clues.push("Komentar HTML mengandung info sensitif/debug");
+          baseReport.enumeration_clues.push("Comment HTML mengandung info sensitif/debug");
         }
       } catch (_) {
         baseReport.has_loading_error = true;
@@ -754,7 +753,7 @@
 
         for (let attempt = 1; attempt <= 2; attempt++) {
           if (progressStatusEl) {
-            progressStatusEl.textContent = `Mengevaluasi seluruh WebApp via ${model} (percobaan ${attempt})...`;
+            progressStatusEl.textContent = `Melakukan penalaran via ${model} (percobaan ${attempt})...`;
           }
 
           try {
@@ -773,7 +772,7 @@
             }, 60000);
 
             if (response.status === 503 || response.status === 429) {
-              lastError = `${model} HTTP ${response.status} (Server sibuk)`;
+              lastError = `${model} HTTP ${response.status} (Server sibuk/High request/Limit)`;
               await new Promise(resolve => setTimeout(resolve, attempt * 2000));
               continue;
             }
@@ -805,8 +804,8 @@
 
       if (progressStatusEl) {
         progressStatusEl.textContent = isFallback
-          ? `Gemini gagal/sibuk, beralih cepat ke Groq (${targetModel})...`
-          : `Mengevaluasi seluruh WebApp via Groq (${targetModel})...`;
+          ? `Gemini gagal/sibuk, beralih ke Groq (${targetModel})...`
+          : `Melakukan penalaran via Groq (${targetModel})...`;
       }
 
       try {
@@ -868,7 +867,7 @@
       if (progressStatusEl) {
         progressStatusEl.textContent = isFallback
           ? `Provider sebelumnya gagal, beralih ke ${providerName} (${targetModel})...`
-          : `Mengevaluasi seluruh WebApp via ${providerName} (${targetModel})...`;
+          : `Melakukan penalaran via ${providerName} (${targetModel})...`;
       }
 
       const headers = { "Content-Type": "application/json" };
@@ -1223,14 +1222,14 @@ Format JSON Array Wajib:
 
         if (aiResponse.results) {
           aiResults = aiResponse.results;
-          evaluationSourceLabel = `Dievaluasi via ${aiResponse.usedModel} (1x Request)`;
+          evaluationSourceLabel = `Penalaran menggunakan ${aiResponse.usedModel}`;
           if (aiResponse.switchedProvider) {
             showToast("Mesin AI Cadangan Aktif", `Provider sebelumnya gagal (${aiResponse.previousErrors}). Sukses via ${aiResponse.usedModel}.`, true);
           } else if (aiResponse.usedGeminiInternalBackup) {
             showToast("Backup Model Gemini Aktif", `Model utama sibuk. Sukses menggunakan ${aiResponse.usedModel}.`, true);
           }
         } else {
-          showToast("Mode Fallback Scan", `Semua API gagal (${aiResponse.error}), beralih ke evaluasi berbasis hasil scan.`, false);
+          showToast("Mode Fallback Scan", `Semua API gagal (${aiResponse.error}), beralih ke evaluasi berbasis hasil scan tanpa penalaran.`, false);
         }
       } else {
         progressStatus.textContent = "Menjalankan evaluasi berbasis hasil scanning DOM & X-Headers...";
@@ -1268,8 +1267,8 @@ Format JSON Array Wajib:
 
       progressBar.style.width = "100%";
       progressPercent.textContent = "100%";
-      progressStatus.textContent = "Audit selesai!";
-      document.getElementById("audit-meta-info").textContent = `${combined.length} WebApp selesai diaudit • ${evaluationSourceLabel}`;
+      progressStatus.textContent = "Periksa selesai!";
+      document.getElementById("audit-meta-info").textContent = `${combined.length} WebApp selesai diperiksa • ${evaluationSourceLabel}`;
 
       renderLeaderboard();
 
@@ -1408,7 +1407,7 @@ Format JSON Array Wajib:
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = `CHATScorer_Audit_${new Date().toISOString().slice(0, 10)}.csv`;
+      link.download = `CHATScorer_${new Date().toISOString().slice(0, 10)}.csv`;
       link.click();
     }
 
