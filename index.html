@@ -287,7 +287,7 @@
   </div>
 
   <!-- TOAST NOTIFICATION -->
-  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm no-print"></div>
+  <div id="toast-container" class="fixed top-20 right-5 z-50 flex flex-col gap-2 max-w-sm no-print"></div>
 
   <script>
     /* ==========================================================================
@@ -481,7 +481,7 @@
       setTimeout(() => {
         toast.style.opacity = "0";
         setTimeout(() => toast.remove(), 300);
-      }, 5500);
+      }, 10000);
     }
 
     async function fetchWithTimeout(url, options = {}, timeoutMs = 20000) {
