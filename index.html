@@ -15,6 +15,12 @@
       .no-print { display: none !important; }
       body { background: white !important; }
     }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .print-page-break { page-break-before: always; break-before: page; }
+      .print-avoid-break { page-break-inside: avoid; break-inside: avoid; }
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
@@ -131,6 +137,10 @@
             <tbody id="leaderboard-tbody" class="divide-y divide-slate-100"></tbody>
           </table>
         </div>
+        <!-- WADAH DETAIL KHUSUS CETAK / PDF (Tersembunyi di layar, muncul saat Print/PDF) -->
+        <div id="print-details-section" class="hidden print:block space-y-6 pt-6 border-t-2 border-slate-300"></div>
+      </div>
+    </section>
       </div>
     </section>
 
@@ -1353,8 +1363,74 @@ Format JSON Array Wajib:
           openDetailModal(idx);
         });
       });
-    }
 
+    renderPrintableDetails();
+    }
+    function renderPrintableDetails() {
+      const printContainer = document.getElementById("print-details-section");
+      if (!printContainer) return;
+
+      if (state.evaluatedItems.length === 0) {
+        printContainer.innerHTML = "";
+        return;
+      }
+
+      printContainer.innerHTML = `
+        <div class="print-page-break">
+          <h3 class="font-extrabold text-slate-900 text-base uppercase tracking-wider border-b-2 border-slate-800 pb-2 mb-4">
+            Lampiran Detail Hasil Evaluasi & Audit Teknis (C1–C10)
+          </h3>
+        </div>
+      ` + state.evaluatedItems.map((item, idx) => {
+        const criteriaHtml = CRITERIA_META.map(m => {
+          const score = item.criteriaScores[m.id];
+          const ev = item.evaluation.evidence?.[m.id] || "-";
+          const reason = item.evaluation.reasons?.[m.id] || "-";
+          const rec = item.evaluation.recommendations?.[m.id] || "-";
+          const strengths = (item.evaluation.strengths?.[m.id] || []).join(", ") || "-";
+          const weaknesses = (item.evaluation.weaknesses?.[m.id] || []).join(", ") || "-";
+
+          return `
+            <div class="p-2.5 border border-slate-200 rounded-xl space-y-1 text-[11px] print-avoid-break">
+              <div class="flex items-center justify-between font-bold text-slate-900">
+                <span>${m.id.toUpperCase()}: ${m.name} (${(m.weight * 100).toFixed(1)}%)</span>
+                <span class="font-mono text-indigo-700">${score.toFixed(2)} / 10</span>
+              </div>
+              <div class="text-slate-600"><strong>Bukti Scan:</strong> ${escapeHtml(ev)}</div>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="text-emerald-800"><strong>Keunggulan:</strong> ${escapeHtml(strengths)}</div>
+                <div class="text-rose-800"><strong>Kelemahan:</strong> ${escapeHtml(weaknesses)}</div>
+              </div>
+              <div class="text-slate-700"><strong>Alasan:</strong> ${escapeHtml(reason)}</div>
+              <div class="text-sky-900 bg-sky-50/70 px-2 py-1 rounded"><strong>Rekomendasi:</strong> ${escapeHtml(rec)}</div>
+            </div>
+          `;
+        }).join("");
+
+        return `
+          <div class="border border-slate-300 rounded-2xl p-4 space-y-3 ${idx > 0 ? "print-page-break" : ""}">
+            <div class="flex items-start justify-between border-b border-slate-200 pb-2.5 print-avoid-break">
+              <div>
+                <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-900">
+                  RANK #${idx + 1} • SKOR ${item.finalScore.toFixed(2)} • ${escapeHtml(item.grade)}
+                </span>
+                <h4 class="font-extrabold text-slate-900 text-base mt-1">${escapeHtml(item.developer)}</h4>
+                <div class="text-[11px] font-mono text-sky-700 break-all">${escapeHtml(item.url)}</div>
+              </div>
+            </div>
+
+            <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] space-y-1 print-avoid-break">
+              <div class="font-extrabold uppercase text-slate-600">Ringkasan Eksekutif</div>
+              <p class="text-slate-800 whitespace-pre-line leading-relaxed">${escapeHtml(item.evaluation.executive_summary || "-")}</p>
+            </div>
+
+            <div class="space-y-2">
+              ${criteriaHtml}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
     function openDetailModal(idx) {
       const item = state.evaluatedItems[idx];
       if (!item) return;
@@ -1534,7 +1610,10 @@ Format JSON Array Wajib:
 
       document.getElementById("btn-run-audit")?.addEventListener("click", runAIAuditBatch);
       document.getElementById("btn-export-csv")?.addEventListener("click", exportLeaderboardCSV);
-      document.getElementById("btn-print-pdf")?.addEventListener("click", () => window.print());
+      document.getElementById("btn-print-pdf")?.addEventListener("click", () => {
+        renderPrintableDetails();
+        window.print();
+      });
     }
 
     document.addEventListener("DOMContentLoaded", initApp);
