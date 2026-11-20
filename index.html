@@ -542,29 +542,55 @@
        4. PEMINDAIAN DOM & HTTP SECURITY HEADERS NYATA
        ========================================================================== */
    function parseInputLines(rawText) {
-  return rawText
-    .split(/\r?\n/)
-    .map(line => line.trim())
-    .filter(Boolean)
-    .map((line, idx) => {
-      let developer = `Peserta #${idx + 1}`;
-      let url = line;
-      if (line.includes("|")) {
-        const parts = line.split("|").map(p => p.trim());
-        developer = parts[0] || developer;
-        url = parts[1] || "";
-      } else if (line.includes("\t")) {
-        const parts = line.split("\t").map(p => p.trim());
-        developer = parts[0] || developer;
-        url = parts[1] || "";
-      }
-      if (url && !/^https?:\/\//i.test(url)) {
-        url = "https://" + url;
-      }
-      return { developer, url };
-    })
-    .filter(item => item.url);
-}
+      // Regex untuk mendeteksi token URL (dengan http/https maupun domain seperti .vercel.app, .com, .id, dll.)
+      const urlTokenRegex = /^(https?:\/\/[^\s]+|(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)+(?:\/[^\s]*)?)$/i;
+
+      return rawText
+        .split(/\r?\n/)
+        .map(line => line.trim())
+        .filter(Boolean)
+        .map((line, idx) => {
+          let developer = `Peserta #${idx + 1}`;
+          let url = "";
+
+          // 1. Jika tetap memakai pemisah eksplisit "|" atau Tab (Excel)
+          if (line.includes("|") || line.includes("\t")) {
+            const sep = line.includes("|") ? "|" : "\t";
+            const parts = line.split(sep).map(p => p.trim()).filter(Boolean);
+            const urlIdx = parts.findIndex(p => urlTokenRegex.test(p));
+
+            if (urlIdx !== -1) {
+              url = parts[urlIdx];
+              const nameParts = parts.filter((_, i) => i !== urlIdx);
+              if (nameParts.length > 0) developer = nameParts.join(" ");
+            } else {
+              developer = parts[0] || developer;
+              url = parts[1] || "";
+            }
+          } else {
+            // 2. Tanpa pemisah "|": pecah per spasi & cari token yang berbentuk URL
+            const tokens = line.split(/\s+/);
+            const urlIdx = tokens.findIndex(t => urlTokenRegex.test(t));
+
+            if (urlIdx !== -1) {
+              url = tokens[urlIdx];
+              // Gabungkan seluruh kata selain URL menjadi satu nama utuh (2, 3, atau lebih kata)
+              const nameTokens = tokens.filter((_, i) => i !== urlIdx);
+              if (nameTokens.length > 0) {
+                developer = nameTokens.join(" ");
+              }
+            }
+          }
+
+          // Pastikan URL memiliki awalan https://
+          if (url && !/^https?:\/\//i.test(url)) {
+            url = "https://" + url;
+          }
+
+          return { developer, url };
+        })
+        .filter(item => item.url);
+    }
 
     async function inspectTargetWebsite(targetUrl) {
       const baseReport = {
