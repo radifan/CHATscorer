@@ -663,7 +663,7 @@
           const ct = res.headers.get("content-type") || "";
           if (ct.includes("application/json")) {
             const json = await res.json();
-            combinedJs += "\n" + (json.contents || json.body || "");
+            combinedJs += "\n" + (json.contents || json.body || json.html || "");
           } else {
             combinedJs += "\n" + (await res.text());
           }
@@ -841,13 +841,18 @@
         baseReport.page_title = (doc.querySelector("title")?.textContent || "").trim();
 
         const rootEl = doc.querySelector("#root, #app, #__next");
-        baseReport.is_client_side_spa = Boolean(rootEl && rootEl.innerHTML.trim().length < 150);
+        const moduleScripts = doc.querySelectorAll("script[type='module'][src], script[src*='assets/']");
+        const initialBodyText = (doc.body?.textContent || "").replace(/\s+/g, " ").trim();
+        baseReport.is_client_side_spa = Boolean(
+          (rootEl && rootEl.innerHTML.trim().length < 250) ||
+          (moduleScripts.length > 0 && initialBodyText.length < 400)
+        );
 
         let rawCodeAndText = html;
-        let searchableText = (doc.body?.innerText || doc.body?.textContent || "").toLowerCase();
+        let searchableText = initialBodyText.toLowerCase();
 
-        // Sedot bundle JS jika SPA (React/Vue/Vite) agar fitur dinamis tetap terbaca
-        if (baseReport.is_client_side_spa) {
+        // Sedot bundle JS jika SPA (React/Vue/Vite/Next) agar teks ter-render (keranjang, cek pesanan, WA link) terbaca
+        if (baseReport.is_client_side_spa || moduleScripts.length > 0) {
           const spaJsBundle = await extractSpaBundleText(doc, targetUrl, proxyBase);
           if (spaJsBundle) {
             rawCodeAndText += "\n" + spaJsBundle;
@@ -976,10 +981,10 @@
         };
         baseReport.has_about_us = profileSignals.length > 0;
 
-        // --- C4: Ketersediaan & Validitas Kanal Komunikasi (Nyata vs Dummy/Placeholder) ---
+        // --- C4: Ketersediaan & Validitas Kanal Komunikasi (Nyata vs Dummy/Placeholder, termasuk tautan WhatsApp/Tel/Email) ---
         const realChannels = [];
         const dummyChannels = [];
-        const socialDomains = ["instagram.com", "facebook.com", "tiktok.com", "youtube.com", "x.com", "twitter.com", "linkedin.com", "t.me", "shopee.co.id", "tokopedia.com"];
+        const socialDomains = ["instagram.com", "facebook.com", "tiktok.com", "youtube.com", "x.com", "twitter.com", "linkedin.com", "t.me", "shopee.co.id", "tokopedia.com", "wa.me", "whatsapp.com", "wa.link"];
         const dummyPatterns = [
           /^#$/, /^javascript:/i, /example\.com/i, /username/i, /namatoko/i, /akunanda/i,
           /08123456789/, /080000000/, /12345678/, /user@domain/i, /email@example/i,
@@ -992,7 +997,7 @@
           const isSocial = socialDomains.some(d => href.toLowerCase().includes(d));
           const isMailto = /^mailto:/i.test(href);
           const isTel = /^tel:/i.test(href);
-          const isContactLabel = /instagram|facebook|tiktok|youtube|twitter|telegram|email|telepon|hubungi|contact|kontak/i.test(label);
+          const isContactLabel = /instagram|facebook|tiktok|youtube|twitter|telegram|whatsapp|email|telepon|hubungi|contact|kontak/i.test(label);
 
           if (isSocial || isMailto || isTel || isContactLabel) {
             const isDummy = !href || dummyPatterns.some(rx => rx.test(href));
@@ -1004,8 +1009,8 @@
           }
         });
 
-        // Cek juga URL medsos atau email di dalam kode/JS bundle SPA
-        const codeSocialMatches = rawCodeAndText.match(/https?:\/\/(?:www\.)?(?:instagram\.com|facebook\.com|tiktok\.com|youtube\.com|t\.me)\/[a-z0-9._-]+/gi) || [];
+        // Cek juga URL medsos, WhatsApp, atau email di dalam kode/JS bundle SPA
+        const codeSocialMatches = rawCodeAndText.match(/https?:\/\/(?:www\.)?(?:instagram\.com|facebook\.com|tiktok\.com|youtube\.com|t\.me|wa\.me|api\.whatsapp\.com)\/[a-z0-9._?=&+-]+/gi) || [];
         codeSocialMatches.forEach(urlMatch => {
           if (dummyPatterns.some(rx => rx.test(urlMatch))) {
             if (!dummyChannels.some(d => d.includes(urlMatch))) dummyChannels.push(`${urlMatch} (Dummy)`);
@@ -1023,44 +1028,46 @@
           }
         });
 
-        baseReport.communication_channels = {
-          has_any_channel: realChannels.length > 0 || dummyChannels.length > 0,
-          real_accessible_channels: realChannels.slice(0, 6),
-          dummy_or_placeholder_channels: dummyChannels.slice(0, 6),
-          channel_status: realChannels.length > 0
-            ? `Aktif & Bisa Diakses (${realChannels.length} kanal nyata)`
-            : (dummyChannels.length > 0 ? `Hanya Dummy/Placeholder (${dummyChannels.length} item)` : "Tidak ada kanal komunikasi")
-        };
-        baseReport.has_contact = realChannels.length > 0 || dummyChannels.length > 0;
-
-        // --- C5: Deteksi Kontak Langsung Penjual (WhatsApp) yang Akurat ---
+        // --- C5: Deteksi Kontak Langsung Penjual (WhatsApp) — mendukung tautan teks nomor HP (mis. 0822-6145-1487) maupun tombol ---
         const waHrefMatches = allLinks
-          .map(a => (a.getAttribute("href") || "").trim())
-          .filter(href => /wa\.me|whatsapp\.com|wa\.link/i.test(href));
+          .map(a => {
+            const href = (a.getAttribute("href") || "").trim();
+            const txt = (a.textContent || "").trim();
+            if (/wa\.me|whatsapp\.com|wa\.link/i.test(href)) return href;
+            if (/^tel:/i.test(href) && /whatsapp|wa|08\d{2}/i.test(`${txt} ${a.parentElement?.textContent || ""}`)) return href;
+            return null;
+          })
+          .filter(Boolean);
 
-        // Mencakup wa.me/628..., wa.me/+628..., api.whatsapp.com/send?phone=..., wa.link/..., maupun window.open(`https://wa.me/${phone}`) di React/JS
+        // Mencakup wa.me/628..., wa.me/+628..., api.whatsapp.com/send?phone=..., wa.link/..., maupun template literal di React/JS
         const waCodeMatches = rawCodeAndText.match(
           /(?:https?:\/\/)?(?:api\.whatsapp\.com\/send\?[^"'`\s<>]+|wa\.me\/\+?\d{8,15}[^"'`\s<>]*|wa\.me\/\$\{[^}]+\}|wa\.link\/[a-z0-9]+)/gi
         ) || [];
 
-        const allWaTargets = [...new Set([...waHrefMatches, ...waCodeMatches])];
+        // Deteksi format nomor Indonesia (08xx-xxxx-xxxx atau +62 8xx...) yang berdekatan dengan kata WhatsApp
+        const waPhoneTextMatches = rawCodeAndText.match(/(?:whatsapp|wa)[^\n<>]{0,40}?(?:\+62|62|0)8[1-9][0-9\s-]{7,14}/gi) || [];
 
-        // Deteksi tombol atau elemen interaktif WhatsApp (<button>, <a>, ikon fa-whatsapp, teks WA)
-        const waElements = Array.from(doc.querySelectorAll("button, [role='button'], a, [onclick]")).filter(el => {
+        const allWaTargets = [...new Set([...waHrefMatches, ...waCodeMatches, ...waPhoneTextMatches])];
+
+        // Deteksi tautan teks <a> atau tombol <button> WhatsApp (tidak harus berbentuk tombol)
+        const waElements = Array.from(doc.querySelectorAll("a, button, [role='button'], [onclick]")).filter(el => {
           const txt = (el.textContent || "").toLowerCase();
           const aria = (el.getAttribute("aria-label") || "").toLowerCase();
           const title = (el.getAttribute("title") || "").toLowerCase();
           const onclick = (el.getAttribute("onclick") || "").toLowerCase();
+          const parentTxt = (el.parentElement?.textContent || "").toLowerCase();
           const hasWaIcon = Boolean(el.querySelector("[class*='whatsapp' i], svg"));
-          return /whatsapp|chat penjual|pesan via wa|hubungi penjual|order via wa|beli via wa/i.test(`${txt} ${aria} ${title} ${onclick}`) || hasWaIcon;
+          return /whatsapp|chat penjual|pesan wa|pesan via wa|hubungi penjual|order via wa|beli via wa/i.test(`${txt} ${aria} ${title} ${onclick}`) ||
+            (/whatsapp/i.test(parentTxt) && /(?:\+62|62|0)8\d/.test(txt)) ||
+            hasWaIcon;
         });
 
-        const hasWaKeywordInCode = /whatsapp|wa\.me|api\.whatsapp\.com|pesan via wa|chat penjual/i.test(searchableText);
+        const hasWaKeywordInCode = /whatsapp|wa\.me|api\.whatsapp\.com|pesan wa|pesan via wa|chat penjual/i.test(searchableText);
         const isDummyWaNumber = (target) => /(?:08123456789|628123456789|080000000|6280000000|12345678)/.test(target);
 
         if (allWaTargets.length > 0) {
           const hasValidRealWa = allWaTargets.some(t =>
-            /(?:wa\.me\/\+?\d{8,15}|phone=\+?\d{8,15}|wa\.me\/\$\{[^}]+\}|wa\.link\/[a-z0-9]+)/i.test(t) && !isDummyWaNumber(t)
+            /(?:wa\.me\/\+?\d{8,15}|phone=\+?\d{8,15}|wa\.me\/\$\{[^}]+\}|wa\.link\/[a-z0-9]+|(?:\+62|62|0)8[1-9][0-9\s-]{7,14})/i.test(t) && !isDummyWaNumber(t)
           );
           const hasDummyWa = allWaTargets.some(t => isDummyWaNumber(t));
 
@@ -1073,7 +1080,7 @@
               is_dummy_clickable: false,
               has_broken_wa_button: false,
               detected_targets: allWaTargets.slice(0, 4),
-              detection_note: "Tombol & tautan WhatsApp valid terdeteksi dan berfungsi"
+              detection_note: "Kontak/tautan WhatsApp aktif dan dapat diklik terdeteksi"
             };
           } else if (hasDummyWa) {
             baseReport.has_seller_contact = true;
@@ -1106,15 +1113,34 @@
             has_seller_contact: true,
             is_dummy_clickable: false,
             has_broken_wa_button: false,
-            detected_targets: ["Tombol interaktif WhatsApp (JS/Button handler)"],
-            detection_note: "Tombol interaktif WhatsApp terdeteksi aktif pada komponen UI"
+            detected_targets: ["Tautan/Tombol interaktif WhatsApp (HTML/JS handler)"],
+            detection_note: "Tautan/tombol WhatsApp terdeteksi aktif pada komponen UI"
           };
         }
 
-        // --- C6 - C10 ---
-        const pureCartRegex = /keranjang|cart|troli|tambah ke keranjang|add to cart|subtotal|jumlah item|qty|quantity/i;
-        const waDirectOrderRegex = /pesan via wa|order via wa|beli via wa|pesan sekarang|chat penjual|tanya penjual|pesan via whatsapp|order via whatsapp/i;
+        // Sinkronkan kontak WhatsApp valid ke daftar kanal komunikasi C4 agar C4 juga mengakui kontak WA aktif
+        if (baseReport.has_seller_contact && !baseReport.is_dummy_clickable) {
+          const waLabel = allWaTargets[0] ? `WhatsApp (${allWaTargets[0]})` : "WhatsApp Penjual Aktif";
+          if (!realChannels.some(r => /whatsapp|wa\.me/i.test(r))) {
+            realChannels.push(waLabel);
+          }
+        }
+
+        baseReport.communication_channels = {
+          has_any_channel: realChannels.length > 0 || dummyChannels.length > 0,
+          real_accessible_channels: realChannels.slice(0, 6),
+          dummy_or_placeholder_channels: dummyChannels.slice(0, 6),
+          channel_status: realChannels.length > 0
+            ? `Aktif & Bisa Diakses (${realChannels.length} kanal nyata: ${realChannels.slice(0, 3).join(", ")})`
+            : (dummyChannels.length > 0 ? `Hanya Dummy/Placeholder (${dummyChannels.length} item)` : "Tidak ada kanal komunikasi")
+        };
+        baseReport.has_contact = realChannels.length > 0 || dummyChannels.length > 0;
+
+        // --- C6 - C10: Keranjang Belanja + Cek Pesanan ---
+        const pureCartRegex = /keranjang|cart|troli|tambah ke keranjang|add to cart|subtotal|jumlah item|qty|quantity|cek pesanan|kode pesanan|lacak pesanan|ringkasan pesanan/i;
+        const waDirectOrderRegex = /pesan wa|pesan via wa|order via wa|beli via wa|pesan sekarang|chat penjual|tanya penjual|pesan via whatsapp|order via whatsapp/i;
         baseReport.has_cart = pureCartRegex.test(searchableText);
+        baseReport.has_order_tracking = /cek pesanan|kode pesanan|lacak pesanan/i.test(searchableText);
         baseReport.has_wa_item_order_only = !baseReport.has_cart && (waDirectOrderRegex.test(searchableText) || baseReport.has_seller_contact);
 
         const directPaymentRegex = /qris|transfer bank|virtual account|va\b|kartu kredit|credit card|debit|gopay|ovo|dana\b|shopeepay|e-wallet|ewallet|cod\b|bayar di tempat|rekening|bca|bri|bni|mandiri|metode pembayaran|payment method/i;
@@ -1571,7 +1597,7 @@
           c3: prof.has_profile ? `Terdeteksi: ${prof.signals.join("; ")}` : "Identitas pemilik/profil usaha tidak ditemukan",
           c4: comm.channel_status,
           c5: wa.detection_note,
-          c6: s.has_cart ? "Keranjang belanja murni terdeteksi" : (s.has_wa_item_order_only ? "Hanya tombol pemesanan via WhatsApp per item katalog (tanpa keranjang akumulasi)" : "Fitur keranjang tidak terdeteksi"),
+          c6: s.has_cart ? (s.has_order_tracking ? "Keranjang belanja murni terdeteksi + fitur Cek Pesanan" : "Keranjang belanja murni terdeteksi") : (s.has_wa_item_order_only ? "Hanya tombol pemesanan via WhatsApp per item katalog (tanpa keranjang akumulasi)" : "Fitur keranjang tidak terdeteksi"),
           c7: s.has_payment ? "Opsi pembayaran langsung terdeteksi" : (s.has_wa_payment_only ? "Pembayaran diarahkan melalui chat WhatsApp penjual" : "Mekanisme pembayaran tidak terdeteksi"),
           c8: `${activeHeadersCount}/6 aktif (${activeHeaderNames.length > 0 ? activeHeaderNames.join(", ") : "Tidak ada"})${sh.coop && sh.coop !== "Tidak terdeteksi" ? `; COOP=${sh.coop}` : ""}${sh.corp && sh.corp !== "Tidak terdeteksi" ? `; CORP=${sh.corp}` : ""}${qualityIssues.length > 0 ? `; Catatan: ${qualityIssues.join("; ")}` : ""}${infoLeaks.length > 0 ? `; Leak: ${infoLeaks.join(", ")}` : ""}`,
           c9: `reachable=${s.reachable}, missing_img=${s.missing_src_images}`,
@@ -1589,7 +1615,7 @@
           c3: prof.has_profile ? [`Identitas pemilik/profil jelas (${prof.signals.length} indikator)`] : [],
           c4: hasRealComm ? [`Tautan komunikasi nyata dapat diakses (${comm.real_accessible_channels.length} kanal)`] : [],
           c5: wa.has_seller_contact ? [wa.is_dummy_clickable ? "Tombol WhatsApp aktif dan dapat diklik (nomor simulasi/dummy)" : "Tombol/kontak WhatsApp penjual terdeteksi aktif"] : [],
-          c6: s.has_cart ? ["Fitur keranjang belanja murni tersedia"] : (s.has_wa_item_order_only ? ["Tersedia tombol pemesanan cepat via WhatsApp pada item katalog"] : []),
+          c6: s.has_cart ? [s.has_order_tracking ? "Fitur keranjang belanja murni tersedia dilengkapi fitur Cek Pesanan" : "Fitur keranjang belanja murni tersedia"] : (s.has_wa_item_order_only ? ["Tersedia tombol pemesanan cepat via WhatsApp pada item katalog"] : []),
           c7: s.has_payment ? ["Informasi/metode pembayaran langsung tersedia"] : (s.has_wa_payment_only ? ["Konfirmasi pembayaran dapat dilakukan melalui kontak WhatsApp"] : []),
           c8: activeHeadersCount > 0 ? [`${activeHeadersCount}/6 header aktif: ${activeHeaderNames.join(", ")}`] : [],
           c9: s.reachable ? ["Halaman dapat diakses lancar"] : [],
