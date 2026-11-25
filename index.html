@@ -254,18 +254,19 @@
   </div>
 
   <!-- MODAL DETAIL PESERTA -->
-  <div id="modal-detail" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white border border-slate-200 rounded-3xl max-w-4xl w-full p-6 space-y-5 shadow-2xl my-8 max-h-[92vh] overflow-y-auto">
-      <div class="flex items-start justify-between border-b pb-3 gap-4">
+  <div id="modal-detail" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-4xl w-full shadow-2xl max-h-[92vh] overflow-y-auto relative">
+      <div class="sticky top-0 z-20 bg-white/95 backdrop-blur-sm flex items-start justify-between border-b border-slate-200 px-6 pt-5 pb-3.5 gap-4 rounded-t-3xl">
         <div>
           <span id="detail-badge" class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800">GRADE A</span>
           <h3 id="detail-title" class="font-extrabold text-slate-900 text-lg mt-1">Nama Pengembang</h3>
           <a id="detail-url" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-mono text-sky-600 hover:underline break-all">https://...</a>
         </div>
-        <button type="button" id="btn-close-detail-modal" class="text-slate-400 hover:text-slate-600 text-xl">
+        <button type="button" id="btn-close-detail-modal" title="Tutup Detail" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-rose-100 text-slate-500 hover:text-rose-600 flex items-center justify-center text-lg transition shrink-0 cursor-pointer">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
+      <div class="p-6 pt-4 space-y-5">
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="md:col-span-2 p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
@@ -278,6 +279,7 @@
       </div>
 
       <div id="detail-criteria-list" class="space-y-3"></div>
+      </div>
     </div>
   </div>
 
@@ -399,7 +401,7 @@
         id: "c8",
         name: "HTTP Security Headers",
         weight: 0.15,
-        subs: ["Content-Security-Policy & X-Frame", "X-Content-Type & HSTS", "Postur Keamanan Transportasi"]
+        subs: ["CSP, X-Frame & X-Content-Type", "HSTS, Referrer & Permissions-Policy", "Kualitas Konfigurasi & Kebersihan Header"]
       },
       {
         id: "c9",
@@ -684,11 +686,16 @@
           has_grid_or_flex: false,
           has_consistent_headings: false,
           inline_style_bloat: 0,
+          has_unique_layout_tech: false,
+          unique_tech_signals: [],
           layout_status: "Belum terdeteksi"
         },
         buttons_count: 0,
         broken_links_count: 0,
+        broken_links_details: [],
         has_search_or_filter: false,
+        has_interactive_filter_ui: false,
+        unique_filter_signals: [],
         has_viewport: false,
         // C3: Identitas Pemilik & Profil Usaha (fleksibel tanpa wajib kata "about us")
         profile_identity: {
@@ -705,18 +712,28 @@
         // C5: Kontak Langsung Penjual (WhatsApp)
         whatsapp_status: {
           has_seller_contact: false,
+          is_dummy_clickable: false,
           has_broken_wa_button: false,
           detected_targets: [],
           detection_note: "Tidak ditemukan"
         },
         // C6 - C10
         has_cart: false,
+        has_wa_item_order_only: false,
         has_payment: false,
+        has_wa_payment_only: false,
         security_headers: {
           csp: "Tidak terdeteksi",
+          cspSource: "none",
           xFrame: "Tidak terdeteksi",
           xContentType: "Tidak terdeteksi",
-          hsts: "Tidak terdeteksi"
+          hsts: "Tidak terdeteksi",
+          referrerPolicy: "Tidak terdeteksi",
+          permissionsPolicy: "Tidak terdeteksi",
+          coop: "Tidak terdeteksi",
+          corp: "Tidak terdeteksi",
+          infoLeakHeaders: [],
+          qualityIssues: []
         },
         has_loading_error: false,
         missing_src_images: 0,
@@ -760,12 +777,67 @@
           normalizedHeaders[k.toLowerCase()] = String(v);
         });
 
-        if (normalizedHeaders["content-security-policy"]) baseReport.security_headers.csp = normalizedHeaders["content-security-policy"];
+        const doc = new DOMParser().parseFromString(html, "text/html");
+
+        if (normalizedHeaders["content-security-policy"]) {
+          baseReport.security_headers.csp = normalizedHeaders["content-security-policy"];
+          baseReport.security_headers.cspSource = "HTTP Header";
+        } else {
+          const metaCsp = doc.querySelector("meta[http-equiv='Content-Security-Policy' i]");
+          if (metaCsp && (metaCsp.getAttribute("content") || "").trim()) {
+            baseReport.security_headers.csp = metaCsp.getAttribute("content").trim();
+            baseReport.security_headers.cspSource = "Meta Tag HTML";
+          }
+        }
         if (normalizedHeaders["x-frame-options"]) baseReport.security_headers.xFrame = normalizedHeaders["x-frame-options"];
         if (normalizedHeaders["x-content-type-options"]) baseReport.security_headers.xContentType = normalizedHeaders["x-content-type-options"];
         if (normalizedHeaders["strict-transport-security"]) baseReport.security_headers.hsts = normalizedHeaders["strict-transport-security"];
+        if (normalizedHeaders["referrer-policy"]) baseReport.security_headers.referrerPolicy = normalizedHeaders["referrer-policy"];
+        if (normalizedHeaders["permissions-policy"]) {
+          baseReport.security_headers.permissionsPolicy = normalizedHeaders["permissions-policy"];
+        } else if (normalizedHeaders["feature-policy"]) {
+          baseReport.security_headers.permissionsPolicy = normalizedHeaders["feature-policy"];
+        }
+        if (normalizedHeaders["cross-origin-opener-policy"]) baseReport.security_headers.coop = normalizedHeaders["cross-origin-opener-policy"];
+        if (normalizedHeaders["cross-origin-resource-policy"]) baseReport.security_headers.corp = normalizedHeaders["cross-origin-resource-policy"];
 
-        const doc = new DOMParser().parseFromString(html, "text/html");
+        // Deteksi header informasi versi teknologi (Information Disclosure: X-Powered-By / Server detail versi)
+        const infoLeaks = [];
+        if (normalizedHeaders["x-powered-by"]) {
+          infoLeaks.push(`X-Powered-By: ${normalizedHeaders["x-powered-by"]}`);
+        }
+        if (normalizedHeaders["server"] && /\/[\d.]+/.test(normalizedHeaders["server"])) {
+          infoLeaks.push(`Server: ${normalizedHeaders["server"]}`);
+        }
+        baseReport.security_headers.infoLeakHeaders = infoLeaks;
+
+        // Validasi kualitas konfigurasi nilai header keamanan
+        const qualityIssues = [];
+        const sh = baseReport.security_headers;
+        if (sh.csp !== "Tidak terdeteksi") {
+          const cspLower = sh.csp.toLowerCase();
+          if (cspLower.includes("'unsafe-eval'") || /default-src\s+\*/.test(cspLower) || /script-src\s+\*/.test(cspLower)) {
+            qualityIssues.push("CSP terlalu longgar (mengandung wildcard * atau 'unsafe-eval')");
+          } else if (cspLower.includes("'unsafe-inline'") && !cspLower.includes("nonce-") && !cspLower.includes("sha256-")) {
+            qualityIssues.push("CSP masih mengizinkan 'unsafe-inline' tanpa nonce/hash");
+          }
+        }
+        if (sh.xFrame !== "Tidak terdeteksi" && !/^(deny|sameorigin)$/i.test(sh.xFrame.trim())) {
+          qualityIssues.push(`X-Frame-Options kurang ketat (${sh.xFrame})`);
+        }
+        if (sh.xContentType !== "Tidak terdeteksi" && sh.xContentType.trim().toLowerCase() !== "nosniff") {
+          qualityIssues.push(`X-Content-Type-Options tidak bernilai 'nosniff' (${sh.xContentType})`);
+        }
+        if (sh.hsts !== "Tidak terdeteksi") {
+          const maxAgeMatch = sh.hsts.match(/max-age=(\d+)/i);
+          if (maxAgeMatch && Number(maxAgeMatch[1]) < 15552000) {
+            qualityIssues.push(`HSTS max-age singkat (${maxAgeMatch[1]} detik, disarankan >= 15552000)`);
+          }
+        }
+        if (sh.referrerPolicy !== "Tidak terdeteksi" && /unsafe-url|no-referrer-when-downgrade/i.test(sh.referrerPolicy)) {
+          qualityIssues.push(`Referrer-Policy kurang ketat (${sh.referrerPolicy})`);
+        }
+        baseReport.security_headers.qualityIssues = qualityIssues;
         baseReport.page_title = (doc.querySelector("title")?.textContent || "").trim();
 
         const rootEl = doc.querySelector("#root, #app, #__next");
@@ -800,14 +872,45 @@
         const headingCount = doc.querySelectorAll("h1, h2, h3").length || (rawCodeAndText.match(/<h[1-3]\b/gi) || []).length;
         const inlineStyleCount = doc.querySelectorAll("[style]").length;
 
+        // Deteksi tingkat keunikan & eksplorasi tata letak (tidak terbatas melingkar: bento grid, split-screen, masonry, parallax, 3D/WebGL, glass/neo-brutalism, SVG, animasi interaktif, dll.)
+        const uniqueTechSignals = [];
+        const svgCount = doc.querySelectorAll("svg").length + (rawCodeAndText.match(/<svg\b/gi) || []).length;
+
+        const hasRadialOrOrbit = /\b(?:rotate\(|translate\(|transform-origin|orbit|radial|circular|wheel|arc)\b/i.test(rawCodeAndText) &&
+          (/(?:Math\.sin|Math\.cos|deg\)|rotate\(|translate\()/i.test(rawCodeAndText) || doc.querySelectorAll("[style*='transform'], [style*='rotate'], [style*='left:'][style*='top:']").length >= 3);
+        if (hasRadialOrOrbit) {
+          uniqueTechSignals.push("Tata letak radial/orbit non-linear berbasis kalkulasi koordinat & CSS transform");
+        }
+        if (/bento|masonry|asymmetric|split-screen|grid-row-span|row-span-|col-span-2|col-span-3/i.test(rawCodeAndText) && /grid-cols-/i.test(rawCodeAndText)) {
+          uniqueTechSignals.push("Komposisi grid asimetris / Bento grid multi-span yang dinamis");
+        }
+        if (/clip-path|mask-image|skew|perspective\(|rotate3d|rotateX|rotateY|preserve-3d|backdrop-blur|glassmorphism|mix-blend-/i.test(rawCodeAndText)) {
+          uniqueTechSignals.push("Eksplorasi visual CSS lanjutan (clip-path/perspektif 3D/backdrop-blur/blend-mode)");
+        }
+        if (/framer-motion|gsap|scrolltrigger|three\.js|@react-three|lottie|canvas|swiper|aos|intersectionobserver/i.test(rawCodeAndText)) {
+          uniqueTechSignals.push("Engine animasi & interaksi dinamis (Framer Motion/GSAP/3D Canvas/Scroll Observer)");
+        }
+        if (/snap-x|snap-y|scroll-snap|horizontal-scroll|overflow-x-auto.*snap/i.test(rawCodeAndText)) {
+          uniqueTechSignals.push("Navigasi scroll-snap / horizontal showcase interaktif");
+        }
+        if (svgCount >= 4 || /<path\b|<polygon\b|<defs\b|linearGradient|radialGradient/i.test(rawCodeAndText)) {
+          uniqueTechSignals.push("Ornamen & ilustrasi vektor SVG kustom");
+        }
+
+        const uniquenessLevel = uniqueTechSignals.length;
+        const hasUniqueLayoutTech = uniquenessLevel > 0;
+
         baseReport.layout_systematization = {
           has_semantic_landmarks: hasLandmarks,
           has_grid_or_flex: hasGridOrFlex,
           has_consistent_headings: headingCount >= 2,
           inline_style_bloat: inlineStyleCount,
-          layout_status: (hasLandmarks && hasGridOrFlex && headingCount >= 2 && inlineStyleCount < 25)
-            ? "Sistematis & Terstruktur"
-            : (hasGridOrFlex || headingCount >= 1 ? "Cukup Terstruktur" : "Kurang Sistematis / Berantakan")
+          has_unique_layout_tech: hasUniqueLayoutTech,
+          uniqueness_level: uniquenessLevel,
+          unique_tech_signals: uniqueTechSignals,
+          layout_status: (hasLandmarks && (hasGridOrFlex || hasUniqueLayoutTech) && headingCount >= 2)
+            ? (uniquenessLevel >= 2 ? "Sangat Unik & Eksploratif (Tinggi Diferensiasi)" : (uniquenessLevel === 1 ? "Sistematis & Unik" : "Sistematis & Terstruktur"))
+            : (hasGridOrFlex || hasUniqueLayoutTech || headingCount >= 1 ? "Cukup Terstruktur" : "Kurang Sistematis / Berantakan")
         };
 
         baseReport.buttons_count = doc.querySelectorAll("button, [role='button'], input[type='submit']").length;
@@ -817,14 +920,34 @@
         }
 
         const allLinks = Array.from(doc.querySelectorAll("a"));
-        baseReport.broken_links_count = allLinks.filter(a => {
+        const brokenLinksList = [];
+        allLinks.forEach(a => {
           const href = (a.getAttribute("href") || "").trim();
-          return href === "" || href === "#" || href.startsWith("javascript:");
-        }).length;
+          if (href === "" || href === "#" || href.startsWith("javascript:")) {
+            const label = (a.textContent || a.getAttribute("aria-label") || a.getAttribute("title") || "").replace(/\s+/g, " ").trim();
+            const hrefDisplay = href === "" ? "(href kosong)" : href;
+            brokenLinksList.push(label ? `"${label}" (${hrefDisplay})` : `<a href="${hrefDisplay}">`);
+          }
+        });
+        baseReport.broken_links_count = brokenLinksList.length;
+        baseReport.broken_links_details = brokenLinksList;
 
+        const uniqueFilterSignals = [];
+        if (doc.querySelector("input[type='range']") || /type=["']range["']|harga maksimal|price range|slider/i.test(rawCodeAndText)) {
+          uniqueFilterSignals.push("Range slider batas harga maksimal");
+        }
+        if (doc.querySelector("input[type='checkbox'][role='switch'], [role='switch']") || /sembunyikan yang habis|stok tersedia|in stock|toggle/i.test(searchableText)) {
+          uniqueFilterSignals.push("Toggle switch ketersediaan stok");
+        }
+        if (/saring produk|filter produk|reset filter|semua momen|kategori/i.test(searchableText) && (doc.querySelectorAll("button").length >= 3 || /onClick/i.test(rawCodeAndText))) {
+          uniqueFilterSignals.push("Panel filter multi-kriteria (kategori/momen dengan counter & tombol reset)");
+        }
+        baseReport.unique_filter_signals = uniqueFilterSignals;
+        baseReport.has_interactive_filter_ui = uniqueFilterSignals.length >= 2;
         baseReport.has_search_or_filter = Boolean(
-          doc.querySelector("input[type='search'], input[placeholder*='cari' i], input[placeholder*='search' i], select") ||
-          /filter|kategori|category|pencarian/i.test(searchableText)
+          doc.querySelector("input[type='search'], input[type='range'], input[placeholder*='cari' i], input[placeholder*='search' i], select") ||
+          uniqueFilterSignals.length > 0 ||
+          /filter|saring|kategori|category|pencarian/i.test(searchableText)
         );
         baseReport.has_viewport = Boolean(doc.querySelector("meta[name='viewport']"));
 
@@ -943,38 +1066,45 @@
 
           if (hasValidRealWa) {
             baseReport.has_seller_contact = true;
+            baseReport.is_dummy_clickable = false;
             baseReport.has_broken_wa_button = false;
             baseReport.whatsapp_status = {
               has_seller_contact: true,
+              is_dummy_clickable: false,
               has_broken_wa_button: false,
               detected_targets: allWaTargets.slice(0, 4),
               detection_note: "Tombol & tautan WhatsApp valid terdeteksi dan berfungsi"
             };
           } else if (hasDummyWa) {
-            baseReport.has_seller_contact = false;
+            baseReport.has_seller_contact = true;
+            baseReport.is_dummy_clickable = true;
             baseReport.has_broken_wa_button = false;
             baseReport.whatsapp_status = {
-              has_seller_contact: false,
+              has_seller_contact: true,
+              is_dummy_clickable: true,
               has_broken_wa_button: false,
               detected_targets: allWaTargets.slice(0, 4),
-              detection_note: "Tautan WhatsApp terdeteksi namun menggunakan nomor dummy/contoh"
+              detection_note: "Tautan WhatsApp aktif dan dapat diklik (menggunakan nomor simulasi/dummy)"
             };
           } else {
             baseReport.has_seller_contact = false;
+            baseReport.is_dummy_clickable = false;
             baseReport.has_broken_wa_button = true;
             baseReport.whatsapp_status = {
               has_seller_contact: false,
+              is_dummy_clickable: false,
               has_broken_wa_button: true,
               detected_targets: allWaTargets.slice(0, 4),
               detection_note: "Tautan WhatsApp tidak menyertakan nomor tujuan yang valid"
             };
           }
         } else if (waElements.length > 0 || (baseReport.is_client_side_spa && hasWaKeywordInCode)) {
-          // Tombol <button> WhatsApp ditemukan (mis. handler React/JS onClick) -> anggap berfungsi, bukan broken link
           baseReport.has_seller_contact = true;
+          baseReport.is_dummy_clickable = false;
           baseReport.has_broken_wa_button = false;
           baseReport.whatsapp_status = {
             has_seller_contact: true,
+            is_dummy_clickable: false,
             has_broken_wa_button: false,
             detected_targets: ["Tombol interaktif WhatsApp (JS/Button handler)"],
             detection_note: "Tombol interaktif WhatsApp terdeteksi aktif pada komponen UI"
@@ -982,8 +1112,14 @@
         }
 
         // --- C6 - C10 ---
-        baseReport.has_cart = /keranjang|cart|troli|tambah ke keranjang|add to cart/i.test(searchableText);
-        baseReport.has_payment = /pembayaran|payment|checkout|bayar|qris|transfer bank|e-wallet|cod/i.test(searchableText);
+        const pureCartRegex = /keranjang|cart|troli|tambah ke keranjang|add to cart|subtotal|jumlah item|qty|quantity/i;
+        const waDirectOrderRegex = /pesan via wa|order via wa|beli via wa|pesan sekarang|chat penjual|tanya penjual|pesan via whatsapp|order via whatsapp/i;
+        baseReport.has_cart = pureCartRegex.test(searchableText);
+        baseReport.has_wa_item_order_only = !baseReport.has_cart && (waDirectOrderRegex.test(searchableText) || baseReport.has_seller_contact);
+
+        const directPaymentRegex = /qris|transfer bank|virtual account|va\b|kartu kredit|credit card|debit|gopay|ovo|dana\b|shopeepay|e-wallet|ewallet|cod\b|bayar di tempat|rekening|bca|bri|bni|mandiri|metode pembayaran|payment method/i;
+        baseReport.has_payment = directPaymentRegex.test(searchableText);
+        baseReport.has_wa_payment_only = !baseReport.has_payment && (baseReport.has_seller_contact || /konfirmasi.*wa|bayar.*wa|pembayaran.*whatsapp/i.test(searchableText));
 
         const imgs = Array.from(doc.querySelectorAll("img"));
         baseReport.missing_src_images = imgs.filter(img => !(img.getAttribute("src") || "").trim()).length;
@@ -1025,7 +1161,10 @@
               menu_complex: scan.menu_complexity_issue,
               btn: scan.buttons_count,
               broken: scan.broken_links_count,
-              search: scan.has_search_or_filter
+              broken_list: scan.broken_links_details,
+              search: scan.has_search_or_filter,
+              interactive_filter: scan.has_interactive_filter_ui,
+              unique_filters: scan.unique_filter_signals
             },
             layout_ux: {
               viewport: scan.has_viewport,
@@ -1034,8 +1173,14 @@
             profile: scan.profile_identity,
             comm_channels: scan.communication_channels,
             whatsapp: scan.whatsapp_status,
-            cart: scan.has_cart,
-            payment: scan.has_payment,
+            cart: {
+              pure_cart: scan.has_cart,
+              wa_item_order_only: scan.has_wa_item_order_only
+            },
+            payment: {
+              direct_payment_options: scan.has_payment,
+              wa_payment_only: scan.has_wa_payment_only
+            },
             headers: scan.security_headers,
             err: scan.has_loading_error,
             miss_img: scan.missing_src_images,
@@ -1330,19 +1475,45 @@
     function generateFallbackDataForPair(pair) {
       const s = pair.real_dom_and_security_inspection;
       const sh = s.security_headers || {};
-      const activeHeadersCount = [sh.csp, sh.xFrame, sh.xContentType, sh.hsts].filter(v => v && v !== "Tidak terdeteksi").length;
-      const c8Score = [3.8, 5.5, 6.9, 8.3, 9.3][activeHeadersCount] || 3.8;
+      const headerEntries = [
+        { label: sh.cspSource === "Meta Tag HTML" ? "Content-Security-Policy (via Meta Tag)" : "Content-Security-Policy (CSP)", val: sh.csp },
+        { label: "X-Frame-Options", val: sh.xFrame },
+        { label: "X-Content-Type-Options", val: sh.xContentType },
+        { label: "Strict-Transport-Security (HSTS)", val: sh.hsts },
+        { label: "Referrer-Policy", val: sh.referrerPolicy },
+        { label: "Permissions-Policy", val: sh.permissionsPolicy }
+      ];
+      const activeHeaderNames = headerEntries.filter(h => h.val && h.val !== "Tidak terdeteksi").map(h => h.label);
+      const missingHeaderNames = headerEntries.filter(h => !h.val || h.val === "Tidak terdeteksi").map(h => h.label);
+      const activeHeadersCount = activeHeaderNames.length;
+      const qualityIssues = sh.qualityIssues || [];
+      const infoLeaks = sh.infoLeakHeaders || [];
 
-      // C1: UI/UX & Kemudahan Akses Menu
-      const s1_1 = s.menu_complexity_issue ? 5.8 : (s.nav_links_count > 0 ? 8.8 : 6.2);
-      const s1_2 = (s.buttons_count > 0 && s.has_search_or_filter) ? 8.8 : (s.buttons_count > 0 ? 7.6 : 5.5);
+      const coreThreeCount = [sh.csp, sh.xFrame, sh.xContentType].filter(v => v && v !== "Tidak terdeteksi").length;
+      const modernThreeCount = [sh.hsts, sh.referrerPolicy, sh.permissionsPolicy].filter(v => v && v !== "Tidak terdeteksi").length;
+
+      const s8_1 = [3.8, 6.0, 7.8, 9.3][coreThreeCount] || 3.8;
+      const s8_2 = [3.8, 6.0, 7.8, 9.3][modernThreeCount] || 3.8;
+      const qualityPenalty = (qualityIssues.length * 0.6) + (infoLeaks.length * 0.4);
+      const s8_3 = activeHeadersCount === 0
+        ? 4.0
+        : Math.max(4.5, Math.min(9.5, 8.8 + (activeHeadersCount >= 5 ? 0.5 : 0) - qualityPenalty));
+      const c8Score = Number(((s8_1 + s8_2 + s8_3) / 3).toFixed(2));
+      const brokenDetailsList = s.broken_links_details || [];
+
+      // C1: UI/UX & Kemudahan Akses Menu (termasuk apresiasi fitur filter/navigasi unik)
+      const uniqueFilters = s.unique_filter_signals || [];
+      const s1_1 = s.menu_complexity_issue ? 5.8 : (s.has_interactive_filter_ui ? 9.2 : (s.nav_links_count > 0 ? 8.8 : 6.2));
+      const s1_2 = s.has_interactive_filter_ui ? 9.3 : ((s.buttons_count > 0 && s.has_search_or_filter) ? 8.8 : (s.buttons_count > 0 ? 7.6 : 5.5));
       const s1_3 = s.broken_links_count === 0 ? 9.0 : Math.max(4.5, 8.5 - s.broken_links_count);
 
-      // C2: Kualitas Tata Letak & Responsivitas UI
+      // C2: Kualitas Tata Letak & Responsivitas UI (semakin unik & beda dari yang lain, semakin tinggi skornya)
       const lay = s.layout_systematization || {};
-      const s2_1 = lay.has_semantic_landmarks && lay.has_grid_or_flex ? 8.8 : (lay.has_grid_or_flex ? 7.2 : 5.2);
-      const s2_2 = s.has_viewport ? 8.8 : 4.5;
-      const s2_3 = (lay.has_consistent_headings && lay.inline_style_bloat < 25) ? 8.6 : 6.0;
+      const uniqueTechs = lay.unique_tech_signals || [];
+      const uLevel = lay.uniqueness_level ?? uniqueTechs.length;
+      const s2_1 = uLevel >= 3 ? 9.7 : (uLevel === 2 ? 9.4 : (uLevel === 1 ? 9.0 : (lay.has_semantic_landmarks && lay.has_grid_or_flex ? 8.4 : (lay.has_grid_or_flex ? 7.2 : 5.2))));
+      const s2_2 = s.has_viewport ? 8.9 : 4.5;
+      const s2_3 = uLevel >= 3 ? 9.6 : (uLevel === 2 ? 9.3 : (uLevel === 1 ? 8.9 : ((lay.has_consistent_headings && lay.inline_style_bloat < 25) ? 8.4 : 6.0)));
 
       // C3: Identitas Pemilik & Profil Usaha (fleksibel)
       const prof = s.profile_identity || { has_profile: s.has_about_us, signals: [] };
@@ -1358,12 +1529,17 @@
       const s4_2 = hasRealComm ? 9.0 : (hasDummyComm ? 4.8 : 4.0);
       const s4_3 = hasRealComm ? 9.0 : (hasDummyComm ? 4.5 : 4.0);
 
-      // C5: Kontak Langsung Penjual (WhatsApp)
-      const wa = s.whatsapp_status || { has_seller_contact: s.has_seller_contact, has_broken_wa_button: s.has_broken_wa_button };
-      const c5Base = wa.has_seller_contact ? 9.1 : (wa.has_broken_wa_button ? 4.0 : 5.0);
+      // C5: Kontak Langsung Penjual (WhatsApp) - nomor dummy yang bisa diklik tetap nilai tinggi (~8.8)
+      const wa = s.whatsapp_status || { has_seller_contact: s.has_seller_contact, is_dummy_clickable: false, has_broken_wa_button: s.has_broken_wa_button };
+      const c5Base = wa.has_seller_contact
+        ? (wa.is_dummy_clickable ? 8.8 : 9.2)
+        : (wa.has_broken_wa_button ? 4.0 : 5.0);
 
-      const c6Score = s.has_cart ? 8.8 : 5.0;
-      const c7Score = s.has_payment ? 8.6 : 4.8;
+      // C6: Alur Keranjang Belanja (Murni keranjang ~8.9, pemesanan langsung per item katalog via tombol WhatsApp di rentang 7.5 - 8.2)
+      const c6Score = s.has_cart ? 8.9 : (s.has_wa_item_order_only ? 7.8 : 4.8);
+
+      // C7: Mekanisme Pembayaran (Opsi pembayaran langsung ~8.6, hanya via kontak WhatsApp nilai cukup ~6.5)
+      const c7Score = s.has_payment ? 8.6 : (s.has_wa_payment_only ? 6.5 : 4.8);
       const c9Score = s.reachable && !s.has_loading_error ? (s.missing_src_images === 0 ? 8.8 : 7.8) : 4.0;
       const c10Score = s.page_title && s.enumeration_clues.length === 0 ? 8.3 : 6.5;
 
@@ -1376,7 +1552,7 @@
       return {
         developer: pair.developer,
         url: pair.url,
-        executive_summary: `1) UI/UX, Tata Letak & Identitas (C1-C3): menu=${s.nav_links_count} link (kompleks=${s.menu_complexity_issue ? "Ya" : "Tidak"}), tata letak ${lay.layout_status}, viewport ${s.has_viewport ? "✓" : "✗"}, identitas pemilik ${prof.has_profile ? "✓" : "✗"}.\n2) Komunikasi, WhatsApp & Transaksi (C4-C7): kanal komunikasi ${comm.channel_status}, WhatsApp ${wa.has_seller_contact ? "✓" : "✗"}, cart ${s.has_cart ? "✓" : "✗"}, payment ${s.has_payment ? "✓" : "✗"}.\n3) Postur Keamanan & Struktur DOM (C8-C10): security headers ${activeHeadersCount}/4 valid, reachable ${s.reachable ? "✓" : "✗"}, missing_images=${s.missing_src_images}.`,
+        executive_summary: `1) UI/UX, Tata Letak & Identitas (C1-C3): menu=${s.nav_links_count} link (kompleks=${s.menu_complexity_issue ? "Ya" : "Tidak"}), tata letak ${lay.layout_status}, viewport ${s.has_viewport ? "✓" : "✗"}, identitas pemilik ${prof.has_profile ? "✓" : "✗"}.\n2) Komunikasi, WhatsApp & Transaksi (C4-C7): kanal komunikasi ${comm.channel_status}, WhatsApp ${wa.has_seller_contact ? "✓" : "✗"}, cart ${s.has_cart ? "✓" : "✗"}, payment ${s.has_payment ? "✓" : "✗"}.\n3) Postur Keamanan & Struktur DOM (C8-C10): security headers ${activeHeadersCount}/6 aktif${qualityIssues.length > 0 ? ` (${qualityIssues.length} catatan kualitas)` : ""}, reachable ${s.reachable ? "✓" : "✗"}, missing_images=${s.missing_src_images}.`,
         sub_scores: {
           c1: { s1_1: Number(s1_1.toFixed(1)), s1_2: Number(s1_2.toFixed(1)), s1_3: Number(s1_3.toFixed(1)) },
           c2: { s2_1: Number(s2_1.toFixed(1)), s2_2: Number(s2_2.toFixed(1)), s2_3: Number(s2_3.toFixed(1)) },
@@ -1385,55 +1561,84 @@
           c5: makeSub(c5Base, 5),
           c6: makeSub(c6Score, 6),
           c7: makeSub(c7Score, 7),
-          c8: makeSub(c8Score, 8),
+          c8: { s8_1: Number(s8_1.toFixed(1)), s8_2: Number(s8_2.toFixed(1)), s8_3: Number(s8_3.toFixed(1)) },
           c9: makeSub(c9Score, 9),
           c10: makeSub(c10Score, 10)
         },
         evidence: {
-          c1: `nav=${s.nav_links_count}, depth=${s.nested_dropdown_depth}, broken=${s.broken_links_count}`,
-          c2: `${lay.layout_status}, viewport=${s.has_viewport}, inline_style=${lay.inline_style_bloat}`,
+          c1: `nav=${s.nav_links_count}, depth=${s.nested_dropdown_depth}, broken=${s.broken_links_count}${brokenDetailsList.length > 0 ? ` [${brokenDetailsList.join(", ")}]` : ""}${uniqueFilters.length > 0 ? `, filter_unik=[${uniqueFilters.join("; ")}]` : ""}`,
+          c2: `${lay.layout_status}, viewport=${s.has_viewport}${uniqueTechs.length > 0 ? `, teknologi=[${uniqueTechs.join("; ")}]` : ""}`,
           c3: prof.has_profile ? `Terdeteksi: ${prof.signals.join("; ")}` : "Identitas pemilik/profil usaha tidak ditemukan",
           c4: comm.channel_status,
           c5: wa.detection_note,
-          c6: `has_cart=${s.has_cart}`,
-          c7: `has_payment=${s.has_payment}`,
-          c8: `${activeHeadersCount}/4 security headers aktif`,
+          c6: s.has_cart ? "Keranjang belanja murni terdeteksi" : (s.has_wa_item_order_only ? "Hanya tombol pemesanan via WhatsApp per item katalog (tanpa keranjang akumulasi)" : "Fitur keranjang tidak terdeteksi"),
+          c7: s.has_payment ? "Opsi pembayaran langsung terdeteksi" : (s.has_wa_payment_only ? "Pembayaran diarahkan melalui chat WhatsApp penjual" : "Mekanisme pembayaran tidak terdeteksi"),
+          c8: `${activeHeadersCount}/6 aktif (${activeHeaderNames.length > 0 ? activeHeaderNames.join(", ") : "Tidak ada"})${sh.coop && sh.coop !== "Tidak terdeteksi" ? `; COOP=${sh.coop}` : ""}${sh.corp && sh.corp !== "Tidak terdeteksi" ? `; CORP=${sh.corp}` : ""}${qualityIssues.length > 0 ? `; Catatan: ${qualityIssues.join("; ")}` : ""}${infoLeaks.length > 0 ? `; Leak: ${infoLeaks.join(", ")}` : ""}`,
           c9: `reachable=${s.reachable}, missing_img=${s.missing_src_images}`,
           c10: `title="${s.page_title || "-"}", spa=${s.is_client_side_spa}${s.has_demo_credentials ? ", akun demo/uji coba tersedia" : ""}`
         },
         strengths: {
-          c1: !s.menu_complexity_issue && s.broken_links_count === 0 ? ["Akses menu ringkas dan bebas tautan mati"] : [],
-          c2: lay.has_semantic_landmarks && lay.has_grid_or_flex ? ["Tata letak sistematis menggunakan grid/flex semantik"] : [],
+          c1: [
+            ...(!s.menu_complexity_issue && s.broken_links_count === 0 ? ["Akses menu ringkas dan bebas tautan mati"] : []),
+            ...(uniqueFilters.length > 0 ? [`Navigasi filter interaktif & unik (${uniqueFilters.join(", ")})`] : [])
+          ],
+          c2: [
+            ...(lay.has_semantic_landmarks && (lay.has_grid_or_flex || lay.has_unique_layout_tech) ? ["Tata letak sistematis dan terstruktur"] : []),
+            ...(uniqueTechs.length > 0 ? [`Eksplorasi teknologi tata letak unik: ${uniqueTechs.join(", ")}`] : [])
+          ],
           c3: prof.has_profile ? [`Identitas pemilik/profil jelas (${prof.signals.length} indikator)`] : [],
           c4: hasRealComm ? [`Tautan komunikasi nyata dapat diakses (${comm.real_accessible_channels.length} kanal)`] : [],
-          c5: wa.has_seller_contact ? ["Tombol/kontak WhatsApp penjual terdeteksi aktif"] : [],
-          c6: s.has_cart ? ["Fitur keranjang terdeteksi"] : [],
-          c7: s.has_payment ? ["Informasi pembayaran tersedia"] : [],
-          c8: activeHeadersCount > 0 ? [`${activeHeadersCount} header keamanan aktif`] : [],
+          c5: wa.has_seller_contact ? [wa.is_dummy_clickable ? "Tombol WhatsApp aktif dan dapat diklik (nomor simulasi/dummy)" : "Tombol/kontak WhatsApp penjual terdeteksi aktif"] : [],
+          c6: s.has_cart ? ["Fitur keranjang belanja murni tersedia"] : (s.has_wa_item_order_only ? ["Tersedia tombol pemesanan cepat via WhatsApp pada item katalog"] : []),
+          c7: s.has_payment ? ["Informasi/metode pembayaran langsung tersedia"] : (s.has_wa_payment_only ? ["Konfirmasi pembayaran dapat dilakukan melalui kontak WhatsApp"] : []),
+          c8: activeHeadersCount > 0 ? [`${activeHeadersCount}/6 header aktif: ${activeHeaderNames.join(", ")}`] : [],
           c9: s.reachable ? ["Halaman dapat diakses lancar"] : [],
           c10: s.page_title ? ["Judul halaman valid"] : []
         },
         weaknesses: {
-          c1: s.menu_complexity_issue ? ["Struktur menu terlalu rumit/bertingkat"] : (s.broken_links_count > 0 ? [`Ditemukan ${s.broken_links_count} tautan kosong/#`] : []),
-          c2: !lay.has_grid_or_flex || !s.has_viewport ? ["Tata letak belum sistematis atau belum responsif mobile"] : [],
+          c1: [
+            ...(s.menu_complexity_issue ? ["Struktur menu terlalu rumit/bertingkat"] : []),
+            ...(s.broken_links_count > 0 ? [`Ditemukan ${s.broken_links_count} tautan kosong/#: ${brokenDetailsList.join(", ")}`] : [])
+          ],
+          c2: !lay.has_grid_or_flex && !lay.has_unique_layout_tech || !s.has_viewport ? ["Tata letak belum sistematis atau belum responsif mobile"] : [],
           c3: !prof.has_profile ? ["Belum mencantumkan identitas pemilik, alamat, atau profil usaha"] : [],
           c4: hasDummyComm && !hasRealComm ? ["Kanal medsos/kontak hanya berupa tautan dummy/placeholder"] : (!hasRealComm ? ["Kanal komunikasi umum belum tersedia"] : []),
-          c5: !wa.has_seller_contact ? [wa.detection_note] : [],
-          c6: !s.has_cart ? ["Alur keranjang belanja belum tersedia"] : [],
-          c7: !s.has_payment ? ["Mekanisme pembayaran belum tersedia"] : [],
-          c8: activeHeadersCount < 4 ? ["Konfigurasi HTTP Security Headers belum lengkap"] : [],
+          c5: !wa.has_seller_contact ? [wa.detection_note] : (wa.is_dummy_clickable ? ["Nomor WhatsApp masih menggunakan nomor dummy/simulasi (bukan nomor aktif permanen)"] : []),
+          c6: !s.has_cart ? (s.has_wa_item_order_only ? ["Belum memiliki keranjang belanja murni (akumulasi multi-item); pemesanan masih langsung per item melalui chat WhatsApp"] : ["Alur keranjang belanja belum tersedia"]) : [],
+          c7: !s.has_payment ? (s.has_wa_payment_only ? ["Belum mencantumkan opsi pembayaran langsung (transfer bank, QRIS, debit/kredit, e-wallet); transaksi hanya diarahkan via WhatsApp"] : ["Mekanisme pembayaran belum tersedia"]) : [],
+          c8: [
+            ...(activeHeadersCount < 6 ? [`HTTP Security Headers belum lengkap — Aktif (${activeHeadersCount}/6): ${activeHeaderNames.length > 0 ? activeHeaderNames.join(", ") : "Tidak ada"}; Belum terpasang: ${missingHeaderNames.join(", ")}`] : []),
+            ...qualityIssues,
+            ...(infoLeaks.length > 0 ? [`Header membocorkan versi server/teknologi: ${infoLeaks.join(", ")}`] : [])
+          ],
           c9: s.missing_src_images > 0 ? [`${s.missing_src_images} gambar tanpa atribut src`] : [],
           c10: s.enumeration_clues.length > 0 ? s.enumeration_clues : []
         },
         reasons: {
-          c1: s.menu_complexity_issue ? "Menu terlalu padat sehingga menyulitkan navigasi pengguna." : "Navigasi menu dan elemen CTA tersusun cukup jelas.",
-          c2: `Evaluasi struktur semantik, sistem grid/flex, dan responsivitas (${lay.layout_status}).`,
+          c1: [
+            s.broken_links_count > 0 ? `Ditemukan ${s.broken_links_count} tautan kosong/# (${brokenDetailsList.join(", ")}).` : "Navigasi menu tersusun ringkas dan bebas tautan mati.",
+            uniqueFilters.length > 0 ? `Memiliki fitur navigasi/penyaringan produk yang unik dan interaktif (${uniqueFilters.join(", ")}) sehingga memudahkan eksplorasi katalog.` : ""
+          ].filter(Boolean).join(" "),
+          c2: [
+            `Evaluasi struktur semantik dan responsivitas (${lay.layout_status}).`,
+            uniqueTechs.length > 0 ? `Memiliki keunikan desain & tata letak yang berbeda dari template standar (${uniqueTechs.join(", ")}), sehingga memperoleh apresiasi skor lebih tinggi sesuai tingkat orisinalitasnya.` : ""
+          ].filter(Boolean).join(" "),
           c3: prof.has_profile ? "Identitas pemilik/brand sudah tercantum pada halaman." : "Identitas pemilik maupun profil usaha tidak ditemukan.",
           c4: hasRealComm ? "Kanal komunikasi nyata dan dapat diakses langsung." : (hasDummyComm ? "Kanal komunikasi sudah dicantumkan namun masih berupa tautan dummy/placeholder sehingga mendapat nilai rendah." : "Tidak ada kanal komunikasi yang dicantumkan."),
-          c5: wa.detection_note,
-          c6: "Dinilai dari keberadaan fitur keranjang belanja.",
-          c7: "Dinilai dari ketersediaan alur pembayaran/checkout.",
-          c8: `Terdeteksi ${activeHeadersCount} dari 4 header keamanan utama.`,
+          c5: wa.is_dummy_clickable
+            ? "Tautan WhatsApp berfungsi dan dapat diklik dengan baik, namun diberikan skor tinggi tidak sempurna (~8.8) karena masih menggunakan nomor dummy/simulasi."
+            : wa.detection_note,
+          c6: s.has_cart
+            ? "Tersedia fitur keranjang belanja murni untuk menampung dan mengelola beberapa item sekaligus."
+            : (s.has_wa_item_order_only
+              ? "Diberi nilai baik di rentang 7.5–8.2 karena pemesanan dilakukan langsung per item katalog melalui tombol WhatsApp, meskipun belum menggunakan keranjang belanja murni (akumulasi multi-item)."
+              : "Belum tersedia fitur keranjang belanja maupun tombol pemesanan item."),
+          c7: s.has_payment
+            ? "Tersedia informasi metode pembayaran langsung (seperti transfer bank, QRIS, kartu, atau e-wallet)."
+            : (s.has_wa_payment_only
+              ? "Diberi nilai cukup karena belum mencantumkan opsi pembayaran langsung (debit/kredit/e-wallet/transfer bank/QRIS) di dalam web, melainkan hanya mengandalkan komunikasi melalui kontak WhatsApp."
+              : "Belum mencantumkan mekanisme maupun instruksi pembayaran."),
+          c8: `Terdeteksi ${activeHeadersCount}/6 header keamanan utama (${activeHeaderNames.length > 0 ? activeHeaderNames.join(", ") : "Tidak ada"}). Belum terpasang: ${missingHeaderNames.length > 0 ? missingHeaderNames.join(", ") : "-"}.${qualityIssues.length > 0 ? ` Catatan kualitas: ${qualityIssues.join("; ")}.` : ""}${infoLeaks.length > 0 ? ` Peringatan kebocoran header: ${infoLeaks.join(", ")}.` : ""}`,
           c9: "Dinilai dari status aksesibilitas dan kelengkapan gambar.",
           c10: s.has_demo_credentials
             ? "Struktur DOM valid; kredensial akun demo/uji coba diakomodasi sebagai fitur simulasi tanpa database."
@@ -1447,7 +1652,7 @@
           c5: "Pastikan tombol WhatsApp mengarah ke nomor aktif penjual.",
           c6: "Tambahkan fitur keranjang belanja untuk memudahkan transaksi.",
           c7: "Sediakan opsi atau panduan pembayaran yang jelas.",
-          c8: "Lengkapi header CSP, X-Frame-Options, X-Content-Type-Options, dan HSTS.",
+          c8: "Lengkapi 6 header keamanan (CSP ketat tanpa unsafe-eval, X-Frame-Options, X-Content-Type-Options: nosniff, HSTS, Referrer-Policy, Permissions-Policy) serta sembunyikan X-Powered-By.",
           c9: "Pastikan seluruh elemen gambar memiliki atribut src valid.",
           c10: "Jaga struktur semantik HTML bebas dari komentar sensitif."
         }
@@ -1534,30 +1739,38 @@ ${JSON.stringify(compactData)}
 
 Aturan Penilaian C1-C10 (Skala 1.0 - 10.0 per subkriteria):
 - C1 (UI/UX, Navigasi & Kemudahan Akses Menu):
-  * s1_1: Kemudahan & kesederhanaan akses menu (jika menu_complex=true atau dropdown terlalu dalam beri nilai rendah ~5.0-6.0; jika ringkas & mudah diakses ~8.5-9.2).
-  * s1_2: Kejelasan tombol CTA & fitur pencarian/filter.
-  * s1_3: Ketiadaan tautan mati (broken links).
+  * s1_1: Kemudahan & kesederhanaan akses menu (jika menu_complex=true beri nilai rendah ~5.0-6.0; jika ringkas ~8.5-9.2).
+  * s1_2: Kejelasan tombol CTA & fitur pencarian/filter. PENTING: Jika web memiliki fitur navigasi/filter produk yang unik & interaktif (misalnya panel filter kategori/momen, toggle ketersediaan stok, range slider harga maksimal pada ui_nav.interactive_filter=true / ui_nav.unique_filters), BERI NILAI TINGGI (~9.0-9.4) dan jelaskan keunikan fitur navigasi/filter tersebut pada strengths.c1 & reasons.c1.
+  * s1_3: Ketiadaan tautan mati (broken links). Jika ui_nav.broken > 0, WAJIB sebutkan secara rinci daftar tautannya dari ui_nav.broken_list pada weaknesses.c1 dan evidence.c1.
 - C2 (Kualitas Tata Letak & Responsivitas UI):
-  * s2_1: Keteraturan & sistematika tata letak (cek layout_ux.layout_status: jika "Kurang Sistematis / Berantakan" atau inline_style_bloat tinggi beri nilai rendah ~4.5-6.0; jika "Sistematis & Terstruktur" ~8.5-9.2).
-  * s2_2: Responsivitas viewport mobile (viewport=true ~8.8, false ~4.5).
-  * s2_3: Konsistensi hirarki visual & heading.
+  * s2_1 & s2_3: Keteraturan, keunikan & sistematika tata letak. PENTING: Tidak harus berbentuk melingkar/radial untuk mendapat skor tinggi — tata letak apa pun yang unik, kreatif, dan berbeda dari desain pasaran/template standar (misalnya komposisi grid asimetris/Bento, perspektif 3D/clip-path, showcase melingkar/radial, scroll-snap interaktif, ornamen SVG kustom, atau animasi modern pada layout_ux.unique_tech_signals / layout_ux.uniqueness_level) WAJIB diberi nilai tinggi (~9.0 - 9.8). Semakin unik dan berbeda tata letaknya dari yang lain, semakin tinggi skor yang diberikan! Jelaskan teknologi/keunikan tata letak tersebut pada strengths.c2 & reasons.c2.
+  * s2_2: Responsivitas viewport mobile (viewport=true ~8.9, false ~4.5).
 - C3 (Identitas Pemilik & Profil Usaha):
   * TIDAK harus ada kata literal "About Us" / "Tentang Kami" / "Profil". Jika profile.has_profile=true (sudah ada identitas pemilik, nama brand/toko, copyright, alamat, atau jam operasional pada profile.signals), beri nilai tinggi (~8.2-9.0). Jika kosong sama sekali, beri nilai rendah (~4.5).
 - C4 (Ketersediaan & Aksesibilitas Kanal Komunikasi):
   * s4_1: Keberagaman kanal (medsos, email, telp).
   * s4_2 & s4_3: Validitas & aksesibilitas tautan nyata. PENTING: Jika hanya mencantumkan tautan dummy/placeholder (comm_channels.dummy_or_placeholder_channels ada, namun real_accessible_channels kosong), TETAP BERI NILAI NAMUN RENDAH (~4.5 - 5.2) dan jelaskan di alasan bahwa tautan masih dummy/placeholder. Jika real_accessible_channels benar-benar ada dan bisa diakses, beri nilai tinggi (~8.5 - 9.2).
 - C5 (Kontak Langsung Penjual / WhatsApp):
-  * Gunakan whatsapp.has_seller_contact & whatsapp.detection_note: jika true (~9.0), jika dummy (~4.8), jika broken (~4.0).
-- C6 (Keranjang): cart=true (~9.0), false (~5.0).
-- C7 (Pembayaran): payment=true (~8.8), false (~4.8).
-- C8 (Security Headers aktif dari 4): 4/4 (~9.3), 3/4 (~8.3), 2/4 (~6.9), 1/4 (~5.5), 0/4 (~3.8).
+  * Jika whatsapp.has_seller_contact=true dan nomor nyata (~9.2).
+  * PENTING: Jika menggunakan nomor dummy/simulasi tetapi tautan WhatsApp tetap aktif dan dapat diklik (whatsapp.is_dummy_clickable=true), TIDAK MASALAH — tetap beri nilai tinggi namun jangan sempurna, kisaran ~8.8, serta jelaskan alasannya. Jika tautan rusak/tidak ada nomor sama sekali, beri nilai rendah (~4.0-5.0).
+- C6 (Alur Keranjang Belanja):
+  * Jika cart.pure_cart=true (memiliki keranjang belanja murni untuk menampung/mengelola multi-item): beri nilai tinggi (~8.8-9.2) dan jelaskan bahwa menggunakan keranjang belanja murni.
+  * PENTING: Jika tidak memiliki keranjang belanja murni, tetapi menyediakan tombol WhatsApp untuk memesan langsung per item katalog (cart.wa_item_order_only=true), berikan nilai di rentang **7.5 - 8.2** dan WAJIB jelaskan pada reasons.c6 bahwa penilaian diberikan di rentang tersebut karena pemesanan dilakukan langsung per item katalog melalui tombol WhatsApp, bukan keranjang belanja murni.
+- C7 (Mekanisme Pembayaran):
+  * Jika payment.direct_payment_options=true (mencantumkan opsi langsung seperti transfer bank, QRIS, debit/kredit, e-wallet, COD): beri nilai tinggi (~8.6-9.0).
+  * PENTING: Jika tidak mencantumkan opsi pembayaran langsung (debit/kredit/e-wallet/transfer dll.), namun mengandalkan komunikasi melalui kontak WhatsApp (payment.wa_payment_only=true), beri nilai CUKUP (~6.3-6.7) dan WAJIB jelaskan pada reasons.c7 bahwa belum tersedia opsi pembayaran langsung dan transaksi hanya diarahkan melalui kontak WhatsApp.
+- C8 (HTTP Security Headers — 6 Header Utama + Kualitas Nilai):
+  * Evaluasi 6 header utama dari objek headers: Content-Security-Policy (csp, termasuk jika terdeteksi via Meta Tag HTML pada cspSource), X-Frame-Options (xFrame), X-Content-Type-Options (xContentType), Strict-Transport-Security (hsts), Referrer-Policy (referrerPolicy), dan Permissions-Policy (permissionsPolicy). Cek juga bonus isolasi lintas origin (coop, corp).
+  * Skala kelengkapan 6 header: 6/6 (~9.3-9.6), 5/6 (~8.7), 4/6 (~8.0), 3/6 (~7.0), 2/6 (~6.0), 1/6 (~5.0), 0/6 (~3.8).
+  * Validasi Kualitas & Kebersihan: Jika terdapat peringatan pada headers.qualityIssues (mis. CSP 'unsafe-inline'/'unsafe-eval'/wildcard, HSTS max-age pendek) atau kebocoran versi server pada headers.infoLeakHeaders (X-Powered-By), kurangi skor subkriteria s8_3 (~0.5 - 1.0 poin) dan cantumkan secara eksplisit pada weaknesses.c8 serta reasons.c8.
+  * WAJIB sebutkan secara spesifik nama header yang aktif maupun yang belum terpasang pada strengths.c8, weaknesses.c8, dan reasons.c8.
 - C9 (Performa): reachable, err, miss_img.
 - C10 (Struktur DOM): netral ~8.2 jika title valid & bebas enum. PENTING: Jika pengembang sengaja menampilkan kredensial akun demo/uji coba (admin, pengguna, pemilik toko, dll.) pada halaman atau kode karena aplikasi statis tanpa database (demo_creds=true), JANGAN dianggap sebagai kebocoran informasi sensitif (disclosure) dan jangan dikurangi nilainya (tetap beri nilai netral/baik ~8.2 - 8.6).
 
 Aturan Output:
 - Wajib isi lengkap c1 sampai c10 untuk setiap objek (sub_scores, evidence, strengths, weaknesses, reasons, recommendations).
 - executive_summary: 3 poin singkat bernomor (1) C1-C3, (2) C4-C7, (3) C8-C10 dengan angka scan & tanda ✓/✗.
-- Tulis evidence, reasons, dan recommendations secara padat (maksimal 15 kata per kriteria) agar hemat token.`;
+- Tulis evidence, reasons, dan recommendations secara padat dan spesifik (sebutkan daftar tautan # dan nama header keamanan secara eksplisit bila ada temuan).`;
 
         const aiResponse = await requestAIWithMultiProviderFailover(
           geminiKey,
