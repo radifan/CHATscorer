@@ -645,31 +645,71 @@
     }
 
     async function extractSpaBundleText(doc, targetUrl, proxyBase) {
-      const scriptSrcs = Array.from(doc.querySelectorAll("script[src]"))
-        .map(s => s.getAttribute("src"))
-        .filter(src => src && !/tailwindcss|fontawesome|chart\.js|googletagmanager|analytics/i.test(src))
-        .slice(0, 3);
+      // Normalisasi base URL agar path relatif (./assets/...) tidak salah direktori
+      let baseHref = targetUrl;
+      try {
+        const u = new URL(targetUrl);
+        if (!u.pathname.endsWith("/") && !/\.[a-z0-9]+$/i.test(u.pathname)) {
+          u.pathname += "/";
+        }
+        baseHref = u.href;
+      } catch (_) {}
 
-      let combinedJs = "";
-      for (const src of scriptSrcs) {
+      const buildProxyUrl = (assetUrl) => {
+        return proxyBase.includes("?") || proxyBase.endsWith("=")
+          ? `${proxyBase}${encodeURIComponent(assetUrl)}`
+          : `${proxyBase.replace(/\/$/, "")}/?url=${encodeURIComponent(assetUrl)}`;
+      };
+
+      const fetchAssetText = async (assetUrl) => {
         try {
-          const absoluteJsUrl = new URL(src, targetUrl).href;
-          const fetchUrl = proxyBase.includes("?") || proxyBase.endsWith("=")
-            ? `${proxyBase}${encodeURIComponent(absoluteJsUrl)}`
-            : `${proxyBase.replace(/\/$/, "")}/?url=${encodeURIComponent(absoluteJsUrl)}`;
-
-          const res = await fetchWithTimeout(fetchUrl, {}, 12000);
-          if (!res.ok) continue;
-
+          const res = await fetchWithTimeout(buildProxyUrl(assetUrl), {}, 12000);
+          if (!res.ok) return "";
           const ct = res.headers.get("content-type") || "";
           if (ct.includes("application/json")) {
             const json = await res.json();
-            combinedJs += "\n" + (json.contents || json.body || json.html || "");
-          } else {
-            combinedJs += "\n" + (await res.text());
+            return [json.contents, json.body, json.html, json.text, json.data]
+              .filter(v => typeof v === "string")
+              .join("\n");
           }
-        } catch (_) {}
+          return await res.text();
+        } catch (_) {
+          return "";
+        }
+      };
+
+      // Ambil dari <script src> maupun <link rel="modulepreload" href>
+      const rawAssets = [
+        ...Array.from(doc.querySelectorAll("script[src]")).map(el => el.getAttribute("src")),
+        ...Array.from(doc.querySelectorAll("link[rel='modulepreload'][href], link[as='script'][href]")).map(el => el.getAttribute("href"))
+      ].filter(src => src && !/tailwindcss|fontawesome|chart\.js|googletagmanager|analytics|gtag/i.test(src));
+
+      const uniqueUrls = [...new Set(rawAssets.map(src => {
+        try { return new URL(src, baseHref).href; } catch (_) { return null; }
+      }).filter(Boolean))].slice(0, 6);
+
+      let combinedJs = "";
+      for (const assetUrl of uniqueUrls) {
+        const text = await fetchAssetText(assetUrl);
+        if (text && !/^\s*<!doctype html/i.test(text)) {
+          combinedJs += "\n" + text;
+        }
       }
+
+      // Sedot dynamic import chunks (Vite/Next.js: assets/xxx.js atau _next/static/xxx.js) yang direferensikan di entry JS
+      const chunkMatches = combinedJs.match(/["'`](?:\.\/|\/)?(?:assets|_next\/static\/chunks)\/[a-zA-Z0-9._-]+\.js["'`]/g) || [];
+      const chunkUrls = [...new Set(chunkMatches.map(m => {
+        const cleanPath = m.slice(1, -1);
+        try { return new URL(cleanPath, baseHref).href; } catch (_) { return null; }
+      }).filter(u => u && !uniqueUrls.includes(u)))].slice(0, 4);
+
+      for (const chunkUrl of chunkUrls) {
+        const chunkText = await fetchAssetText(chunkUrl);
+        if (chunkText && !/^\s*<!doctype html/i.test(chunkText)) {
+          combinedJs += "\n" + chunkText;
+        }
+      }
+
       return combinedJs;
     }
 
@@ -842,11 +882,11 @@
         baseReport.page_title = (doc.querySelector("title")?.textContent || "").trim();
 
         const rootEl = doc.querySelector("#root, #app, #__next");
-        const moduleScripts = doc.querySelectorAll("script[type='module'][src], script[src*='assets/']");
+        const moduleScripts = doc.querySelectorAll("script[type='module'][src], script[src*='assets/'], link[rel='modulepreload'][href]");
         const initialBodyText = (doc.body?.textContent || "").replace(/\s+/g, " ").trim();
         baseReport.is_client_side_spa = Boolean(
           (rootEl && rootEl.innerHTML.trim().length < 250) ||
-          (moduleScripts.length > 0 && initialBodyText.length < 400)
+          (moduleScripts.length > 0 && initialBodyText.length < 500)
         );
 
         let rawCodeAndText = html;
@@ -1138,9 +1178,11 @@
         baseReport.has_contact = realChannels.length > 0 || dummyChannels.length > 0;
 
         // --- C6 - C10: Keranjang Belanja + Cek Pesanan ---
-        const pureCartRegex = /keranjang|cart|troli|tambah ke keranjang|add to cart|subtotal|jumlah item|qty|quantity|cek pesanan|kode pesanan|lacak pesanan|ringkasan pesanan/i;
+        const pureCartRegex = /\+\s*keranjang|keranjang\s*belanja|tambah\s*ke\s*keranjang|add\s*to\s*cart|["'`>\s]keranjang["'`<\s]|["'`>\s]cart["'`<\s]|troli|subtotal|jumlah\s*item|cek\s*pesanan|kode\s*pesanan|lacak\s*pesanan|ringkasan\s*pesanan/i;
         const waDirectOrderRegex = /pesan wa|pesan via wa|order via wa|beli via wa|pesan sekarang|chat penjual|tanya penjual|pesan via whatsapp|order via whatsapp/i;
-        baseReport.has_cart = pureCartRegex.test(searchableText);
+        const cartMatches = rawCodeAndText.match(/(?:\+\s*keranjang|keranjang\s*belanja|tambah\s*ke\s*keranjang|add\s*to\s*cart|cek\s*pesanan|kode\s*pesanan|subtotal|keranjang)/gi) || [];
+        baseReport.has_cart = pureCartRegex.test(searchableText) || cartMatches.length > 0;
+        baseReport.cart_evidence_snippets = [...new Set(cartMatches.map(m => m.trim()))].slice(0, 5);
         baseReport.has_order_tracking = /cek pesanan|kode pesanan|lacak pesanan/i.test(searchableText);
         baseReport.has_wa_item_order_only = !baseReport.has_cart && (waDirectOrderRegex.test(searchableText) || baseReport.has_seller_contact);
 
@@ -1202,6 +1244,7 @@
             whatsapp: scan.whatsapp_status,
             cart: {
               pure_cart: scan.has_cart,
+              evidence_snippets: scan.cart_evidence_snippets,
               wa_item_order_only: scan.has_wa_item_order_only
             },
             payment: {
